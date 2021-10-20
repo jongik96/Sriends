@@ -1,0 +1,6 @@
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/withplay?useUnicode=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&MVCC=TRUE
+    username: root
+    password: madmin
