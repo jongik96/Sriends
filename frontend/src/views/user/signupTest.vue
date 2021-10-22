@@ -9,7 +9,7 @@
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
               <div class="col-start-2 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
-                  <form action="" class="">
+                  <form @submit.prevent="submitForm">
                       <div class="pt-10">
                           <p class="text-3xl font-bold flex justify-center">Sign Up</p>
                       </div>
@@ -43,10 +43,10 @@
                       </div>
                       <div class="pt-5 pl-20">
                         <p class="text-xl font-bold">성별</p>
-                        <input type="radio" id="man" value="man" v-model="form.gender">
-                        <label for="man">남성</label>
+                        <input class="mt-3 " type="radio" id="man" value="man" v-model="form.gender">
+                        <label class="mr-3 font-semibold" for="man">남성</label>
                         <input type="radio" id="woman" value="woman" v-model="form.gender">
-                        <label for="woman">여성</label>
+                        <label class="font-semibold" for="woman">여성</label>
                         <br>
                         <span>{{ this.form.gender }}</span>
                         <p>
@@ -65,7 +65,7 @@
                         <p>
                             <span v-if="!form.city" class="text-yellow-600">지역을 선택해주세요</span>
                         </p>
-                        <select v-model="selectDo">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="selectDo">
                             <option disabled value="">지역</option>
                             <option value="1">서울/인천/경기</option>
                             <option value="2">대전/충청</option>
@@ -74,7 +74,7 @@
                             <option value="5">부산/울산/경남</option>
                             <option value="6">제주</option>
                         </select>
-                        <select v-if="this.selectDo=='1'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
                             <option value="서울특별시">서울특별시</option>
                             <option value="인천광역시">인천광역시</option>
@@ -110,7 +110,7 @@
                             <option value="양평군">양평군</option>
                             <option value="연천군">연천군</option>
                         </select>
-                        <select v-if="this.selectDo=='2'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='2'" v-model="form.city">
                             <option disabled value="">시/군</option>
                             <option value="대전광역시">대전광역시</option>
                             <option value="세종특별자치시">세종특별자치시</option>
@@ -141,7 +141,7 @@
                             <option value="증평군">증평군</option>
                             <option value="진천군">진천군</option>
                         </select>
-                        <select v-if="this.selectDo=='3'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='3'" v-model="form.city">
                             <option disabled value="">시/군</option>
                             <option value="대구광역시">대구광역시</option>
                             <option value="경산시">경산시</option>
@@ -168,7 +168,7 @@
                             <option value="청송군">청송군</option>
                             <option value="칠곡군">칠곡군</option>
                         </select>
-                        <select v-if="this.selectDo=='4'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='4'" v-model="form.city">
                             <option disabled value="">시/군</option>
                             <option value="강릉시">강릉시</option>
                             <option value="동해시">동해시</option>
@@ -186,7 +186,7 @@
                             <option value="철원군">철원군</option>
                             <option value="평창군">평창군</option>
                         </select>
-                        <select v-if="this.selectDo=='5'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='5'" v-model="form.city">
                             <option disabled value="">시/군</option>
                             <option value="부산광역시">부산광역시</option>
                             <option value="울산광역시">울산광역시</option>
@@ -209,23 +209,25 @@
                             <option value="함양군">함양군</option>
                             <option value="합천군">합천군</option>
                         </select>
-                        <select v-if="this.selectDo=='6'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='6'" v-model="form.city">
                             <option disabled value="">시/군</option>
                             <option value="제주시">제주시</option>
                             <option value="서귀포시">서귀포시</option>
                         </select>
-                        <span>선택지역: {{ this.form.city }} </span>
+                        <br/>
+                        <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
 
-                      </div>          
+                      </div>
+                      <div class="flex justify-center p-2 mt-10">
+                        <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                    </div>
+                    <div class="flex justify-center p-2 ">
+                        <router-link to="/">
+                            <button class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
+                        </router-link>
+                    </div>          
                   </form>
-                  <div class="flex justify-center p-2 mt-10">
-                    <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
-                  </div>
-                  <div class="flex justify-center p-2 ">
-                      <router-link to="/">
-                        <button class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
-                      </router-link>
-                  </div>
+                  
               </div>
           </div>
 
@@ -273,6 +275,11 @@ export default {
             }
             return false;
         }
+    },
+    methods:{
+        submitForm: function(){
+            console.log('click')
+        }        
     }
 
 }
