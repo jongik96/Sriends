@@ -1,0 +1,71 @@
+<template>
+  <div>
+      <header class="flex flex-wrap items-center p-4 md:py-8">
+
+      <div class="md:w-3/12 md:ml-16">
+        <!-- profile image -->
+        <img class="w-20 h-20 md:w-40 md:h-40 object-cover rounded-xl
+                     border-2 border-yellow-500 p-1" src="https://images.unsplash.com/photo-1502791451862-7bd8c1df43a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80" alt="profile">
+      </div>
+
+      <!-- profile meta -->
+      <div class="w-8/12 md:w-7/12 ml-4">
+        <div class="md:flex md:flex-wrap md:items-center mb-4">
+          <h2 class="text-3xl inline-block font-light md:mr-2 mb-2 sm:mb-0">
+            mrtravlerrr_
+          </h2>
+
+          <!-- badge -->
+          <span class="inline-block fas fa-certificate fa-lg text-blue-500 
+                               relative mr-6 text-xl transform -translate-y-2" aria-hidden="true">
+            <i class="fas fa-check text-white text-xs absolute inset-x-0
+                               ml-1 mt-px"></i>
+          </span>
+
+          <!-- follow button -->
+          <a href="#" class="bg-blue-500 px-2 py-1 
+                        text-white font-semibold text-sm rounded block text-center 
+                        sm:inline-block block">정보수정</a>
+        </div>
+
+        <!-- post, following, followers list for medium screens -->
+        <ul class="hidden md:flex space-x-8 mb-4">
+          <li>
+            <span class="font-semibold">136</span>
+            성별
+          </li>
+          <li>
+            <span class="font-semibold">136</span>
+            나이
+          </li>
+        </ul>
+
+        <!-- user meta form medium screens -->
+        <div class="hidden md:block">
+          <h1 class="font-semibold">Mr Travlerrr...</h1>
+          <span>Travel, Nature and Music</span>
+          <p>Lorem ipsum dolor sit amet consectetur</p>
+        </div>
+
+      </div>
+
+      <!-- user meta form small screens -->
+      <div class="md:hidden text-sm my-2">
+        <h1 class="font-semibold">Mr Travlerrr...</h1>
+        <span>Travel, Nature and Music</span>
+        <p>Lorem ipsum dolor sit amet consectetur</p>
+      </div>
+
+    </header>
+  </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>

@@ -7,7 +7,7 @@
 
 <script>
 import topMenu from '@/components/topMenu.vue'
-import myTeamPage from './user/myPage.vue'
+import myTeamPage from '@/components/user/myPage.vue'
 export default {
     components:{
         topMenu,

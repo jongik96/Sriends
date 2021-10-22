@@ -3,7 +3,7 @@
     <nav class="col-start-2 col-span-4 flex items-center justify-between flex-wrap py-6">
       <div class=" flex items-center flex-shrink-0 text-yellow-500 mr-6">
         
-        <span class="font-semibold text-xl">S-riends</span>
+        <span class="font-semibold text-3xl">S-riends</span>
       </div>
       <div class=" sm:hidden">
         <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 ">

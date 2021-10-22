@@ -15,13 +15,14 @@ export default new VueRouter({
             component: () => import('@/views/user/signupPage.vue')
         },
         {
-            path: '/main',
-            component: () => import('@/views/mainPage.vue')
+            path:'/modify',
+            component: () => import('@/views/user/modifyPage.vue')
         },
         {
-            path: '/myTeam',
-            component: () => import('@/views/user/myPage.vue')
+            path: '/main',
+            component: () => import('@/views/user/mainPage.vue')
         },
+
         {
             path: '/findPassword',
             component: () => import('@/views/user/findPasswordPage.vue')
