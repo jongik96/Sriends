@@ -26,9 +26,5 @@ export default new VueRouter({
             path: '/findPassword',
             component: () => import('@/views/user/findPasswordPage.vue')
         },
-        {
-            path: '/signupTest',
-            component: () => import('@/views/user/signupTest.vue')
-        }
     ]
 })
