@@ -22,10 +22,17 @@ export default new VueRouter({
             path: '/main',
             component: () => import('@/views/user/mainPage.vue')
         },
-
         {
             path: '/findPassword',
             component: () => import('@/views/user/findPasswordPage.vue')
         },
+        {
+            path: '/confirmPassword',
+            component: () => import('@/views/user/confirmPasswordPage.vue')
+        },
+        {
+            path: '/modifyPassword',
+            component: () => import('@/views/user/modifyPasswordPage.vue')
+        }
     ]
 })

@@ -2,16 +2,11 @@
   <div class="grid grid-cols-6">
 
       <div class="col-start-2 col-span-4 ">
-          <div class="flex justify-center mt-10">
-              <p class="text-4xl text-yellow-500 font-bold">S-riends</p>
-          </div>
-      </div>
-      <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
               <div class="col-start-2 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
                   <form @submit.prevent="submitForm">
                       <div class="pt-10">
-                          <p class="text-3xl font-bold flex justify-center">Sign Up</p>
+                          <p class="text-3xl font-bold flex justify-center">회원정보 수정</p>
                       </div>
                       <div class="pt-10 pl-20">
                           <p class="text-xl font-bold">profileImg</p>
@@ -26,10 +21,9 @@
                       </div>
                       <div class="pt-5 pl-20">
                           <p class="text-xl font-bold">Password</p>
-                          <input type="password" v-model="form.password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400">
-                          <p class="w-3/4">
-                              <span v-if="!isPasswordValid" class=" text-yellow-600">비밀번호는 영문,숫자,특수문자가 포함된 8자 이상으로 이루어져야합니다.</span>
-                          </p>
+                            <router-link to="/modifyPassword">
+                                <button class="border-2 rounded-xl border-yellow-500  font-medium w-40 h-10 mt-3">비밀번호 변경하기</button>
+                            </router-link>
                       </div>
                       <div class="pt-5 pl-20">
                           <p class="text-xl font-bold">이름</p>
@@ -226,8 +220,8 @@
                         <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
-                        <router-link to="/">
-                            <button class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
+                        <router-link to="/main">
+                            <button class="rounded-md hover:bg-gray-200"><p>취소</p></button>
                         </router-link>
                     </div>          
                   </form>
@@ -249,12 +243,12 @@ export default {
             selectDo : '',
             form:{
                 email: '',
-                password: '',
                 name: '',
                 bitrh: '',
                 phone: '',
                 city : '',
                 gender: '',
+                uuid:'',
             }
             
         }
