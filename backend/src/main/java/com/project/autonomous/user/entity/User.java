@@ -1,16 +1,45 @@
 package com.project.autonomous.user.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.project.autonomous.common.entity.BaseEntity;
 import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Getter
-public class User {
+@Setter
+public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
+    String email;
+    String name;
+    Date birth;
+    String gender;
+    String phone;
+    String city;
+    String picture_id;
+
+    String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserTeam> userTeamList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", birth=" + birth +
+                ", gender='" + gender + '\'' +
+                ", phone='" + phone + '\'' +
+                ", city='" + city + '\'' +
+                ", picture_id='" + picture_id + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
