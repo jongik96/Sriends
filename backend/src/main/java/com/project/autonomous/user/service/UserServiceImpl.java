@@ -1,5 +1,6 @@
 package com.project.autonomous.user.service;
 
+<<<<<<< HEAD
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
@@ -131,5 +132,8 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
+=======
+public class UserServiceImpl {
+>>>>>>> 50a2b1ba14286ef47887be3dca4daffc9b9e54b7
 
 }

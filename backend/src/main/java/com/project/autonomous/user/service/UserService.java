@@ -1,5 +1,6 @@
 package com.project.autonomous.user.service;
 
+<<<<<<< HEAD
 import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
@@ -21,5 +22,8 @@ public interface UserService {
     UserProfileRes getUserProfile(Long userId);
 
     User getUser(String userEmail);
+=======
+public interface UserService {
+>>>>>>> 50a2b1ba14286ef47887be3dca4daffc9b9e54b7
 
 }
