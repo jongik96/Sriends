@@ -33,6 +33,10 @@ export default new VueRouter({
         {
             path: '/modifyPassword',
             component: () => import('@/views/user/modifyPasswordPage.vue')
+        },
+        {
+            path : '/team',
+            component: () => import('@/views/team/teamMainPage.vue')
         }
     ]
 })

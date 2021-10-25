@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white shadow-md grid grid-cols-6">
     <nav class="col-start-2 col-span-4 flex items-center justify-between flex-wrap py-6">
-      <div class=" flex items-center flex-shrink-0 text-yellow-500 mr-6">
+      <div class="flex items-center flex-shrink-0 text-yellow-500 mr-6">
         
         <a href="/main"><button class="font-semibold text-3xl">S-riends</button></a>
       </div>
