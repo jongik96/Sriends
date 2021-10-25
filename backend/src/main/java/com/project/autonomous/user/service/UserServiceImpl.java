@@ -1,13 +1,11 @@
 package com.project.autonomous.user.service;
 
-<<<<<<< HEAD
 import com.project.autonomous.team.entity.Team;
-import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
-import com.project.autonomous.user.dto.respose.MyProfileRes;
-import com.project.autonomous.user.dto.respose.UserProfileRes;
-import com.project.autonomous.user.dto.respose.UserTeamListRes;
+import com.project.autonomous.user.dto.response.MyProfileRes;
+import com.project.autonomous.user.dto.response.UserProfileRes;
+import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.PictureRepository;
@@ -20,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -53,8 +51,8 @@ public class UserServiceImpl implements UserService{
     public Boolean emailCheck(String email) {
         User user = new User();
         boolean check = userRepository.findByEmail(email).isPresent();
-        
-        if(check){//이미 있는 이메일
+
+        if (check) {//이미 있는 이메일
             return false;
         }
         return true;
@@ -92,7 +90,7 @@ public class UserServiceImpl implements UserService{
 
         ArrayList<UserTeamListRes> teamList = new ArrayList<>();
         for (UserTeam userTeam : userTeamRepository.findAll()) {
-            if(userTeam.getUser().equals(user)){
+            if (userTeam.getUser().equals(user)) {
                 Team team = userTeam.getTeam();
                 UserTeamListRes utl = new UserTeamListRes();
                 utl.setId(team.getId());
@@ -127,13 +125,8 @@ public class UserServiceImpl implements UserService{
     public User getUser(String userEmail) {
         User user = userRepository.findByEmail(userEmail).get();
 
-        if(user == null)
+        if (user == null)
             return null;
         return user;
     }
-
-=======
-public class UserServiceImpl {
->>>>>>> 50a2b1ba14286ef47887be3dca4daffc9b9e54b7
-
 }

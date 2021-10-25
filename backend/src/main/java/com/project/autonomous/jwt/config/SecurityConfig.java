@@ -1,8 +1,7 @@
-package com.project.autonomous.common.config;
+package com.project.autonomous.jwt.config;
 
 import com.project.autonomous.jwt.JwtAccessDeniedHandler;
 import com.project.autonomous.jwt.JwtAuthenticationEntryPoint;
-import com.project.autonomous.jwt.JwtSecurityConfig;
 import com.project.autonomous.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
