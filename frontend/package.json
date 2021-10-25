@@ -12,9 +12,11 @@
     "autoprefixer": "^9.8.8",
     "core-js": "^3.6.5",
     "postcss": "^7.0.39",
+    "sweetalert2": "^11.1.9",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
+    "vue-sweetalert2": "^5.0.2",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

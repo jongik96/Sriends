@@ -63,19 +63,26 @@
         </header>
         <div class="grid justify-center">
             <div class="mt-7">
-                <button class="bg-yellow-500 px-2 py-1 
-                                text-white font-semibold text-sm rounded block text-center 
-                                sm:inline-block">
-                                가입 신청하기
-                </button>
+                <router-link to='/joinTeam'>
+                    <button class="bg-yellow-500 px-2 py-1 
+                                    text-white font-semibold text-sm rounded block text-center 
+                                    sm:inline-block">
+                                    가입 신청하기
+                    </button>
+                </router-link>
             </div>
         </div>
     </div>
   </div>
 </template>
 
-<script>
+<script> 
 export default {
+    data(){
+        return{
+            
+        }
+    },
 
 }
 </script>

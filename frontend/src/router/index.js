@@ -37,6 +37,14 @@ export default new VueRouter({
         {
             path : '/team',
             component: () => import('@/views/team/teamMainPage.vue')
+        },
+        {
+            path: '/joinTeam',
+            component: () => import('@/views/team/joinTeamPage.vue')
+        },
+        {
+            path: '/team/article',
+            component: () => import('@/views/team/teamArticlePage.vue')
         }
     ]
 })
