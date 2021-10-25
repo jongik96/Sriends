@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-6">
+  <div class="grid grid-cols-6 font-sans">
 
       <div class="col-start-2 col-span-4 ">
           <div class="flex justify-center mt-10">
@@ -10,7 +10,7 @@
           <div class="grid grid-cols-6  mt-10">
               <div class="col-start-2 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
                   <form @submit.prevent="submitForm">
-                      <div class="pt-10">
+                      <div class="pt-10 font-mono">
                           <p class="text-3xl font-bold flex justify-center">Sign Up</p>
                       </div>
                       <div class="pt-10 pl-20">
@@ -19,6 +19,15 @@
                           <p>
                               <span v-if="!isEmailValid || !form.email" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
                           </p>
+                          <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">중복검사</button>
+                          &nbsp;
+                          <button @click="clickEmailAuth" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">인증</button>
+                          <div v-if="EmailAuthBtn" class="mt-2">
+                            <p class="text-md font-bold">인증번호를 입력해주세요</p>
+                            <input type="text" v-model="authCode" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                            <br/>
+                            <button class="border-solid border-2 mt-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">확인</button>
+                          </div>
                       </div>
                       <div class="pt-5 pl-20">
                           <p class="text-xl font-bold">Password</p>
@@ -219,7 +228,7 @@
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/">
@@ -243,6 +252,8 @@ export default {
     data() {
         return {
             selectDo : '',
+            EmailAuthBtn : false,
+            authCode: '',
             form:{
                 email: '',
                 password: '',
@@ -279,6 +290,9 @@ export default {
     methods:{
         submitForm: function(){
             console.log('click')
+        },
+        clickEmailAuth: function(){
+            this.EmailAuthBtn = true;
         }        
     }
 
