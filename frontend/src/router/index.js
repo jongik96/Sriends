@@ -33,6 +33,14 @@ export default new VueRouter({
         {
             path: '/modifyPassword',
             component: () => import('@/views/user/modifyPasswordPage.vue')
-        }
+        },
+        {
+            path: '/teamCreate',
+            component: () => import('@/views/user/teamCreatePage.vue')
+        },
+        {
+            path: '/teamNotice',
+            component: () => import('@/views/user/teamNoticePage.vue')
+        },
     ]
 })
