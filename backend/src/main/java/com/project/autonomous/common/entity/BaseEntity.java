@@ -1,14 +1,11 @@
 package com.project.autonomous.common.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import lombok.Getter;
 
-@Setter
 @Getter
 @MappedSuperclass
 public class BaseEntity {

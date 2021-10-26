@@ -1,5 +1,6 @@
 package com.project.autonomous.jwt.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
 
     @Id
+    @Column(name = "user_id")
     private String key;
     private String value;
 

@@ -1,5 +1,6 @@
 package com.project.autonomous.user.service;
 
+import com.project.autonomous.common.entity.City;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
         user.setName(registerInfo.getName());
         user.setBirth(registerInfo.getBirth());
         user.setGender(registerInfo.getGender());
-        user.setCity(registerInfo.getCity());
+        user.setCity(City.from(registerInfo.getCity()));
         user.setPhone(registerInfo.getPhone());
         user.setPassword(registerInfo.getPassword());
         userRepository.save(user);
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
         user.setBirth(modifyInfo.getBirth());
         user.setPhone(modifyInfo.getPhone());
         user.setGender(modifyInfo.getGender());
-        user.setCity(modifyInfo.getCity());
+        user.setCity(City.from(modifyInfo.getCity()));
         user.setPicture_id(modifyInfo.getUuid());
         userRepository.save(user);
         return null;
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
         res.setBirth(user.getBirth());
         res.setPhone(user.getPhone());
         res.setGender(user.getGender());
-        res.setCity(user.getCity());
+        res.setCity(user.getCity().toString());
 
         ArrayList<UserTeamListRes> teamList = new ArrayList<>();
         for (UserTeam userTeam : userTeamRepository.findAll()) {
@@ -116,7 +117,7 @@ public class UserServiceImpl implements UserService {
         res.setName(user.getName());
         res.setBirth(user.getBirth());
         res.setPhone(user.getPhone());
-        res.setCity(user.getCity());
+        res.setCity(user.getCity().toString());
 
         return res;
     }

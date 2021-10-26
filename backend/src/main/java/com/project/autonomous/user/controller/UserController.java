@@ -21,50 +21,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     UserService userService;
-
-    @PostMapping("/sign-up")
-    @ApiOperation(value = "프로젝트 생성", notes = "<strong>받은 정보로프로젝트를 생성</strong>한다.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "정보 조회"),
-            @ApiResponse(code = 404, message = "MEMBER_NOT_FOUND"),
-    })
-    public String hello(){
-        return "hello!";
-    }
-
-
-    @GetMapping("/sign-up/{email}")
-    public ResponseEntity<Boolean> emailCheck(@PathVariable("email") String email){
-        System.out.println("이메일 중복 검사");
-
-        boolean check = userService.emailCheck(email);
-        if(check){
-            return ResponseEntity.status(200).body(true);//사용가능한 이메일
-        }
-
-        return ResponseEntity.status(400).body(false);
-    }
-
-    @PostMapping("/sign-up")
-    public ResponseEntity<Boolean> signUp(@RequestBody UserRegisterPostReq registerInfo){
-        System.out.println("회원가입");
-
-        if(!userService.emailCheck(registerInfo.getEmail())){
-            System.out.println("중복된 이메일");
-            return ResponseEntity.status(400).body(false);
-        }
-        User user = userService.createUser(registerInfo);
-
-        return ResponseEntity.status(200).body(true);
-    }
 
     @PutMapping("/{userId}")
     public ResponseEntity<Boolean> modifyUserInfo(@PathVariable("userId") Long userId, @RequestBody UserModifyPutReq modifyInfo){
@@ -109,32 +72,4 @@ public class UserController {
 
     }
 
-    @PostMapping("/check-password")
-    public ResponseEntity<Boolean> checkPassword(@RequestBody PasswordReq checkInfo){
-        System.out.println("비밀번호 확인");
-        String password = checkInfo.getPassword();
-
-
-
-        return ResponseEntity.status(400).body(Boolean.FALSE);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody LoginReq loginInfo){
-        System.out.println("로그인");
-        String userEmail = loginInfo.getEmail();
-        String password = loginInfo.getPassword();
-
-        User user = userService.getUser(userEmail);
-        if(user == null){
-            //회원 정보 없음
-            return ResponseEntity.status(400).body(Boolean.FALSE);
-        }
-        if(user.getPassword().equals(password)){
-            return ResponseEntity.status(200).body(Boolean.TRUE);
-        }
-        return ResponseEntity.status(400).body(Boolean.FALSE);
-
-
-    }
 }
