@@ -1,12 +1,9 @@
-package com.project.autonomous.user.dto.respose;
+package com.project.autonomous.user.dto.response;
 
-import com.project.autonomous.team.entity.Team;
-import com.project.autonomous.user.entity.User;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Date;
-import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -14,7 +11,7 @@ public class MyProfileRes {
 
     String email;
     String name;
-    Date birth;
+    LocalDate birth;
     String gender;
     String phone;
     String city;

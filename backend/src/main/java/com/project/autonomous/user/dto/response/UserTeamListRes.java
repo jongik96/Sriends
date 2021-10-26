@@ -1,4 +1,4 @@
-package com.project.autonomous.user.dto.respose;
+package com.project.autonomous.user.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
