@@ -12,14 +12,14 @@
       </div>
       <div class="hidden sm:flex sm:items-center sm:w-auto">
         <div class="text-md">
-          <a href="#responsive-header" class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200 w-20 mr-4">
-           팀 찾기
+          <a href="#responsive-header" class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200 w-22 mr-4">
+           스렌즈 찾기
           </a>
           <a href="#responsive-header" class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200  w-32 mr-4">
-            경기/용병 찾기
+            경기/스렌드 찾기
           </a>
-          <a href="#responsive-header" class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200  w-20 mr-4">
-            My Page
+          <a href="#responsive-header" class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200  w-23 mr-4">
+            My S-riends
           </a>
           <!-- <a href="#responsive-header" class="block mt-4 sm:inline-block hover:bg-yellow-500 rounded-md lg:mt-0 text-teal-200 h-10 w-20">
             회원관리

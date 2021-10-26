@@ -9,7 +9,7 @@
 <script>
 import topmenu from '@/components/topMenu.vue'
 import teamMenu from '@/components/team/teamMenu.vue'
-import teamArticle from '@/components/team/teamArticle.vue'
+import teamArticle from '@/components/team/article/teamArticle.vue'
 export default { 
     components: {
         topmenu,
