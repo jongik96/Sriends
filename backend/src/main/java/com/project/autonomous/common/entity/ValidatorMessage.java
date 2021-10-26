@@ -1,4 +1,4 @@
-package com.woowacourse.zzimkkong.dto;
+package com.project.autonomous.common.entity;
 
 public class ValidatorMessage {
     private ValidatorMessage() {
