@@ -42,5 +42,9 @@ export default new VueRouter({
             path: '/teamNotice',
             component: () => import('@/views/user/teamNoticePage.vue')
         },
+        {
+            path: '/teamModify',
+            component: () => import('@/views/user/teamModifyPage.vue')
+        },
     ]
 })
