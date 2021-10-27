@@ -41,6 +41,18 @@ export default new VueRouter({
             path: '/modifyPassword',
             component: () => import('@/views/user/modifyPasswordPage.vue')
         },
+        {
+            path: '/teamCreate',
+            component: () => import('@/views/user/teamCreatePage.vue')
+        },
+        {
+            path: '/teamNotice',
+            component: () => import('@/views/user/teamNoticePage.vue')
+        },
+        {
+            path: '/teamModify',
+            component: () => import('@/views/user/teamModifyPage.vue')
+        },
         // 팀 메인페이지
         {
             path : '/team',
