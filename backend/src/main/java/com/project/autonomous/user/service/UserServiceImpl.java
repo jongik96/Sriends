@@ -1,6 +1,7 @@
 package com.project.autonomous.user.service;
 
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
@@ -61,6 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User modifyUser(Long userId, UserModifyPutReq modifyInfo) {
+        SecurityUtil.getCurrentMemberId();
         User user = userRepository.findById(userId).get();
         user.setName(modifyInfo.getName());
         user.setBirth(modifyInfo.getBirth());
