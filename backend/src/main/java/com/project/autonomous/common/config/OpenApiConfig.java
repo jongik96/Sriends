@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import java.util.Arrays;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,25 @@ public class OpenApiConfig {
             .security(Arrays.asList(schemaRequirement))
             .info(info);
 //            .servers(servers);
+    }
+
+    @Bean
+    public GroupedOpenApi userApi() {
+        String packagesToscan[] = {"com.project.autonomous.user.controller"};
+        return GroupedOpenApi.builder().group("Users").packagesToScan(packagesToscan)
+            .build();
+//        return GroupedOpenApi.builder()
+//            .group("Users")
+//            .pathsToMatch("/auth/**")
+//            .pathsToMatch("/users/**")
+//
+//            .build();
+    }
+    @Bean
+    public GroupedOpenApi teamApi() {
+        String packagesToscan[] = {"com.project.autonomous.team.controller"};
+        return GroupedOpenApi.builder().group("Teams").packagesToScan(packagesToscan)
+            .build();
     }
 
 }
