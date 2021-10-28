@@ -44,16 +44,12 @@ export default new VueRouter({
         // 팀 생성 페이지
         {
             path: '/teamCreate',
-            component: () => import('@/views/user/teamCreatePage.vue')
-        },
-        {
-            path: '/teamNotice',
-            component: () => import('@/views/user/teamNoticePage.vue')
+            component: () => import('@/views/team/teamCreatePage.vue')
         },
         //팀 정보수정 페이지
         {
             path: '/teamModify',
-            component: () => import('@/views/user/teamModifyPage.vue')
+            component: () => import('@/views/team/teamModifyPage.vue')
         },
         // 팀 메인페이지
         {
@@ -80,11 +76,53 @@ export default new VueRouter({
             path: '/team/calendar',
             component: () => import('@/views/team/schedule/teamCalendarPage.vue')
         },
+
+        // 팀 일정 추가페이지
+        {
+            path:'/team/makeSchedule',
+            component: () => import('@/views/team/schedule/makeSchedulePage.vue')
+        },
         
         // 팀 멤버목록 페이지
         {
             path: '/team/memberList',
             component: () => import('@/views/team/member/teamMemberPage.vue')
+        },
+
+        // 가입 대기 중 회원 목록페이지
+        {
+            path: '/team/waitingMemberList',
+            component: () => import('@/views/team/member/waitingMemberPage.vue')
+        },
+        
+        // 팀찾기 목록
+        {
+            path: '/teamList',
+            component: () => import('@/views/sriends/teamListPage.vue')
+        },
+
+        // 경기/스렌드 찾기 목록페이지
+        {
+            path: '/matchingList',
+            component: () => import('@/views/matching/matchingListPage.vue')
+        },
+
+        // 매칭목록
+        {
+            path: '/createMatching',
+            component: () => import('@/views/matching/createMatchingPage.vue')
+        },
+
+        // 팀게시글 상세페이지
+        {
+            path: '/team/articleDetail',
+            component: () => import('@/views/team/article/articleDetailPage.vue')
+        },
+
+        // 매칭글 상세페이지
+        {
+            path: '/matchingDetail',
+            component: () => import('@/views/matching/matchingDetailPage.vue')
         }
     ]
 })

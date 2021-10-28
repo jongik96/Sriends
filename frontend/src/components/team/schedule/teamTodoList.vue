@@ -1,18 +1,39 @@
 <template>
   <div class="">
-      <div v-for="item in todos" :key="item.id" class="border-b rounded-md">
-          <div>
-              <p>
-                {{item.title}}
-              </p>
-          </div>
-            <div>
-                {{item.content}}
+      <div class="grid place-content-end">
+          <router-link to="/team/makeSchedule">
+          <p class="bg-yellow-400 px-2 py-1 text-black font-semibold text-sm rounded">일정 생성하기</p>
+          </router-link>
+      </div>
+      <div class="border-b rounded-md py-3">
+            <div class="grid grid-cols-6">
+                <div class="grid col-start-1 col-span-2 place-items-center">
+                    <p>
+                        일정이름
+                    </p>
+                </div>
+                <div class="grid col-start-3 col-span-3 place-items-center ">
+                    일정 내용
+                </div>
+                <div class="grid col-start-6 col-span-1 place-items-center">
+                    일시
+                </div>
             </div>
-            <div>
-                {{item.date}}
+      </div>
+      <div v-for="item in todos" :key="item.id" class="border-b rounded-md py-1">
+            <div class="grid grid-cols-6">
+                <div class="grid col-start-1 col-span-2 place-items-center">
+                    <p>
+                        {{item.title}}
+                    </p>
+                </div>
+                <div class="grid col-start-3 col-span-3 place-items-center ">
+                    {{item.content}}
+                </div>
+                <div class="grid col-start-6 col-span-1 place-items-center">
+                    {{item.date}}
+                </div>
             </div>
-
       </div>
   </div>
 </template>
@@ -51,42 +72,6 @@ export default {
                     title : '축구하자',
                     content : '구미인동풋살장에서 ㄱㄱ',
                     date : '2021-11-2',
-                },
-                {
-                    id : 6,
-                    title : '축구하자',
-                    content : '구미인동풋살장에서 ㄱㄱ',
-                    date : '2021-11-3',
-                },
-                {
-                    id : 7,
-                    title : '축구하자',
-                    content : '구미인동풋살장에서 ㄱㄱ',
-                    date : '2021-11-4',
-                },
-                {
-                    id : 8,
-                    title : '축구하자',
-                    content : '구미인동풋살장에서 ㄱㄱ',
-                    date : '2021-11-5',
-                },
-                {
-                    id : 9,
-                    title : '축구하자',
-                    content : '구미인동풋살장에서 ㄱㄱ',
-                    date : '2021-11-5',
-                },
-                {
-                    id : 10,
-                    title : '축구하자',
-                    content : '구미인동풋살장에서 ㄱㄱ',
-                    date : '2021-11-5',
-                },
-                {
-                    id : 11,
-                    title : '축구하자',
-                    content : '구미인동풋살장에서 ㄱㄱ',
-                    date : '2021-11-5',
                 },
 
 

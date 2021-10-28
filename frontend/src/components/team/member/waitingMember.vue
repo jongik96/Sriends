@@ -2,8 +2,8 @@
   <div class="grid grid-cols-6">
         <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div class="grid place-content-end">
-                <router-link to="/team/waitingMemberList">
-                <p class="bg-yellow-400 px-2 py-1 text-black font-semibold text-sm rounded">대기중인 요청</p>
+                <router-link to="/team/memberList">
+                <p class="bg-yellow-400 px-2 py-1 text-black font-semibold text-sm rounded">돌아가기</p>
                 </router-link>
             </div>
             <div v-for="item in member" :key="item.id" class="shadow-md rounded-xl p-4 mt-5 mx-6 mb-4 min-w-300">
