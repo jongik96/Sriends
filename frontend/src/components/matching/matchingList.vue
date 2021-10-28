@@ -4,15 +4,15 @@
             <div class="flex justify-end">
                 <router-link to="/team/createMatching">
                 <button class="bg-yellow-500 px-2 py-1 
-                    text-white font-semibold text-xl rounded block text-center 
+                    text-white font-semibold text-md md:text-xl rounded block text-center 
                     sm:inline-block mr-5">
-                            경기 매칭
+                            경기 매칭구하기
                 </button>
                 </router-link>
             </div>
-            <div v-for="item in items" :key="item.id" class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300">
+            <div v-for="item in items" :key="item.id" class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300 h-36 md:h-24">
                 <h2 class="text-2xl font-semibold"><a href="#">{{ item.title }}</a></h2>
-                <p class="truncate w-96 text-justify leading-tight text-gray-800">{{ item.description }}<p>
+                <p class="truncate md:w-96 w-48 text-justify leading-tight text-gray-800">{{ item.description }}<p>
                 <div class="mt-2">
                 <span class="left">Posted On: {{ item.datePosted }}</span>
                 <span class="float-right">By: <a class="text-purple-500" href="#">{{ item.postedBy }}</a></span>
