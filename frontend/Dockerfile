@@ -5,7 +5,7 @@
 ### 나머지 프론트 소스코드와 리소스를 복사하여 빌드 진행
 FROM node:lts-alpine as build-stage
 WORKDIR /homepage
-COPY package*.json ./
+ADD package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
