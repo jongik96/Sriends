@@ -2,9 +2,7 @@ package com.project.autonomous.user.controller;
 
 import com.project.autonomous.jwt.dto.TokenDto;
 import com.project.autonomous.user.dto.request.LoginReq;
-import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
-import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.service.AuthServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

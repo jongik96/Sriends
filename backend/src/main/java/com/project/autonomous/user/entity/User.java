@@ -2,7 +2,6 @@ package com.project.autonomous.user.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +10,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -39,7 +36,6 @@ public class User extends BaseEntity {
 
     String picture_id;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private UserAuthority userAuthority;
 
@@ -73,17 +69,4 @@ public class User extends BaseEntity {
             '}';
     }
 
-    public static User from(UserRegisterPostReq dto, PasswordEncoder passwordEncoder){
-        return User.builder()
-            .email(dto.getEmail())
-            .name(dto.getName())
-            .birth(dto.getBirth())
-            .gender(dto.getGender())
-            .phone(dto.getPhone())
-            .city(City.from(dto.getCity()))
-            .password(passwordEncoder.encode(dto.getPassword()))
-            .userAuthority(UserAuthority.ROLE_USER)
-            .deleted(false)
-            .build();
-    }
 }
