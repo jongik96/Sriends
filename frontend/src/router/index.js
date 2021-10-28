@@ -105,6 +105,22 @@ export default new VueRouter({
             component: () => import('@/views/matching/matchingListPage.vue')
         },
 
+        // 매칭목록
+        {
+            path: '/createMatching',
+            component: () => import('@/views/matching/createMatchingPage.vue')
+        },
 
+        // 팀게시글 상세페이지
+        {
+            path: '/team/articleDetail',
+            component: () => import('@/views/team/article/articleDetailPage.vue')
+        },
+
+        // 매칭글 상세페이지
+        {
+            path: '/matchingDetail',
+            component: () => import('@/views/matching/matchingDetailPage.vue')
+        }
     ]
 })

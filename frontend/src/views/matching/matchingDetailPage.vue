@@ -1,17 +1,17 @@
 <template>
   <div>
     <topMenu></topMenu>
-    <matchingList></matchingList>
+    <matchingDetail></matchingDetail>
   </div>
 </template>
 
 <script>
 import topMenu from '@/components/topMenu.vue'
-import matchingList from '@/components/matching/matchingList.vue'
+import matchingDetail from '@/components/matching/matchingDetail.vue'
 export default {
     components:{
         topMenu,
-        matchingList
+        matchingDetail
         
     }
 
