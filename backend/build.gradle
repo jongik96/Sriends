@@ -41,10 +41,9 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
-	// 스웨거 https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
-	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	// OPEN API 3
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.4'
+	implementation 'org.springdoc:springdoc-openapi-data-rest:1.5.4'
 
 	// 테스트
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
