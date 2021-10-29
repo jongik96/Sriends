@@ -10,25 +10,26 @@
                 </button>
                 </router-link>
             </div>
-            <div v-for="item in items" :key="item.id" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 min-w-300 h-48 grid grid-cols-6">
+            <div v-for="item in items" :key="item.id" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
                 <div class="grid col-start-1 col-span-2">
-                    <img src='@/assets/logo.png' class="rounded-md h-20 w-20 ml-10" alt="">
+                    <img src='@/assets/logo.png' class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
+                    <p class="visible md:invisible ml-14 w-36">{{item.title}}</p>
                     <button class="bg-yellow-500 px-2 py-1 w-24
-                    text-white font-semibold text-sm rounded block text-center ml-8
+                    text-white font-semibold text-sm rounded block text-center md:ml-8 ml-12
                     sm:inline-block mr-5 h-10" 
                     @click="joinBtn"
                     >
                         가입 요청
                     </button>
                 </div>
-                <div class="grid col-start-3 col-span-4">
-                    <div>
+                <div class="invisible md:visible grid md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
+                    <div class="flex ">
                         <p>팀명 : {{item.title}} </p>
                     </div>
-                    <div>
-                        <p class="invisible md:visible">대표 : {{item.postedBy}} </p>
+                    <div class="invisible md:visible">
+                        <p >대표 : {{item.postedBy}} </p>
                     </div>
-                    <div>
+                    <div class="invisible md:visible">
                         <p>연락처 : 01012341234 </p>
                     </div>
                     <div class="">

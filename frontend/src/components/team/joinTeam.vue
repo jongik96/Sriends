@@ -8,9 +8,9 @@
       </div>
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
-              <div class="col-start-2 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
+              <div class="md:col-start-2 md:col-span-4 col-start-1 col-span-6 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
                   <form>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">간단한 소개글을 적어주세요.</p>
                           <textarea v-model="joinIntro" id="joinIntro" rows=5 type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                       </div>

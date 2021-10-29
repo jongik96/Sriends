@@ -41,10 +41,12 @@ export default new VueRouter({
             path: '/modifyPassword',
             component: () => import('@/views/user/modifyPasswordPage.vue')
         },
+        // 팀 생성 페이지
         {
             path: '/teamCreate',
             component: () => import('@/views/team/teamCreatePage.vue')
         },
+        //팀 정보수정 페이지
         {
             path: '/teamModify',
             component: () => import('@/views/team/teamModifyPage.vue')

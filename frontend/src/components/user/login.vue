@@ -4,32 +4,35 @@
       <div class="col-start-2 col-span-4 ">
           <div class="flex justify-center mt-10">
               <p class="text-4xl text-yellow-500 font-bold">S-riends</p>
+              
+          </div>
+          <div class="flex justify-center mt-3">
+              <p class="text-2xl font-bold flex justify-center">우리동네 스포츠동호회 찾기</p>
           </div>
       </div>
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
-              <div class="col-start-1 col-span-3 mr-2">
-                  <p class="text-2xl font-bold flex justify-center">우리동네 스포츠동호회 찾기</p>
-                  <img src="@/assets/sideImg.png" width="450"  alt="">
+              <div class="md:col-start-1 md:col-span-3 md:mr-2 md:visible ml-10 md:ml-5 col-start-1 col-span-5 ">
+                  <img src="@/assets/sports.png" width="450"  alt="">
               </div>
-              <div class="col-start-4 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
+              <div class="md:col-start-4 md:col-span-4  col-start-1 col-span-6  shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
                   <form @submit.prevent="submitForm">
                       <div class="pt-10">
                           <p class="text-3xl font-bold flex justify-center">Log In</p>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">E-mail</p>
                           <input id="email" type="text" v-model="form.email" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400"/>
                           <p>
-                              <span v-if="!isEmailValid || !form.email" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
+                              <span v-if="(form.email).length>0 && !isEmailValid" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
                           </p>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">Password</p>
                           <input id="password" type="password" v-model="form.password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400"/>
-                          <p>
-                              <span v-if="!form.password" class="text-yellow-600">비밀번호를 입력해주세요.</span>
-                          </p>
+                          <!-- <p>
+                              <span class="text-yellow-600">비밀번호를 입력해주세요.</span>
+                          </p> -->
                       </div>
                     <div class="flex justify-center p-2 mt-10">
                         <!-- <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">Log In</button> -->
@@ -57,6 +60,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import { validateEmail } from '@/utils/validation.js';
 export default {
     data() {
@@ -81,7 +85,8 @@ export default {
     methods:{
         submitForm: function(){
             console.log('click')
-        }
+            Swal.fire('로그인됨')
+        },
     }
 }
 </script>
