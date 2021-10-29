@@ -9,22 +9,22 @@
             <div v-for="item in member" :key="item.id" class="shadow-md rounded-xl p-4 mt-5 mx-6 mb-4 min-w-300">
                 <div class="grid grid-cols-7">
                     <div class="col-start-1 col-span-1">
-                        <img src='@/assets/profiledefault.jpg' class="rounded-md h-20 w-20" alt="">
+                        <img src='@/assets/profiledefault.jpg' class="rounded-md h-10 w-10 md:h-20 md:w-20" alt="">
                     </div>
-                    <div class="col-start-2 col-span-1 grid place-items-center">
+                    <div class="col-start-2 col-span-1 grid text-sm md:text-base sm:place-items-center">
                         {{item.name}}
                     </div>
-                    <div class="col-start-3 col-span-2 grid place-items-center">
-                        {{item.phone}}
-                    </div>
-                    <div class="col-start-5 col-span-1 grid place-items-center">
+                    <div class="col-start-3 col-span-1 grid text-sm md:text-base sm:place-items-center">
                         {{item.level}}
                     </div>
-                    <div class="col-start-6 col-span-1 flex justify-center">
+                    <div class="col-start-4 col-span-2 text-sm md:text-base md:grid sm:place-items-center">
+                        {{item.phone}}
+                    </div>
+                    <div class="col-start-6 col-span-1 text-sm md:text-base grid justify-center">
                         <button><font-awesome-icon icon="comments"/></button>
                     </div>
-                    <div class="col-start-7 col-span-1 flex justify-center">
-                        <button><font-awesome-icon icon="ban"/></button>
+                    <div class="col-start-7 col-span-1 text-sm md:text-base flex justify-center">
+                        <button>신청서 보기</button>
                     </div>
                 </div>
             </div>
@@ -40,32 +40,32 @@ export default {
                 { id: 1,
                     name: "하지훈",
                     phone: "01012341234",
-                    level: "대표",
+                    level: "대기중",
                 },
                 { id: 2,
                     name: "박범진",
                     phone: "01012341234",
-                    level: "매니저",
+                    level: "대기중",
                 },
                 { id: 3,
                     name: "권현지",
                     phone: "01012341234",
-                    level: "회원",
+                    level: "대기중",
                 },
                 { id: 4,
                     name: "권준엽",
                     phone: "01012341234",
-                    level: "회원",
+                    level: "대기중",
                 },
                 { id: 5,
                     name: "박종익",
                     phone: "01012341234",
-                    level: "회원",
+                    level: "대기중",
                 },
                 { id: 6,
                     name: "ㅎㅇㅎㅇ",
                     phone: "01012341234",
-                    level: "회원",
+                    level: "대기중",
                 },
             ]
         }

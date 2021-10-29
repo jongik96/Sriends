@@ -3,43 +3,43 @@
 
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
-              <div class="col-start-2 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
+              <div class="md:col-start-2 md:col-span-4 col-start-1 col-span-6 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
                   <form @submit.prevent="submitForm">
                       <div class="pt-10">
                           <p class="text-3xl font-bold flex justify-center">회원정보 수정</p>
                       </div>
-                      <div class="pt-10 pl-20">
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">profileImg</p>
                           <input type="file"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">E-mail</p>
                           <input type="text" v-model="form.email" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                               <span v-if="!isEmailValid || !form.email" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
                           </p>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">Password</p>
                             <router-link to="/modifyPassword">
                                 <button class="border-2 rounded-xl border-yellow-500  font-medium w-40 h-10 mt-3">비밀번호 변경하기</button>
                             </router-link>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">이름</p>
                           <input type="text" v-model="form.name" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                               <span v-if="!form.name" class="text-yellow-600">이름을 입력해주세요.</span>
                           </p>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">생년월일</p>
                           <input type="date" v-model="form.bitrh" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                               <span v-if="!form.birth" class="text-yellow-600">생년월일을 선택해주세요.</span>
                           </p>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                         <p class="text-xl font-bold">성별</p>
                         <input class="mt-3 " type="radio" id="man" value="man" v-model="form.gender">
                         <label class="mr-3 font-semibold" for="man">남성</label>
@@ -51,14 +51,14 @@
                             <span v-if="!form.gender" class="text-yellow-600">성별을 선택해주세요.</span>
                         </p>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">연락처</p>
                           <input type="text" v-model="form.phone" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                             <span v-if="!isPhoneValid" class="text-yellow-600">올바른 전화번호를 입력해주세요.</span>
                         </p>
                       </div>
-                      <div class="pt-5 pl-20">
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                         <p class="text-xl font-bold">거주 지역</p>
                         <p>
                             <span v-if="!form.city" class="text-yellow-600">지역을 선택해주세요</span>
@@ -217,7 +217,7 @@
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">수정</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/main">
