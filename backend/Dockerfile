@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-alpine as builder
-COPY --from=build-stage ./dist ./src/main/resources/dist
+# COPY --from=build-stage ./dist ./src/main/resources/dist
 COPY ./backend/gradlew .
 COPY ./backend/gradle gradle
 COPY ./backend/build.gradle .
@@ -9,6 +9,6 @@ RUN chmod +x ./gradlew
 RUN ./gradlew clean build
 
 FROM openjdk:8-jdk-alpine
-COPY --from=builder build/libs/ssafy-fifth-web-common-project-6.16.0.jar app.jar
+COPY --from=builder build/libs/autonomous-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
