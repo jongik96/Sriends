@@ -3,10 +3,15 @@
         <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div v-for="item in items" :key="item.id" class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300">
                 <p class="text-justify leading-tight text-gray-800">{{ item.content }}<p>
-                <div class="mt-2">
-                    <span class="left">Posted On: {{ item.dataPosted }}</span>
+                <div class="mt-3">
+                    <span class="left">Posted On: {{ item.datePosted }}</span>
                     <span class="float-right">By: <a class="text-purple-500" href="#">{{ item.postedBy }}</a></span>
+                    <div class="float-right">
+                        <button class="mr-3">수정</button>
+                        <button class="mr-3">삭제</button>
+                    </div>
                 </div>
+                
             </div>
         </div>
   </div>

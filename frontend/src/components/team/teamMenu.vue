@@ -9,17 +9,17 @@
         </router-link>
         <div class="space-x-4">
             <router-link to="/team/articleList">
-                <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-sm rounded">
+                <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-md rounded">
                     <p>공지사항</p>
                 </button>
             </router-link>
             <router-link to="/team/calendar">
-                <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-sm rounded">
+                <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-md rounded">
                     <p>일정관리</p>
                 </button>
             </router-link>
             <router-link to="/team/memberList">
-                <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-sm rounded">
+                <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-md rounded">
                     <p>팀 관리</p>
                 </button>
             </router-link>
