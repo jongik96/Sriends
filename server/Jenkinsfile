@@ -27,8 +27,8 @@ pipeline {
         stage('Docker build') {
             agent any
             steps {
-                // sh 'docker build -t frontend:latest /home/ubuntu/S05P31D106/frontend/'
-                sh 'docker build -t frontend:latest ./frontend/'
+                sh 'docker build -t frontend:latest /home/ubuntu/S05P31D106/frontend/'
+                // sh 'docker build -t frontend:latest ./frontend/'
                 sh 'docker build -t backend:latest /home/ubuntu/S05P31D106/backend/'
             }
         }
