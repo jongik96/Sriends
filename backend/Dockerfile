@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine as builder
 # COPY --from=build-stage ./dist ./src/main/resources/dist
-ADD ./backend/gradlew .
+COPY gradlew .
 COPY ./backend/gradle gradle
 COPY ./backend/build.gradle .
 COPY ./backend/settings.gradle . 
