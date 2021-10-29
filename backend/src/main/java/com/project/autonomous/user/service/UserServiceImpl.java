@@ -2,6 +2,7 @@ package com.project.autonomous.user.service;
 
 import com.project.autonomous.common.entity.City;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
@@ -10,7 +11,6 @@ import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserTeam;
-import com.project.autonomous.user.repository.PictureRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;

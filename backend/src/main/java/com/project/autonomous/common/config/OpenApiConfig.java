@@ -48,13 +48,20 @@ public class OpenApiConfig {
 //            .group("Users")
 //            .pathsToMatch("/auth/**")
 //            .pathsToMatch("/users/**")
-//
 //            .build();
     }
     @Bean
     public GroupedOpenApi teamApi() {
         String packagesToscan[] = {"com.project.autonomous.team.controller"};
         return GroupedOpenApi.builder().group("Teams").packagesToScan(packagesToscan)
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi pictureApi() {
+        return GroupedOpenApi.builder()
+            .group("Pictures")
+            .pathsToMatch("/picture/**")
             .build();
     }
 
