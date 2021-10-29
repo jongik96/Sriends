@@ -11,13 +11,15 @@
                     <div class="col-start-1 col-span-1">
                         <img src='@/assets/profiledefault.jpg' class="h-10 w-10 rounded-md md:h-20 md:w-20" alt="">
                     </div>
-                    <div class="col-start-2 col-span-1 grid sm:place-items-center">
+                    <div class="ml-1 md:ml-0 col-start-2 col-span-2 grid sm:place-items-center">
                         {{item.name}}
-                    </div>
-                    <div class=" sm:visible col-start-3 col-span-1 grid sm:place-items-center">
+                        <br>
                         {{item.level}}
                     </div>
-                    <div class="invisible sm:visible col-start-4 sm:col-span-2 grid sm:place-items-center">
+                    <!-- <div class=" sm:visible col-start-3 col-span-1 grid sm:place-items-center">
+                        {{item.level}}
+                    </div> -->
+                    <div class="invisible sm:visible sm:col-start-4 sm:col-span-2 grid sm:place-items-center">
                         {{item.phone}}
                     </div>
 

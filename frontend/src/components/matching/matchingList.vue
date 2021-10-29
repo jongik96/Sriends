@@ -2,7 +2,7 @@
   <div class="grid grid-cols-6">
         <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div class="flex justify-end">
-                <router-link to="/team/createMatching">
+                <router-link to="/createMatching">
                 <button class="bg-yellow-500 px-2 py-1 
                     text-white font-semibold text-md md:text-xl rounded block text-center 
                     sm:inline-block mr-5">

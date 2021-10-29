@@ -13,53 +13,46 @@
                           <input type="file"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
-                          <p class="text-xl font-bold">E-mail</p>
-                          <input type="text" v-model="form.email" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
-                          <p>
-                              <span v-if="!isEmailValid || !form.email" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
-                          </p>
-                      </div>
-                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
-                          <p class="text-xl font-bold">Password</p>
+                          <p class="text-xl font-bold">Password *</p>
                             <router-link to="/modifyPassword">
                                 <button class="border-2 rounded-xl border-yellow-500  font-medium w-40 h-10 mt-3">비밀번호 변경하기</button>
                             </router-link>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
-                          <p class="text-xl font-bold">이름</p>
+                          <p class="text-xl font-bold">이름 *</p>
                           <input type="text" v-model="form.name" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
-                              <span v-if="!form.name" class="text-yellow-600">이름을 입력해주세요.</span>
+                              <span v-if="!form.name" class="text-yellow-600">이름은 2자 이상 6자 이하로 입력해주세요.</span>
                           </p>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
-                          <p class="text-xl font-bold">생년월일</p>
+                          <p class="text-xl font-bold">생년월일 *</p>
                           <input type="date" v-model="form.bitrh" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
-                          <p>
+                          <!-- <p>
                               <span v-if="!form.birth" class="text-yellow-600">생년월일을 선택해주세요.</span>
-                          </p>
+                          </p> -->
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
-                        <p class="text-xl font-bold">성별</p>
+                        <p class="text-xl font-bold">성별 *</p>
                         <input class="mt-3 " type="radio" id="man" value="man" v-model="form.gender">
                         <label class="mr-3 font-semibold" for="man">남성</label>
                         <input type="radio" id="woman" value="woman" v-model="form.gender">
                         <label class="font-semibold" for="woman">여성</label>
                         <br>
                         <span>{{ this.form.gender }}</span>
-                        <p>
+                        <!-- <p>
                             <span v-if="!form.gender" class="text-yellow-600">성별을 선택해주세요.</span>
-                        </p>
+                        </p> -->
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">연락처</p>
                           <input type="text" v-model="form.phone" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                             <span v-if="!isPhoneValid" class="text-yellow-600">올바른 전화번호를 입력해주세요.</span>
-                        </p>
+                          </p>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
-                        <p class="text-xl font-bold">거주 지역</p>
+                        <p class="text-xl font-bold">거주 지역 *</p>
                         <p>
                             <span v-if="!form.city" class="text-yellow-600">지역을 선택해주세요</span>
                         </p>
@@ -234,7 +227,7 @@
 </template>
 
 <script>
-import { validateEmail } from '@/utils/validation.js';
+// import { validateEmail } from '@/utils/validation.js';
 import { validatePassword } from '@/utils/passwordValidation.js';
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 export default {
@@ -242,7 +235,6 @@ export default {
         return {
             selectDo : '',
             form:{
-                email: '',
                 name: '',
                 bitrh: '',
                 phone: '',
@@ -255,14 +247,14 @@ export default {
     },
     computed: {
         btnDisabled(){
-            if(!this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
+            if(!this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
                 return false
             }
             return true
         },
-        isEmailValid(){
-            return validateEmail(this.form.email);
-        },
+        // isEmailValid(){
+        //     return validateEmail(this.form.email);
+        // },
         isPasswordValid(){
             return validatePassword(this.form.password);
         },

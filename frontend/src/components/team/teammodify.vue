@@ -2,28 +2,29 @@
   <div class="grid grid-cols-6">
 
       <div class="col-start-2 col-span-4 ">
-          <br>
-        <p class="text-3xl font-bold flex justify-center">공지사항 /팀관리 /일정관리</p>
           <div class="grid grid-cols-6  mt-10">
-              <div class="col-start-2 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
+              <div class="md:col-start-2 md:col-span-4 col-start-1 col-span-6 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
                   <form @submit.prevent="submitForm">
-                      <div class="pt-10 pl-40">
+                      <div class="pt-10">
+                          <p class="text-3xl font-bold flex justify-center">S-riends 수정</p>
+                      </div>
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">S-riends 명</p>
                           <input type="text"  class=" text-xl w-2/4 rounded-md border-2 border-yellow-400">
                       </div>
-                      <div class="pt-5 pl-40">
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">S-riends 대표</p>
                           <input type="text"  class=" text-xl w-2/4 rounded-md border-2 border-yellow-400">
                       </div>
-                      <div class="pt-5 pl-40">
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">회비가격</p>
                           <input type="text"  class=" text-xl w-2/4 rounded-md border-2 border-yellow-400">
                       </div>
-                      <div class="pt-5 pl-40">
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">특이사항</p>
                           <input type="text"  class=" text-xl w-3/4 h-24  rounded-md border-2 border-yellow-400">
                       </div>
-                      <div class="pt-5 pl-40">
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                         <p class="text-xl font-bold">종목</p>
                         <p> 
                             <span v-if="!form.city" class="text-yellow-600">종목</span>
@@ -37,7 +38,7 @@
                             <option value="5">야구</option>
                         </select>  
                       </div>
-                      <div class="pt-5 pl-40">
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                         <p class="text-xl font-bold">거주 지역</p>
                         <p>
                             <span v-if="!form.city" class="text-yellow-600">지역을 선택해주세요</span>
