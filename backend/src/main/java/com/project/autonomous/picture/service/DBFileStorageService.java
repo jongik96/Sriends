@@ -1,12 +1,21 @@
 package com.project.autonomous.picture.service;
 
+import com.project.autonomous.common.exception.CustomException;
+import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.picture.dto.PictureInfoDto;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.exception.FileStorageException;
 import com.project.autonomous.picture.repository.PictureRepository;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -19,13 +28,38 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class DBFileStorageService {
 
     private final PictureRepository pictureRepository;
-    private final String IMAGE_PATH = "C:\\Users\\박범진\\Downloads";
+
+    // application-dev.yml (로컬 환경에서 테스트시 다른 디렉토리에서 하고 싶다면 여기서 변경)
+    @Value("${images.absolute.location}")
+    private String IMAGE_PATH;
 
     @Transactional
     public PictureInfoDto storeFile(MultipartFile file) {
-        // Normalize file name
+        // 디렉토리 경로 확인 후 없으면 디렉토리 생성 (경로 설정을 확실히 한다면 불필요)
+        Path directory = Paths.get(IMAGE_PATH);
+        try {
+            Files.createDirectories(directory);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        // DB에 저장할 내용
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String filePath = IMAGE_PATH + "\\" + fileName;
+        String fileType = file.getContentType();
+        String fileExtension;
+
+        // 사진 파일만 받음
+        if(fileType.contains("image/jpeg") || fileType.contains("image/jpg")){
+            fileExtension = ".JPG";
+        }else if(fileType.contains("image/png")){
+            fileExtension = ".PNG";
+        } else {
+            throw new CustomException(ErrorCode.NOT_ALLOW_TYPE);
+        }
+
+        // 파일 저장 url
+        String filePath = IMAGE_PATH + uuid + fileExtension;
 
         try {
             // Check if the file's name contains invalid characters
@@ -33,13 +67,14 @@ public class DBFileStorageService {
                 throw new FileStorageException(
                     "Sorry! Filename contains invalid path sequence " + fileName);
             }
-
+            // 파일 저장
             file.transferTo(new File(filePath));
-            Picture picture = new Picture(fileName, file.getContentType(), filePath);
+            Picture picture = Picture.of(uuid, fileName, fileType, filePath);
 
             return PictureInfoDto.from(pictureRepository.save(picture));
         } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+            throw new FileStorageException(
+                "Could not store file " + fileName + ". Please try again!", ex);
         }
     }
 
