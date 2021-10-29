@@ -41,7 +41,7 @@
 
         <!-- user meta form medium screens -->
         <div class="hidden md:block">
-          <h1 class="font-semibold">내 이름은 박범진.</h1>
+          <h1 class="font-semibold text-lg">내 이름은 박범진.</h1>
           <span>Travel, Nature and Music</span>
           <p>Lorem ipsum dolor sit amet consectetur</p>
         </div>
