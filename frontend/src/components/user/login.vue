@@ -8,11 +8,11 @@
       </div>
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
-              <div class="col-start-1 col-span-3 mr-2">
+              <div class="md:col-start-1 md:col-span-3 md:mr-2 md:visible ml-5 col-start-1 col-span-5  ">
                   <p class="text-2xl font-bold flex justify-center">우리동네 스포츠동호회 찾기</p>
                   <img src="@/assets/sideImg.png" width="450"  alt="">
               </div>
-              <div class="col-start-4 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
+              <div class="md:col-start-4 md:col-span-4  col-start-1 col-span-6  shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
                   <form @submit.prevent="submitForm">
                       <div class="pt-10">
                           <p class="text-3xl font-bold flex justify-center">Log In</p>
