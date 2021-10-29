@@ -1,9 +1,15 @@
 package com.project.autonomous.picture.controller;
 
+import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.picture.dto.PictureInfoDto;
 import com.project.autonomous.picture.service.DBFileStorageService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +33,10 @@ public class PictureController {
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "단일 사진 업로드", description = "<strong>받은 multipart file</strong>를 저장한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "파일 정보", content = @Content(schema = @Schema(implementation = PictureInfoDto.class))),
+        @ApiResponse(responseCode = "400", description = "NOT_ALLOW_TYPE\n\nFileStorageException", content = @Content),
+    })
     public ResponseEntity<PictureInfoDto> uploadFile(@RequestPart("file") MultipartFile file) {
         return ResponseEntity.ok(dbFileStorageService.storeFile(file));
     }

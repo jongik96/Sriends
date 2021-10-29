@@ -22,6 +22,7 @@ public enum ErrorCode {
     CANNOT_APPLY(BAD_REQUEST, "신청할 수 없습니다."),
     ALREADY_JOIN(BAD_REQUEST, "이미 가입되어있습니다."),
     ALREADY_APPLY(BAD_REQUEST, "이미 신청되어있습니다."),
+    NOT_ALLOW_TYPE(BAD_REQUEST, "JPG와 PNG 형식만 지원합니다."),
 
     EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
     EMAIL_MESSAGE(BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
