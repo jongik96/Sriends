@@ -1,9 +1,3 @@
-FROM node:lts-alpine as build-stage
-COPY frontend/package*.json ./
-RUN npm install
-COPY ./frontend .
-RUN npm run build
-
 FROM openjdk:8-jdk-alpine as builder
 COPY --from=build-stage ./dist ./src/main/resources/dist
 COPY ./backend/gradlew .
