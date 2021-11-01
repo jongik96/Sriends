@@ -1,22 +1,19 @@
 package com.project.autonomous.user.controller;
 
 
+import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.user.dto.request.AuthCode;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.service.EmailService;
 import com.project.autonomous.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "토큰이 필요한 유저 API")
 @RestController
@@ -26,6 +23,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EmailService emailService;
 
     @PutMapping("/{userId}")
     public ResponseEntity<Boolean> modifyUserInfo(@PathVariable("userId") Long userId, @RequestBody UserModifyPutReq modifyInfo){
@@ -51,9 +51,10 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<MyProfileRes> getMyProfile(){
         //토큰으로 userid 찾는거 추가
+
         System.out.println("본인 회원정보 조회");
-        Long userId = 1L;//임시로
-        MyProfileRes userRes = userService.getMyProfile(userId);
+
+        MyProfileRes userRes = userService.getMyProfile();
 
         return ResponseEntity.status(200).body(userRes);
 
@@ -68,6 +69,26 @@ public class UserController {
 
         return ResponseEntity.status(200).body(userRes);
 
+    }
+
+    @GetMapping("/auth/{email}")
+    public ResponseEntity<Boolean> sendMail(@PathVariable("email") String email){
+        System.out.println("이메일 발송");
+
+        emailService.sendMail(email);
+
+        return ResponseEntity.status(200).body(true);
+    }
+
+    @PostMapping("/auth/{email}")
+    public ResponseEntity<Boolean> checkMail(@PathVariable("email") String email, @RequestBody AuthCode authCode){
+        System.out.println("이메일 확인");
+
+        if(emailService.checkCode(authCode, email)){
+
+            return ResponseEntity.status(200).body(true);
+        }
+        return ResponseEntity.status(500).body(false);
     }
 
 }

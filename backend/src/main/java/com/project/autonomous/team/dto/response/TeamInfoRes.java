@@ -1,17 +1,16 @@
-package com.project.autonomous.team.dto.request;
+package com.project.autonomous.team.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TeamCreatePostReq {
+public class TeamInfoRes {
     String name;
     LocalDateTime createDate;
-//    long leaderId;
+    long leaderId;
     String pictureId;
     int memberCount;
     int maxCount;

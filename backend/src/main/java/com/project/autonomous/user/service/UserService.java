@@ -16,10 +16,11 @@ public interface UserService {
 
     User deleteUser(Long userId);
 
-    MyProfileRes getMyProfile(Long userId);
+    MyProfileRes getMyProfile();
 
     UserProfileRes getUserProfile(Long userId);
 
     User getUser(String userEmail);
 
+//    void sendEmail(String email);
 }
