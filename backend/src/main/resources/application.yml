@@ -1,6 +1,0 @@
-spring:
-  profiles:
-    active: dev
-
-# 개발 환경으로 배포
-# ava -jar 파일명.jar --spring.profiles.active=prod

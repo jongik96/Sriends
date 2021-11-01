@@ -10,6 +10,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.4.1",
     "autoprefixer": "^9.8.8",
+    "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "postcss": "^7.0.39",
     "sweetalert2": "^11.1.9",

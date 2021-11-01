@@ -252,6 +252,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { validateEmail } from '@/utils/validation.js';
 import { validatePassword } from '@/utils/passwordValidation.js';
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
@@ -297,6 +298,9 @@ export default {
     },
     methods:{
         submitForm: function(){
+            axios({
+                
+            })
             console.log('click')
         },
         clickEmailAuth: function(){
