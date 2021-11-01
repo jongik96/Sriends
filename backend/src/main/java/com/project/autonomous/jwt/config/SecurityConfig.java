@@ -39,8 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-            .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v2/**", "/favicon.ico"
-            );
+            .antMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs", "/api-docs/**");
     }
 
     @Override
@@ -59,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .authorizeRequests()
-//            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //OPTIONS 메소드 허락
             .antMatchers("/auth/**").permitAll()
             // 나머지 API 모두 인증 필요
             .anyRequest().authenticated()
