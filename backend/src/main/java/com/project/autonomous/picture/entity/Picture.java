@@ -17,9 +17,9 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor
 public class Picture {
 
+//    @GeneratedValue(generator = "uuid")
+//    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     private String name;
@@ -28,21 +28,16 @@ public class Picture {
 
     private String imageUrl;
 
-//    @Lob
-//    private byte[] data;
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public Picture(String name, String type) {
-        this.name = name;
-        this.type = type;
-    }
-
-    public Picture(String name, String type, String imageUrl) {
-        this.name = name;
-        this.type = type;
-        this.imageUrl = imageUrl;
+    public static Picture of(String id, String name, String type, String imageUrl){
+        return Picture.builder()
+            .id(id)
+            .name(name)
+            .type(type)
+            .imageUrl(imageUrl)
+            .build();
     }
 }

@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TeamCreatePostReq {
+public class TeamModifyPostReq {
     String name;
     LocalDateTime createDate;
-//    long leaderId;
+    long leaderId;
     String pictureId;
     int memberCount;
     int maxCount;

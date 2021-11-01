@@ -80,7 +80,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MyProfileRes getMyProfile(Long userId) {
+    public MyProfileRes getMyProfile() {
+        long userId = SecurityUtil.getCurrentMemberId();
+
         User user = userRepository.findById(userId).get();
 
         MyProfileRes res = new MyProfileRes();

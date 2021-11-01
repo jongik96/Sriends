@@ -1,6 +1,7 @@
 package com.project.autonomous.user.controller;
 
 
+import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
@@ -51,9 +52,10 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<MyProfileRes> getMyProfile(){
         //토큰으로 userid 찾는거 추가
+
         System.out.println("본인 회원정보 조회");
-        Long userId = 1L;//임시로
-        MyProfileRes userRes = userService.getMyProfile(userId);
+
+        MyProfileRes userRes = userService.getMyProfile();
 
         return ResponseEntity.status(200).body(userRes);
 
