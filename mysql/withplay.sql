@@ -5,6 +5,10 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
 -- Schema withplay
 -- -----------------------------------------------------
 
@@ -31,9 +35,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `withplay`.`picture` (
   `id` VARCHAR(255) NOT NULL,
-  `file_name` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
-  `image_uri` VARCHAR(255) NOT NULL,
+  `image_url` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
