@@ -2,11 +2,11 @@ package com.project.autonomous.team.service;
 
 import com.project.autonomous.common.entity.City;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
 import com.project.autonomous.team.dto.response.TeamInfoRes;
 import com.project.autonomous.team.dto.response.TeamListRes;
-import com.project.autonomous.team.entity.SportCategory;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.team.repository.TeamRepository;
@@ -14,7 +14,6 @@ import com.project.autonomous.user.entity.Interest;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.InterestRepository;
-import com.project.autonomous.user.repository.PictureRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,7 +228,7 @@ public class TeamServiceImpl implements TeamService{
                         teamListRes1.setSportsCategory(city.toString());
                         teamListRes1.setMemberCount(team.getMemberCount());
 
-                        String downloadUri = pictureRepository.findById(team.getPictureId()).get().getDownload_uri();
+                        String downloadUri = pictureRepository.findById(team.getPictureId()).get().getImageUrl();
                         teamListRes1.setPictureDownloadUri(downloadUri);
 
                         teamListRes.add(teamListRes1);
