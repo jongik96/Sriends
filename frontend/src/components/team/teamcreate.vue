@@ -9,7 +9,7 @@
                           <p class="text-3xl font-bold flex justify-center">S-riends 생성</p>
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
-                          <p class="text-xl font-bold">S-riends 명</p>
+                          <p class="text-xl font-bold">S-riends 이름</p>
                           <input type="text"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">

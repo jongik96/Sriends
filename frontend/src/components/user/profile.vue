@@ -61,7 +61,29 @@
 
 <script>
 export default {
-
+  data(){
+    return{
+      email : '',
+      name : '',
+      birth : '',
+      phone : '',
+      gender : '',
+      city : '',
+      pictureDownloadUri : '',
+      teams : [
+        {    
+          id : '',
+          pictureDownloadUri: '',
+          name : ''
+        },
+        {    
+          id : '',
+          pictureDownloadUri: '',
+          name : ''
+        },
+      ],
+    }
+  }
 }
 </script>
 

@@ -80,7 +80,17 @@
 export default {
     data(){
         return{
-            
+            name : '',
+            createDate : '',
+            leaderId : '',
+            pictureId : '',
+            memberCount : '',
+            maxCount : '',
+            description : '',
+            recruitmentState : '',
+            membershipFee : '',
+            city : '',
+            sportCategory : ''
         }
     },
 

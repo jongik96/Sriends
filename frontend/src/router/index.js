@@ -95,6 +95,12 @@ export default new VueRouter({
             component: () => import('@/views/team/member/waitingMemberPage.vue')
         },
         
+        // 팀찾기 전 종목 선택
+        {
+            path: '/selectCategory',
+            component: () => import('@/views/sriends/selectCategoryPage.vue')
+        },
+
         // 팀찾기 목록
         {
             path: '/teamList',
