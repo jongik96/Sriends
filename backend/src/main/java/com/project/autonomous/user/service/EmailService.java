@@ -5,6 +5,7 @@ import com.project.autonomous.user.dto.request.AuthCode;
 import com.project.autonomous.user.entity.Email;
 import com.project.autonomous.user.repository.EmailRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,8 +15,9 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmailService {
+
 
     private JavaMailSender javaMailSender;
 
