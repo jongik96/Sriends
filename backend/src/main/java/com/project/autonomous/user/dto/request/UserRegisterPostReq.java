@@ -35,6 +35,7 @@ public class UserRegisterPostReq {
             .password(passwordEncoder.encode(password))
             .userAuthority(UserAuthority.ROLE_USER)
             .deleted(false)
+            .auth_status(true)
             .build();
     }
 }
