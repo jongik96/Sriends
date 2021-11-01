@@ -4,14 +4,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- -----------------------------------------------------
 -- Schema withplay
 -- -----------------------------------------------------
@@ -20,12 +13,11 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- Schema withplay
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `withplay` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`confirmation_token`
+-- Table `withplay`.`confirmation_token`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`confirmation_token` (
+CREATE TABLE IF NOT EXISTS `withplay`.`confirmation_token` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `expiration_date` DATETIME NULL DEFAULT NULL,
   `expired` BIT(1) NULL DEFAULT NULL,
@@ -129,7 +121,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `mydb`.`request_join`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`request_join` (
+CREATE TABLE IF NOT EXISTS `withplay`.`request_join` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `team_id` BIGINT NOT NULL,
   `user_id` BIGINT NOT NULL,
@@ -151,7 +143,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 -- Table `mydb`.`team_board`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`team_board` (
+CREATE TABLE IF NOT EXISTS `withplay`.`team_board` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `writer_id` BIGINT NOT NULL,
   `title` VARCHAR(45) NOT NULL,
@@ -169,7 +161,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 -- Table `mydb`.`team_board_comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`team_board_comment` (
+CREATE TABLE IF NOT EXISTS `withplay`.`team_board_comment` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `team_board_id` BIGINT NOT NULL,
   `writer_id` BIGINT NOT NULL,

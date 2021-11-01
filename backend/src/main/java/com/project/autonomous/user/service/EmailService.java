@@ -28,10 +28,6 @@ public class EmailService {
 
     public void sendMail(String mailAddress) {
 
-        long userId = SecurityUtil.getCurrentMemberId();
-
-
-
         SimpleMailMessage message = new SimpleMailMessage();
         int code = makeCode();
         String text = "인증코드 : [" + String.valueOf(code)+"]\n5분 이내에 인증을 완료해주세요." ;
@@ -41,9 +37,9 @@ public class EmailService {
         message.setSubject("[Sriends] 인증코드 발송");
         message.setText(text);
 
-        if(emailRepository.findByUserId(userId).isPresent()){
+        if(emailRepository.findByEmail(mailAddress).isPresent()){
             System.out.println("있어");
-            Email email = emailRepository.findByUserId(userId).get();
+            Email email = emailRepository.findByEmail(mailAddress).get();
             email.setCreateDate(LocalDateTime.now());
             email.setLastModifiedDate(LocalDateTime.now());
             email.setExpirationDate(LocalDateTime.now().plusMinutes(5));
@@ -53,7 +49,7 @@ public class EmailService {
         }else{
             System.out.println("없어");
             Email email = new Email();
-            email.setUserId(userId);
+            email.setEmail(mailAddress);
             email.setCreateDate(LocalDateTime.now());
             email.setLastModifiedDate(LocalDateTime.now());
             email.setExpirationDate(LocalDateTime.now().plusMinutes(5));
@@ -84,11 +80,11 @@ public class EmailService {
 
     }
 
-    public boolean checkCode(AuthCode authCode) {
+    public boolean checkCode(AuthCode authCode, String emailAddress) {
         long userId = SecurityUtil.getCurrentMemberId();
 
-        if(emailRepository.findByUserId(userId).isPresent()){//아이디가 있는지 확인
-            Email email = emailRepository.findByUserId(userId).get();
+        if(emailRepository.findByEmail(emailAddress).isPresent()){//아이디가 있는지 확인
+            Email email = emailRepository.findByEmail(emailAddress).get();
             System.out.println(email.isExpired());
 
             if(authCode.getCode() == email.getCode()){//입력한거랑 아닌거랑 다르면 패스
