@@ -59,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
+            .antMatchers("/picture/**").permitAll()
             // 나머지 API 모두 인증 필요
             .anyRequest().authenticated()
             // TokenProvider, JwtFilter를 SecurityConfig에 적용
