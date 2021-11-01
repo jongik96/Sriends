@@ -42,6 +42,8 @@ public class User extends BaseEntity {
     @NotNull
     private boolean deleted;
 
+    private boolean auth_status;
+
     @OneToMany(mappedBy = "user")
     private List<UserTeam> userTeamList = new ArrayList<>();
 
