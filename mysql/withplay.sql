@@ -52,6 +52,18 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `withplay`.`sport_category`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `withplay`.`sport_category` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `withplay`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `withplay`.`user` (
@@ -74,38 +86,6 @@ CREATE TABLE IF NOT EXISTS `withplay`.`user` (
     REFERENCES `withplay`.`picture` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`email`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`email` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `expiration_date` DATETIME NULL DEFAULT NULL,
-  `expired` BIT(1) NULL DEFAULT NULL,
-  `create_date` DATETIME NULL DEFAULT NULL,
-  `last_modified_date` DATETIME NULL DEFAULT NULL,
-  `user_id` BIGINT NOT NULL,
-  `code` INT NOT NULL,
-  PRIMARY KEY (`id`, `user_id`),
-  INDEX `fk_Email_user_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Email_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `withplay`.`user` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `withplay`.`sport_category`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `withplay`.`sport_category` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -259,13 +239,10 @@ CREATE TABLE IF NOT EXISTS `withplay`.`email` (
   `expired` BIT(1) NULL DEFAULT NULL,
   `create_date` DATETIME NULL DEFAULT NULL,
   `last_modified_date` DATETIME NULL DEFAULT NULL,
-  `user_id` BIGINT NOT NULL,
   `code` INT NOT NULL,
-  PRIMARY KEY (`id`, `user_id`),
-  INDEX `fk_email_user_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_email_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `withplay`.`user` (`id`))
+  `email` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
