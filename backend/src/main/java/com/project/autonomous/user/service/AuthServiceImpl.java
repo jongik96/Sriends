@@ -36,6 +36,7 @@ public class AuthServiceImpl {
         if (userRepository.existsByEmail(userRegisterPostReq.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_JOIN);
         }
+        
         User user = User.from(userRegisterPostReq, passwordEncoder);
         userRepository.save(user);
     }

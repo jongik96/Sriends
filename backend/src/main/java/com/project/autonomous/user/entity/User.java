@@ -37,7 +37,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private City city;
 
-    String picture_id;
+    String pictureId;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -45,6 +45,7 @@ public class User extends BaseEntity {
 
     @NotNull
     private boolean deleted;
+    private boolean auth_status;
 
     @OneToMany(mappedBy = "user")
     private List<UserTeam> userTeamList = new ArrayList<>();
@@ -68,7 +69,7 @@ public class User extends BaseEntity {
             ", gender='" + gender + '\'' +
             ", phone='" + phone + '\'' +
             ", city='" + city + '\'' +
-            ", picture_id='" + picture_id + '\'' +
+            ", picture_id='" + pictureId + '\'' +
             ", password='" + password + '\'' +
             '}';
     }
@@ -84,6 +85,7 @@ public class User extends BaseEntity {
             .password(passwordEncoder.encode(dto.getPassword()))
             .userAuthority(UserAuthority.ROLE_USER)
             .deleted(false)
+                .auth_status(false)
             .build();
     }
 }

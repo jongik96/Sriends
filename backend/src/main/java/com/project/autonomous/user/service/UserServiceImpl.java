@@ -1,6 +1,7 @@
 package com.project.autonomous.user.service;
 
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
@@ -16,6 +17,7 @@ import com.project.autonomous.user.repository.UserTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @Service
@@ -32,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     PictureRepository pictureRepository;
+
+
+
 
     @Override
     public User createUser(UserRegisterPostReq registerInfo) {
@@ -67,18 +72,35 @@ public class UserServiceImpl implements UserService {
         user.setPhone(modifyInfo.getPhone());
         user.setGender(modifyInfo.getGender());
         user.setCity(City.from(modifyInfo.getCity()));
-        user.setPicture_id(modifyInfo.getUuid());
+        user.setPictureId(modifyInfo.getUuid());
         userRepository.save(user);
         return null;
     }
 
     @Override
     public User deleteUser(Long userId) {
+        User user = userRepository.findById(userId).get();
+
+        //가입된 팀에 지우기
+        //게시글은 지울지 말지 고민
+        for(UserTeam userTeam : userTeamRepository.findAll()){
+            if(userTeam.getUser().getId() == user.getId()){
+                userTeam.set_active(false);
+                userTeamRepository.save(userTeam);
+            }
+        }
+
+        user.setDeleted(true);
+        userRepository.save(user);
+
         return null;
     }
 
     @Override
-    public MyProfileRes getMyProfile(Long userId) {
+    public MyProfileRes getMyProfile() {
+
+        long userId = SecurityUtil.getCurrentMemberId();
+
         User user = userRepository.findById(userId).get();
 
         MyProfileRes res = new MyProfileRes();
@@ -130,4 +152,13 @@ public class UserServiceImpl implements UserService {
             return null;
         return user;
     }
+
+//    @Override
+//    public void sendEmail(String email) {
+//
+//        ConfirmationToken findConfirmationToken = confirmationTokenService.findByIdAndExpirationDateAfterAndExpired(token);
+//        User findUserInfo = findById(findConfirmationToken.getUserId());
+//        findConfirmationToken.useToken();	// 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true로 변경
+//        findUserInfo.emailVerifiedSuccess();
+//    }
 }

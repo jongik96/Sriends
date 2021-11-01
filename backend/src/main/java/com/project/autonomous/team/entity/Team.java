@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -16,19 +17,19 @@ import java.util.List;
 @Getter
 @Setter
 public class Team extends BaseEntity {
-    Long leader_id;
-    String picture_id;
+    Long leaderId;
+    String pictureId;
     String name;
-    Date create_date;
-    int member_count;
-    int max_count;
+    LocalDateTime createDate;
+    int memberCount;
+    int maxCount;
     String description;
-    BitSet recruitment_state;
-    BitSet is_active;
-    BitSet membership_fee;
-    BitSet public_state;
+    boolean recruitmentState;
+    boolean is_active;
+    boolean membershipFee;
+    boolean publicState;
     String city;
-    Long sport_category;
+    Long sportCategory;
 
 
     @OneToMany(mappedBy = "team")

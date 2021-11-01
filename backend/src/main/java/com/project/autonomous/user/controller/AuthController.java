@@ -2,14 +2,14 @@ package com.project.autonomous.user.controller;
 
 import com.project.autonomous.jwt.dto.TokenDto;
 import com.project.autonomous.user.dto.request.LoginReq;
-import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
-import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.service.AuthServiceImpl;
+import com.project.autonomous.user.service.EmailService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +25,9 @@ public class AuthController {
     // 토큰을 사용하지 않는 API
 
     private final AuthServiceImpl authService;
+
+    @Autowired
+    EmailService emailSenderService;
 
     @PostMapping("/sign-up")
     @ApiOperation(value = "회원 가입", notes = "<strong>입력 받은 정보</strong>를 사용해 회원 가입한다.")
@@ -64,5 +67,7 @@ public class AuthController {
     public ResponseEntity<TokenDto> login(@RequestBody LoginReq loginReq){
         return ResponseEntity.ok(authService.login(loginReq));
     }
+
+
 
 }

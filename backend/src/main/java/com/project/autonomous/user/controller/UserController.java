@@ -1,20 +1,15 @@
 package com.project.autonomous.user.controller;
 
 
-import com.project.autonomous.user.dto.request.LoginReq;
-import com.project.autonomous.user.dto.request.PasswordReq;
-import com.project.autonomous.user.dto.request.UserModifyPutReq;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
+import com.project.autonomous.user.dto.request.*;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.service.EmailService;
 import com.project.autonomous.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +23,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EmailService emailService;
 
     @PutMapping("/{userId}")
     public ResponseEntity<Boolean> modifyUserInfo(@PathVariable("userId") Long userId, @RequestBody UserModifyPutReq modifyInfo){
@@ -52,10 +50,9 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<MyProfileRes> getMyProfile(){
-        //토큰으로 userid 찾는거 추가
+
         System.out.println("본인 회원정보 조회");
-        Long userId = 1L;//임시로
-        MyProfileRes userRes = userService.getMyProfile(userId);
+        MyProfileRes userRes = userService.getMyProfile();
 
         return ResponseEntity.status(200).body(userRes);
 
@@ -71,5 +68,21 @@ public class UserController {
         return ResponseEntity.status(200).body(userRes);
 
     }
+
+    @GetMapping("/auth/{email}")
+    public void sendEmail(@PathVariable("email") String email){
+        System.out.println("이메일 발송");
+
+        emailService.sendMail(email);
+//
+//        return;
+    }
+    @PostMapping("/auth")
+    public ResponseEntity<Boolean> checkEmailCode(@RequestBody AuthCode authCode){
+        System.out.println("인증코드 확인");
+
+        return ResponseEntity.ok(emailService.checkCode(authCode));
+    }
+
 
 }

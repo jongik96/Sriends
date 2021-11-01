@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,4 +23,8 @@ public class UserTeam {
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+
+    LocalDateTime register_date;
+    String authority;
+    boolean is_active;
 }
