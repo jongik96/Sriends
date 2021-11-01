@@ -27,7 +27,6 @@ dependencies {
 	//이메일 인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-
 	//querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'
 	compileOnly 'org.projectlombok:lombok'
