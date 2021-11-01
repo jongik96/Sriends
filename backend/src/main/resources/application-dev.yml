@@ -37,11 +37,11 @@ mail:
   username: ssafyD106@gmail.com
   password: FinalProjD106
   properties:
-      mail:
-          stmp:
-            auth: true
-            starttls:
-              enable: true
+    mail:
+      stmp:
+        auth: true
+        starttls:
+          enable: true
 
 logging:
   level:
