@@ -3,6 +3,8 @@ package com.project.autonomous.user.controller;
 
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.user.dto.request.AuthCode;
+import com.project.autonomous.user.dto.request.InterestReq;
+import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "토큰이 필요한 유저 API")
@@ -35,6 +38,7 @@ public class UserController {
 
         return ResponseEntity.status(200).body(true);
     }
+
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") Long userId){
@@ -71,24 +75,14 @@ public class UserController {
 
     }
 
-    @GetMapping("/auth/{email}")
-    public ResponseEntity<Boolean> sendMail(@PathVariable("email") String email){
-        System.out.println("이메일 발송");
 
-        emailService.sendMail(email);
+    @PostMapping("/interest")
+    public void interest(@RequestBody InterestReq interestReq){
+        System.out.println("흥미있는 종목 선택");
 
-        return ResponseEntity.status(200).body(true);
+        userService.interest(interestReq);
     }
 
-    @PostMapping("/auth/{email}")
-    public ResponseEntity<Boolean> checkMail(@PathVariable("email") String email, @RequestBody AuthCode authCode){
-        System.out.println("이메일 확인");
 
-        if(emailService.checkCode(authCode, email)){
-
-            return ResponseEntity.status(200).body(true);
-        }
-        return ResponseEntity.status(500).body(false);
-    }
 
 }

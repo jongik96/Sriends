@@ -11,5 +11,7 @@ import java.util.Optional;
 @Repository
 public interface UserTeamRepository extends CrudRepository<UserTeam, UserTeamId> {
     Optional<UserTeam> findByUserId(long userId);
+    Optional<UserTeam> findByTeamId(long teamId);
+    Optional<UserTeam> findByUserIdAndTeamId(long userId, long teamId);
     ArrayList<UserTeam> findAllByTeamId(long teamId);
 }
