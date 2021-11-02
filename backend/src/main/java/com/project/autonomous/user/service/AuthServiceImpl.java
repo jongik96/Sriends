@@ -9,6 +9,7 @@ import com.project.autonomous.jwt.entity.RefreshToken;
 import com.project.autonomous.jwt.repository.RefreshTokenRepository;
 import com.project.autonomous.user.dto.request.LoginReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
+import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +32,13 @@ public class AuthServiceImpl {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public void signup(UserRegisterPostReq userRegisterPostReq) {
+    public MyProfileRes signup(UserRegisterPostReq userRegisterPostReq) {
         // 가입되어있는지 확인 (회원을 삭제해도 DB에 회원 정보가 남아있어서 가입 안됨 고민해야할 일)
         if (userRepository.existsByEmail(userRegisterPostReq.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_JOIN);
         }
         User user = userRegisterPostReq.toUser(passwordEncoder);
-        userRepository.save(user);
+        return MyProfileRes.from(userRepository.save(user));
     }
 
     public boolean checkEmail(String email){

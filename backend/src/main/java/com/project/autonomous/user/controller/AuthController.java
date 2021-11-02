@@ -6,6 +6,7 @@ import com.project.autonomous.user.dto.request.AuthCode;
 import com.project.autonomous.user.dto.request.LoginReq;
 import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
+import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.service.AuthServiceImpl;
 import com.project.autonomous.user.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,21 +37,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthServiceImpl authService;
-
-    @Autowired
-    EmailService emailService;
+    private final EmailService emailService;
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원 가입", description = "<strong>입력 받은 정보</strong>를 사용해 회원 가입한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "정상 가입", content = @Content),
-        @ApiResponse(responseCode = "400", description = "ALREADY_JOIN",
+        @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> signUp(
-        @Valid @RequestBody UserRegisterPostReq userRegisterPostReq) {
-        authService.signup(userRegisterPostReq);
-        return ResponseEntity.ok("정상 가입");
+    public ResponseEntity<MyProfileRes> signUp(@Valid @RequestBody UserRegisterPostReq userRegisterPostReq) {
+        return ResponseEntity.ok(authService.signup(userRegisterPostReq));
     }
 
     @GetMapping("/sign-up/{email}")
@@ -69,16 +66,13 @@ public class AuthController {
         return ResponseEntity.status(400).body(Boolean.FALSE);
     }
 
-    @GetMapping("/pageable-test")
-    public ResponseEntity<String> pageable(@ParameterObject Pageable pageable) {
-        return ResponseEntity.ok("fsda");
-    }
-
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "<strong>받은 이메일, 패스워드</strong>를 사용해 로그인한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "토큰 정보",
             content = @Content(schema = @Schema(implementation = TokenDto.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST (이메일, 비밀번호 형식 틀림)", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Unauthoriezed (아이디 또는 비밀번호 틀림)", content = @Content),
     })
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginReq loginReq) {
         return ResponseEntity.ok(authService.login(loginReq));
