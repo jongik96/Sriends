@@ -25,6 +25,7 @@ public class ControllerExceptionHandler {
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
+    // https://cheese10yun.github.io/spring-jpa-best-02/
     @ExceptionHandler(value = { MethodArgumentNotValidException.class })
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         final BindingResult bindingResult = e.getBindingResult();
