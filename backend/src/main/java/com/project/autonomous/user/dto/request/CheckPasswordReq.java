@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,5 +20,9 @@ public class CheckPasswordReq {
     @NotNull(message = EMPTY_MESSAGE)
     @Pattern(regexp = USER_PW_FORMAT, message = USER_PW_MESSAGE)
     private String password;
+
+    public String encodePassword(PasswordEncoder passwordEncoder){
+        return passwordEncoder.encode(this.password);
+    }
 
 }

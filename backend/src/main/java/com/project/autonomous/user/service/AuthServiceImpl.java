@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService{
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepository userRepository;
@@ -34,13 +34,12 @@ public class AuthServiceImpl {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public MyProfileRes signup(UserRegisterReq userRegisterReq) {
+    public void signup(UserRegisterReq userRegisterReq) {
         // 가입되어있는지 확인 (회원을 삭제해도 DB에 회원 정보가 남아있어서 가입 안됨 고민해야할 일)
         if (userRepository.existsByEmail(userRegisterReq.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_JOIN);
         }
-        User user = userRegisterReq.toUser(passwordEncoder);
-        return MyProfileRes.from(userRepository.save(user));
+        userRepository.save(userRegisterReq.toUser(passwordEncoder));
     }
 
     public boolean checkEmail(String email) {
@@ -71,8 +70,6 @@ public class AuthServiceImpl {
         // 5. 토큰 발급
         return tokenDto;
     }
-
-
 
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {

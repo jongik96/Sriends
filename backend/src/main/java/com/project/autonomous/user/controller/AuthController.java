@@ -4,10 +4,8 @@ import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.jwt.dto.TokenDto;
 import com.project.autonomous.user.dto.request.AuthCode;
 import com.project.autonomous.user.dto.request.LoginReq;
-import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.UserRegisterReq;
-import com.project.autonomous.user.dto.response.MyProfileRes;
-import com.project.autonomous.user.service.AuthServiceImpl;
+import com.project.autonomous.user.service.AuthService;
 import com.project.autonomous.user.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthServiceImpl authService;
+    private final AuthService authService;
     private final EmailService emailService;
 
     @PostMapping("/sign-up")
@@ -41,8 +39,9 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MyProfileRes> signUp(@Valid @RequestBody UserRegisterReq userRegisterReq) {
-        return ResponseEntity.ok(authService.signup(userRegisterReq));
+    public ResponseEntity<String> signUp(@Valid @RequestBody UserRegisterReq userRegisterReq) {
+        authService.signup(userRegisterReq);
+        return ResponseEntity.ok("정상 가입");
     }
 
     @GetMapping("/sign-up/{email}")

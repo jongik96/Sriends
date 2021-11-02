@@ -13,6 +13,8 @@ public interface UserService {
     Boolean emailCheck(String email);
     boolean checkPassword(CheckPasswordReq checkPasswordReq);
 
+    void changePassword(CheckPasswordReq checkPasswordReq);
+
     User modifyUser(Long userId, UserModifyPutReq modifyInfo);
 
     User deleteUser(Long userId);

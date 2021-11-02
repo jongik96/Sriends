@@ -41,7 +41,7 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
-    @PostMapping("/check-password")
+    @PostMapping("/password")
     @Operation(summary = "비밀번호 확인 (비밀번호 수정 페이지에 사용)", description = "<strong>입력 받은 비밀번호</strong>를 사용해 현 사용자의 비밀번호와 비교한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "true, false", content = @Content),
@@ -50,6 +50,18 @@ public class UserController {
     })
     public ResponseEntity<Boolean> checkPassword(@Valid @RequestBody CheckPasswordReq checkPasswordReq) {
         return ResponseEntity.ok(userService.checkPassword(checkPasswordReq));
+    }
+
+    @PutMapping("/password")
+    @Operation(summary = "비밀번호 수정 (비밀번호 수정 페이지에 사용)", description = "<strong>입력 받은 비밀번호</strong>를 사용해 사용자의 비밀번호를 변경한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "변경되었습니다.", content = @Content),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<String> changePassword(@Valid @RequestBody CheckPasswordReq checkPasswordReq) {
+        userService.changePassword(checkPasswordReq);
+        return ResponseEntity.ok("변경되었습니다.");
     }
 
     @PutMapping("/{userId}")

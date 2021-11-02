@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,11 +61,21 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    // 비밀번호 확인
     public boolean checkPassword(CheckPasswordReq checkPasswordReq) {
         String currentPass = userRepository.findById(SecurityUtil.getCurrentMemberId())
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)).getPassword();
 
         return passwordEncoder.matches(checkPasswordReq.getPassword(), currentPass);
+    }
+
+    // 비밀번호 변경
+    @Transactional
+    public void changePassword(CheckPasswordReq checkPasswordReq) {
+        User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.changePassword(checkPasswordReq.encodePassword(passwordEncoder));
     }
 
     @Override
@@ -138,8 +149,9 @@ public class UserServiceImpl implements UserService {
     public User getUser(String userEmail) {
         User user = userRepository.findByEmail(userEmail).get();
 
-        if (user == null)
+        if (user == null) {
             return null;
+        }
         return user;
     }
 
@@ -147,7 +159,7 @@ public class UserServiceImpl implements UserService {
     public void interest(InterestReq interestReq) {
         long userId = SecurityUtil.getCurrentMemberId();
 
-        for(String name : interestReq.getSportCategory()){
+        for (String name : interestReq.getSportCategory()) {
             long sportCategoryId = sportCategoryRepository.findByName(name).get().getId();
             Interest interest = new Interest();
             interest.setSportCategoryId(sportCategoryId);
