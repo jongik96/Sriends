@@ -18,9 +18,9 @@
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                         <p class="text-xl font-bold">회비유무</p>
-                        <input class="mt-3 " type="radio" id="O" value="회비O" v-model="form.money">
+                        <input class="mt-3 " type="radio" id="O" value="회비O" v-model="form.membershipFee">
                         <label class="mr-3 font-semibold" for="O">O</label>
-                        <input type="radio" id="X" value="회비X" v-model="form.money">
+                        <input type="radio" id="X" value="회비X" v-model="form.membershipFee">
                         <label class="font-semibold" for="X ">X</label>
                         <br>
                       </div>
@@ -91,19 +91,22 @@ export default {
             selectDo : '',
             selectDo2 : '',
             form:{
-                name: '',
-                bitrh: '',
-                phone: '',
+                name : '',
+                pictureId : '',
+                memberCount : '',
+                maxCount : '',
+                description : '',
+                recruitmentState : '',
+                membershipFee : '',
                 city : '',
-                money: '',
-                uuid:'',
+                sportCategory : '',
             }
             
         }
     },
     computed: {
         btnDisabled(){
-            if(!this.isPasswordValid || !this.form.bitrh || !this.form.money){
+            if(!this.isPasswordValid || !this.form.bitrh || !this.form.membershipFee){
                 return false
             }
             return true
