@@ -13,18 +13,17 @@ public class AutonomousApplication {
 		SpringApplication.run(AutonomousApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-					.allowedMethods("*")
-//                        .allowedOrigins("*")
-					.allowedHeaders("*")
-					.allowedOriginPatterns("*");
-//                        .allowedOrigins("http://localhost:8081");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**")
+//					.allowedMethods("*")
+////                        .allowedOrigins("*")
+//					.allowedHeaders("*")
+//					.allowedOriginPatterns("*");
+////                        .allowedOrigins("http://localhost:8081");
+//			}
+//		};
 }
