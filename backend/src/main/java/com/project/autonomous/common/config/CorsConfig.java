@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-//            .allowedOrigins("http://jxy.me") // http://jxy.me/websocket-debug-tool/
+                .allowedOrigins("*")
                 .allowCredentials(false)
                 .allowedMethods("*")
                 .allowedOriginPatterns("*")
