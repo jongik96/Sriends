@@ -29,7 +29,7 @@ public class Team extends BaseEntity {
     boolean membershipFee;
     boolean publicState;
     String city;
-    Long sportCategory;
+    Long sportCategoryId;
 
 
     @OneToMany(mappedBy = "team")

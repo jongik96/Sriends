@@ -1,6 +1,8 @@
 package com.project.autonomous.user.service;
 
 
+import com.project.autonomous.user.dto.request.InterestReq;
+import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
 import com.project.autonomous.user.dto.response.MyProfileRes;
@@ -22,5 +24,5 @@ public interface UserService {
 
     User getUser(String userEmail);
 
-//    void sendEmail(String email);
+    void interest(InterestReq interestReq);
 }

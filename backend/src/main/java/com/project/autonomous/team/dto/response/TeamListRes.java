@@ -13,4 +13,5 @@ public class TeamListRes {
     boolean membershipFee;
     int memberCount;
     String sportsCategory;
+    String city;
 }

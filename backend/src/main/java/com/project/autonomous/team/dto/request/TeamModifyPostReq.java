@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class TeamModifyPostReq {
     String name;
-    LocalDateTime createDate;
+//    LocalDateTime createDate;
     long leaderId;
     String pictureId;
     int memberCount;
