@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Getter
+@Setter
 public class LoginReq {
 
     @Email

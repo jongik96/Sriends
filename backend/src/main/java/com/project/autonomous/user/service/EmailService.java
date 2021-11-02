@@ -7,27 +7,27 @@ import com.project.autonomous.user.repository.EmailRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class EmailService {
-
-
-    private JavaMailSender javaMailSender;
 
     @Autowired
     EmailRepository emailRepository;
 
+
+    private JavaMailSender javaMailSender;
     private static final String FROM_ADDRESS = "ssafyD106@gmail.com";
 
     public void sendMail(String mailAddress) {
-
         SimpleMailMessage message = new SimpleMailMessage();
         int code = makeCode();
         String text = "인증코드 : [" + String.valueOf(code)+"]\n5분 이내에 인증을 완료해주세요." ;
@@ -36,6 +36,7 @@ public class EmailService {
         message.setFrom(EmailService.FROM_ADDRESS);
         message.setSubject("[Sriends] 인증코드 발송");
         message.setText(text);
+        javaMailSender.send(message);
 
         if(emailRepository.findByEmail(mailAddress).isPresent()){
             System.out.println("있어");
@@ -57,7 +58,6 @@ public class EmailService {
             email.setCode(code);
             emailRepository.save(email);
         }
-        javaMailSender.send(message);
     }
 
     public int makeCode(){
@@ -72,16 +72,11 @@ public class EmailService {
             result = result - trim;
         }
 
-        String message ="인증코드 : ";
-        message += String.valueOf(result);
-        message += "\n5분 이내에 인증코드를 입력해주세요.";
-        System.out.println(message);
         return result;
 
     }
 
     public boolean checkCode(AuthCode authCode, String emailAddress) {
-        long userId = SecurityUtil.getCurrentMemberId();
 
         if(emailRepository.findByEmail(emailAddress).isPresent()){//아이디가 있는지 확인
             Email email = emailRepository.findByEmail(emailAddress).get();
@@ -108,4 +103,7 @@ public class EmailService {
         }
         return false;
     }
+
+
+
 }
