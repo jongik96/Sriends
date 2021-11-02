@@ -2,10 +2,12 @@ package com.project.autonomous.user.controller;
 
 import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.jwt.dto.TokenDto;
+import com.project.autonomous.user.dto.request.AuthCode;
 import com.project.autonomous.user.dto.request.LoginReq;
 import com.project.autonomous.user.dto.request.PasswordReq;
 import com.project.autonomous.user.dto.request.UserRegisterPostReq;
 import com.project.autonomous.user.service.AuthServiceImpl;
+import com.project.autonomous.user.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +19,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthServiceImpl authService;
+
+    @Autowired
+    EmailService emailService;
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원 가입", description = "<strong>입력 받은 정보</strong>를 사용해 회원 가입한다.")
@@ -77,5 +83,28 @@ public class AuthController {
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginReq loginReq) {
         return ResponseEntity.ok(authService.login(loginReq));
     }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<Boolean> sendMail(@PathVariable("email") String email){
+        System.out.println("이메일 발송");
+
+        emailService.sendMail(email);
+
+        return ResponseEntity.status(200).body(true);
+    }
+
+    @PostMapping("/{email}")
+    public ResponseEntity<Boolean> checkMail(@PathVariable("email") String email, @RequestBody AuthCode authCode){
+        System.out.println("이메일 확인");
+
+        if(emailService.checkCode(authCode, email)){
+
+            return ResponseEntity.status(200).body(true);
+        }
+        return ResponseEntity.status(500).body(false);
+    }
+
+
+
 
 }

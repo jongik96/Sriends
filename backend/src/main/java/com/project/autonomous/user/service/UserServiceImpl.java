@@ -1,19 +1,19 @@
 package com.project.autonomous.user.service;
 
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.common.entity.Sport;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.team.entity.Team;
-import com.project.autonomous.user.dto.request.UserModifyPutReq;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
+import com.project.autonomous.team.repository.SportCategoryRepository;
+import com.project.autonomous.user.dto.request.*;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
+import com.project.autonomous.user.entity.Interest;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserTeam;
-import com.project.autonomous.user.repository.UserRepository;
-import com.project.autonomous.user.repository.UserRepositorySupport;
-import com.project.autonomous.user.repository.UserTeamRepository;
+import com.project.autonomous.user.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +33,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     PictureRepository pictureRepository;
+
+    @Autowired
+    SportCategoryRepository sportCategoryRepository;
+
+    @Autowired
+    InterestRepository interestRepository;
 
     @Override
     public User createUser(UserRegisterPostReq registerInfo) {
@@ -134,4 +140,22 @@ public class UserServiceImpl implements UserService {
             return null;
         return user;
     }
+
+    @Override
+    public void interest(InterestReq interestReq) {
+        long userId = SecurityUtil.getCurrentMemberId();
+
+        for(String name : interestReq.getSportCategory()){
+            long sportCategoryId = sportCategoryRepository.findByName(name).get().getId();
+            Interest interest = new Interest();
+            interest.setSportCategoryId(sportCategoryId);
+            interest.setUserId(userId);
+
+            interestRepository.save(interest);
+        }
+
+        return;
+    }
+
+
 }
