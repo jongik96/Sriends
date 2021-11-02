@@ -12,5 +12,5 @@ public class AutonomousApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AutonomousApplication.class, args);
 	}
-	
+
 }
