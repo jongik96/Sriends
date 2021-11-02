@@ -3,7 +3,10 @@ package com.project.autonomous.common.exception;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Getter
 @Builder
@@ -23,6 +26,18 @@ public class ErrorResponse {
                 .error(errorCode.getHttpStatus().name())
                 .code(errorCode.name())
                 .message(errorCode.getDetail())
+                .build()
+            );
+    }
+
+    public static ResponseEntity<ErrorResponse> toResponseEntity(FieldError error) {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.name())
+                .code(error.getCode())
+                .message(error.getDefaultMessage() + "에러 필드 : " + error.getField() + "에러 값 : " + error.getRejectedValue())
                 .build()
             );
     }

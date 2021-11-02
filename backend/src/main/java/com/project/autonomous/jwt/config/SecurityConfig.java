@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .authorizeRequests()
-            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //OPTIONS 메소드 허락
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //OPTIONS 메소드 허락 cors preflight 에러 방지
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/picture/**").permitAll()
             // 나머지 API 모두 인증 필요
