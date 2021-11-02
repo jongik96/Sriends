@@ -5,29 +5,19 @@ import static com.project.autonomous.common.exception.ValidatorMessage.USER_PW_F
 import static com.project.autonomous.common.exception.ValidatorMessage.USER_PW_MESSAGE;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Getter
-public class LoginReq {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class CheckPasswordReq {
 
-    @Schema(description = "로그인 이메일", example = "qjawlsqjacks@naver.com")
-    @NotBlank(message = EMPTY_MESSAGE)
-    @Email
-    private String email;
-
-    @Schema(description = "비밀번호", example = "abcdef12345^")
+    @Schema(description = "확인할 비밀번호", example = "qwer1234^")
     @NotNull(message = EMPTY_MESSAGE)
     @Pattern(regexp = USER_PW_FORMAT, message = USER_PW_MESSAGE)
     private String password;
 
-    public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(email, password);
-    }
 }

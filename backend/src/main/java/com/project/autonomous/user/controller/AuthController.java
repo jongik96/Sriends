@@ -4,13 +4,12 @@ import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.jwt.dto.TokenDto;
 import com.project.autonomous.user.dto.request.AuthCode;
 import com.project.autonomous.user.dto.request.LoginReq;
-import com.project.autonomous.user.dto.request.PasswordReq;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
+import com.project.autonomous.user.dto.request.CheckPasswordReq;
+import com.project.autonomous.user.dto.request.UserRegisterReq;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.service.AuthServiceImpl;
 import com.project.autonomous.user.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,10 +17,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,8 +41,8 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MyProfileRes> signUp(@Valid @RequestBody UserRegisterPostReq userRegisterPostReq) {
-        return ResponseEntity.ok(authService.signup(userRegisterPostReq));
+    public ResponseEntity<MyProfileRes> signUp(@Valid @RequestBody UserRegisterReq userRegisterReq) {
+        return ResponseEntity.ok(authService.signup(userRegisterReq));
     }
 
     @GetMapping("/sign-up/{email}")
@@ -57,13 +52,6 @@ public class AuthController {
     })
     public ResponseEntity<Boolean> emailCheck(@PathVariable("email") String email) {
         return ResponseEntity.ok(authService.checkEmail(email));
-    }
-
-    @PostMapping("/check-password")
-    public ResponseEntity<Boolean> checkPassword(@RequestBody PasswordReq checkInfo) {
-        System.out.println("비밀번호 확인");
-        String password = checkInfo.getPassword();
-        return ResponseEntity.status(400).body(Boolean.FALSE);
     }
 
     @PostMapping("/login")

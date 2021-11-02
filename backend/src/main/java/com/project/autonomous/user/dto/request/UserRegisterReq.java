@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
-public class UserRegisterPostReq {
+public class UserRegisterReq {
 
     @Schema(description = "Email", example = "k5d106@naver.com")
     @NotBlank(message = EMPTY_MESSAGE)
