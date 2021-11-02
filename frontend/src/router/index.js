@@ -9,6 +9,7 @@ export default new VueRouter({
         // 로그인 & 실행 후 첫페이지
         {
             path:'/',
+            name: 'login',
             component: () => import('@/views/user/loginPage.vue')
         },
         // 회원가입
