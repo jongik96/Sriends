@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).get();
 
         MyProfileRes res = new MyProfileRes();
+        res.setId(userId);
         res.setEmail(user.getEmail());
         res.setName(user.getName());
         res.setBirth(user.getBirth());

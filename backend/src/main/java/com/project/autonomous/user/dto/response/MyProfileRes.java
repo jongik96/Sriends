@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class MyProfileRes {
 
+    Long id;
     String email;
     String name;
     LocalDate birth;
