@@ -45,6 +45,17 @@
 export default {
     data() {
         return{
+            teams:[
+                {    
+                    id : '',
+                    pictureDownloadUri: '',
+                    name : '',
+                    description : '',
+                    membershipFee : '',
+                    userCount : '',
+                    sportsCategory : '',
+                }
+            ],
             items: [
             { id: 1,
                 title: "동호회1",

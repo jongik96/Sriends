@@ -52,16 +52,16 @@
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">생년월일 *</p>
-                          <input type="date" v-model="form.bitrh" class="text-md md:text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="date" v-model="form.birth" class="text-md md:text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <!-- <p>
                               <span v-if="!form.birth" class="text-yellow-600">생년월일을 선택해주세요.</span>
                           </p> -->
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                         <p class="text-xl font-bold">성별 *</p>
-                        <input class="mt-3 " type="radio" id="man" value="man" v-model="form.gender">
+                        <input class="mt-3 " type="radio" id="man" value="남성" v-model="form.gender">
                         <label class="mr-3 font-semibold" for="man">남성</label>
-                        <input type="radio" id="woman" value="woman" v-model="form.gender">
+                        <input type="radio" id="woman" value="여성" v-model="form.gender">
                         <label class="font-semibold" for="woman">여성</label>
                         <br>
                         <span>{{ this.form.gender }}</span>
@@ -92,7 +92,7 @@
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
-                            <option value="서울특별시">서울특별시</option>
+                            <option value="서울">서울특별시</option>
                             <option value="인천광역시">인천광역시</option>
                             <option value="고양시">고양시</option>
                             <option value="과천시">과천시</option>
@@ -235,11 +235,11 @@
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button @click="submitForm"  class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/">
-                            <button class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
+                            <button type="submit" class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
                         </router-link>
                     </div>          
                   </form>
@@ -252,9 +252,11 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { validateEmail } from '@/utils/validation.js';
 import { validatePassword } from '@/utils/passwordValidation.js';
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
         return {
@@ -266,7 +268,7 @@ export default {
                 email: '',
                 password: '',
                 name: '',
-                bitrh: '',
+                birth: '',
                 phone: '',
                 city : '',
                 gender: '',
@@ -298,7 +300,18 @@ export default {
     methods:{
         submitForm: function(){
             console.log('click')
+            axios({
+                method: 'post',
+                url: `${SERVER_URL}/auth/sign-up`,
+                data: this.form
+            }).then((res)=>{
+                console.log(res.data)
+                this.$router.push({name: 'login'})
+            }).catch((err)=>{
+                console.log(err)
+            }) 
         },
+
         clickEmailAuth: function(){
             this.EmailAuthBtn = true;
         }        

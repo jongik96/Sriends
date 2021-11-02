@@ -209,8 +209,11 @@
                         <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
 
                       </div>
-                      <div class="flex justify-center p-2 mt-10">
+                    <div class="flex justify-center p-2 mt-10">
                         <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">수정</button>
+                    </div>
+                    <div class="flex justify-center p-2 mt-10">
+                        <button type="button"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">삭제</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/main">

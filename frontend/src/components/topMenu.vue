@@ -13,7 +13,7 @@
               
             <ul v-if="smallList" @click="smallList = false" class="fixed border-2 mr-10 mt-36 w-60 bg-white">
               <li>
-                <router-link to="/teamList"><p class="hover:bg-yellow-500">스렌즈 찾기</p></router-link>
+                <router-link to="/selectCategory"><p class="hover:bg-yellow-500">스렌즈 찾기</p></router-link>
               </li>
               <li>
                 <router-link to="/matchingList"><p class="hover:bg-yellow-500">경기/스렌드 찾기</p></router-link>
@@ -34,7 +34,7 @@
       </div>
       <div class="hidden sm:flex sm:items-center sm:w-auto">
         <div class="text-md">
-          <router-link to="/teamList">
+          <router-link to="/selectCategory">
             <p class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200 w-22 mr-4">
             스렌즈 찾기
             </p>

@@ -22,6 +22,18 @@ public enum ErrorCode {
     CANNOT_APPLY(BAD_REQUEST, "신청할 수 없습니다."),
     ALREADY_JOIN(BAD_REQUEST, "이미 가입되어있습니다."),
     ALREADY_APPLY(BAD_REQUEST, "이미 신청되어있습니다."),
+    NOT_ALLOW_TYPE(BAD_REQUEST, "JPG와 PNG 형식만 지원합니다."),
+
+    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
+    EMAIL_MESSAGE(BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
+    MEMBER_PW_MESSAGE(BAD_REQUEST, "비밀번호는 영어와 숫자를 포함해서 8자 이상 20자 이내로 입력해주세요."),
+    RESERVATION_PW_MESSAGE(BAD_REQUEST, "비밀번호는 숫자 4자리만 입력 가능합니다."),
+    ORGANIZATION_MESSAGE(BAD_REQUEST, "조직명은 특수문자 없이 20자 이내로 작성 가능합니다."),
+    NAME_MESSAGE(BAD_REQUEST, "이름은 특수문자(-_!?.,)를 포함하여 20자 이내로 작성 가능합니다."),
+    PRESET_NAME_MESSAGE(BAD_REQUEST, "프리셋 이름은 공백과 특수문자(-_!?.,)를 포함하여 20자 이내로 작성 가능합니다."),
+    DESCRIPTION_MESSAGE(BAD_REQUEST, "예약 내용은 100자 이내로 작성 가능합니다."),
+    FORMAT_MESSAGE(BAD_REQUEST, "날짜 및 시간 데이터 형식이 올바르지 않습니다."),
+    DAY_OF_WEEK_MESSAGE(BAD_REQUEST, "올바른 요일 형식이 아닙니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
@@ -40,6 +52,7 @@ public enum ErrorCode {
     CONTENT_NOT_FOUND(NOT_FOUND, "내용을 찾을 수 없습니다."),
     ARTICLE_NOT_FOUND(NOT_FOUND, "게시글을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
+    TOKEN_NOT_FOUND(NOT_FOUND, "해당 토큰을 찾을 수 없습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),

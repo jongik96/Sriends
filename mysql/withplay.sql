@@ -20,10 +20,21 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- Schema withplay
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `withplay` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
--- -----------------------------------------------------
--- Schema withsport
--- -----------------------------------------------------
 USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`confirmation_token`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`confirmation_token` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `expiration_date` DATETIME NULL DEFAULT NULL,
+  `expired` BIT(1) NULL DEFAULT NULL,
+  `create_date` DATETIME NULL DEFAULT NULL,
+  `last_modified_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
 
 -- -----------------------------------------------------
 -- Table `withplay`.`picture`
@@ -41,35 +52,59 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `withplay`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `withplay`.`user` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `phone` VARCHAR(45) NULL DEFAULT NULL,
+  `birth` DATE NOT NULL,
+  `gender` VARCHAR(45) NOT NULL,
+  `city` VARCHAR(45) NULL DEFAULT NULL,
+  `picture_id` VARCHAR(30) NULL DEFAULT NULL,
+  `deleted` BIT(1) NOT NULL,
+  `auth_status` BIT(1) NOT NULL,
+  `user_authority` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_user_picture1_idx` (`picture_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_picture1`
+    FOREIGN KEY (`picture_id`)
+    REFERENCES `withplay`.`picture` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`email`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`email` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `expiration_date` DATETIME NULL DEFAULT NULL,
+  `expired` BIT(1) NULL DEFAULT NULL,
+  `create_date` DATETIME NULL DEFAULT NULL,
+  `last_modified_date` DATETIME NULL DEFAULT NULL,
+  `user_id` BIGINT NOT NULL,
+  `code` INT NOT NULL,
+  PRIMARY KEY (`id`, `user_id`),
+  INDEX `fk_Email_user_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Email_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `withplay`.`user` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
 -- Table `withplay`.`sport_category`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `withplay`.`sport_category` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `withplay`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `withplay`.`user` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
-  `phone` VARCHAR(45) NULL DEFAULT NULL,
-  `birth` DATE NOT NULL,
-  `gender` VARCHAR(45) NOT NULL,
-  `city` VARCHAR(45) NULL DEFAULT NULL,
-  `picture_id` VARCHAR(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_user_picture1_idx` (`picture_id` ASC) VISIBLE,
-  CONSTRAINT `fk_user_picture1`
-    FOREIGN KEY (`picture_id`)
-    REFERENCES `withplay`.`picture` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -118,22 +153,19 @@ CREATE TABLE IF NOT EXISTS `mydb`.`request_join` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `team_id` BIGINT NOT NULL,
   `user_id` BIGINT NOT NULL,
-  `description` VARCHAR(500) NULL,
+  `description` VARCHAR(500) NULL DEFAULT NULL,
   `create_date` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_request_join_team_idx` (`team_id` ASC) VISIBLE,
   INDEX `fk_request_join_user1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_request_join_team`
     FOREIGN KEY (`team_id`)
-    REFERENCES `withplay`.`team` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `withplay`.`team` (`id`),
   CONSTRAINT `fk_request_join_user1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `withplay`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `withplay`.`user` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -149,10 +181,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`team_board` (
   INDEX `fk_team_board_user1_idx` (`writer_id` ASC) VISIBLE,
   CONSTRAINT `fk_team_board_user1`
     FOREIGN KEY (`writer_id`)
-    REFERENCES `withplay`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `withplay`.`user` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -166,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`team_board_comment` (
   `create_date` DATETIME NOT NULL,
   `modify_date` DATETIME NOT NULL,
   `is_modified` BIT(1) NOT NULL,
-  `parent_id` BIGINT(1) NOT NULL,
+  `parent_id` BIGINT NOT NULL,
   `depth` INT NOT NULL,
   `reply_count` INT NOT NULL,
   PRIMARY KEY (`id`),
@@ -174,15 +205,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`team_board_comment` (
   INDEX `fk_team_board_comment_user1_idx` (`writer_id` ASC) VISIBLE,
   CONSTRAINT `fk_team_board_comment_team_board1`
     FOREIGN KEY (`team_board_id`)
-    REFERENCES `mydb`.`team_board` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `mydb`.`team_board` (`id`),
   CONSTRAINT `fk_team_board_comment_user1`
     FOREIGN KEY (`writer_id`)
-    REFERENCES `withplay`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `withplay`.`user` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 USE `withplay` ;
 
@@ -218,6 +246,28 @@ CREATE TABLE IF NOT EXISTS `withplay`.`calendar` (
     FOREIGN KEY (`writer_id`)
     REFERENCES `withplay`.`user` (`id`))
 ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `withplay`.`email`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `withplay`.`email` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `expiration_date` DATETIME NULL DEFAULT NULL,
+  `expired` BIT(1) NULL DEFAULT NULL,
+  `create_date` DATETIME NULL DEFAULT NULL,
+  `last_modified_date` DATETIME NULL DEFAULT NULL,
+  `user_id` BIGINT NOT NULL,
+  `code` INT NOT NULL,
+  PRIMARY KEY (`id`, `user_id`),
+  INDEX `fk_email_user_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_email_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `withplay`.`user` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -295,9 +345,19 @@ CREATE TABLE IF NOT EXISTS `withplay`.`matching_board_comment` (
     REFERENCES `withplay`.`matching_board` (`id`),
   CONSTRAINT `fk_matching_board_comment_user1`
     FOREIGN KEY (`writer_id`)
-    REFERENCES `withplay`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `withplay`.`user` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `withplay`.`refresh_token`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `withplay`.`refresh_token` (
+  `user_id` VARCHAR(45) NOT NULL,
+  `value` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;

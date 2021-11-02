@@ -6,7 +6,7 @@
         <div class="md:w-4/12 md:ml-16">
             <!-- profile image -->
             <img class="w-30 h-30 md:w-50 md:h-50 object-cover rounded-xl
-                        border-2 border-yellow-500 p-1" src="@/assets/profiledefault.jpg" alt="profile">
+                        border-2 border-yellow-500 p-1" src="@/assets/sideImg.png" alt="profile">
         </div>
         <!-- profile meta -->
         <div class="w-6/12 md:w-6/12 = md:ml-5 ml-4 2xl:ml-20">
@@ -80,7 +80,17 @@
 export default {
     data(){
         return{
-            
+            name : '',
+            createDate : '',
+            leaderId : '',
+            pictureId : '',
+            memberCount : '',
+            maxCount : '',
+            description : '',
+            recruitmentState : '',
+            membershipFee : '',
+            city : '',
+            sportCategory : ''
         }
     },
 

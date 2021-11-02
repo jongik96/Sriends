@@ -60,6 +60,8 @@
 </template>
 
 <script>
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import axios from 'axios'
 import Swal from 'sweetalert2'
 import { validateEmail } from '@/utils/validation.js';
 export default {
@@ -84,6 +86,17 @@ export default {
     },
     methods:{
         submitForm: function(){
+            axios({
+                method: 'post',
+                url: `${SERVER_URL}/auth/login`,
+                data: this.form
+            }).then((res)=>{
+                console.log(res.data)
+                this.$router.push({path: '/main'})
+            }).catch((err)=>{
+                console.log(err)
+            }) 
+            
             console.log('click')
             Swal.fire('로그인됨')
         },

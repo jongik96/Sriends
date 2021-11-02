@@ -9,6 +9,7 @@ export default new VueRouter({
         // 로그인 & 실행 후 첫페이지
         {
             path:'/',
+            name: 'login',
             component: () => import('@/views/user/loginPage.vue')
         },
         // 회원가입
@@ -95,6 +96,12 @@ export default new VueRouter({
             component: () => import('@/views/team/member/waitingMemberPage.vue')
         },
         
+        // 팀찾기 전 종목 선택
+        {
+            path: '/selectCategory',
+            component: () => import('@/views/sriends/selectCategoryPage.vue')
+        },
+
         // 팀찾기 목록
         {
             path: '/teamList',
