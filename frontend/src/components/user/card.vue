@@ -63,8 +63,48 @@
 </template>
 
 <script>
+import {getProfileInfo} from '@/api/index.js'
 export default {
-
+      data(){
+    return{
+      id: '',
+      email : '',
+      name : '',
+      birth : '',
+      phone : '',
+      gender : '',
+      city : '',
+      age :'',
+      pictureDownloadUri : '',
+      teams : [
+        {    
+          id : '',
+          pictureDownloadUri: '',
+          name : ''
+        },
+        {    
+          id : '',
+          pictureDownloadUri: '',
+          name : ''
+        },
+      ],
+    }
+  },
+    created: function(){
+        getProfileInfo()
+        .then((res)=>{
+        console.log(res.data)
+        this.id = res.data.id
+        this.name = res.data.name
+        this.birth = res.data.birth
+        this.phone = res.data.phone
+        this.gender = res.data.gender
+        this.pictureDownloadUri = res.data.pictureDownloadUri
+        this.city = res.data.city
+        }).catch((err)=>{
+        console.log(err)
+        })
+    },
 }
 </script>
 

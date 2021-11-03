@@ -4,7 +4,7 @@
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
               <div class="md:col-start-2 md:col-span-4 col-start-1 col-span-6 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
-                  <form>
+                  <form @submit.prevent="submitForm">
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">Password</p>
                           <input id="password" v-model="form.password" type="password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
@@ -14,7 +14,7 @@
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">비밀번호를 한 번 더 입력해주세요.</p>
-                          <input id="password" v-model="confirmPassword" type="password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+                          <input id="passwordConfirm" v-model="confirmPassword" type="password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                           <p class="w-3/4">
                               <span v-if="!isSame" class=" text-yellow-600">비밀번호가 일치하지 않습니다.</span>
                           </p>
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import { validatePassword } from '@/utils/passwordValidation.js';
 export default {
  data(){
@@ -44,17 +46,38 @@ export default {
         }  
    }
  },
+ methods:{
+   submitForm(){
+     axios({
+      method:'put',
+      url: `${SERVER_URL}/users/password`,
+      headers: this.getToken,
+      data: this.form
+     }).then((res)=>{
+       console.log(res)
+     }).catch((err)=>{
+       console.log(err)
+     })
+   }
+ },
  computed: {
-     isPasswordValid(){
+    isPasswordValid(){
             return validatePassword(this.form.password);
-        },
+    },
     isSame(){
         if(this.form.password != this.confirmPassword){
             return false;
         }
         return true;
-    }
- }
+    },
+    getToken(){
+        const token = sessionStorage.getItem('token')
+        const config = {
+            Authorization: `Bearer ${token}`
+        }
+        return config
+    },
+}
 }
 </script>
 

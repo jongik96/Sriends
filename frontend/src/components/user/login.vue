@@ -92,13 +92,14 @@ export default {
                 data: this.form
             }).then((res)=>{
                 console.log(res.data)
+                localStorage.setItem('token',res.data.accessToken)
+                Swal.fire('로그인되었습니다.')
                 this.$router.push({path: '/main'})
             }).catch((err)=>{
                 console.log(err)
+                Swal.fire('ID 또는 비밀번호를 확인해주세요.')
             }) 
             
-            console.log('click')
-            Swal.fire('로그인됨')
         },
     }
 }
