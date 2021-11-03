@@ -62,7 +62,7 @@ public class MyProfileRes {
             .gender(user.getGender())
             .phone(user.getPhone())
             .city(user.getCity().toString())
-            .pictureUrl(user.getPicture_id())
+//            .pictureUrl(user.getPicture_id())
             .teams(teams)
             .build();
     }
@@ -76,7 +76,7 @@ public class MyProfileRes {
             .gender(user.getGender())
             .phone(user.getPhone())
             .city(user.getCity().toString())
-            .pictureUrl(user.getPicture_id())
+//            .pictureUrl(user.getPicture_id())
             .build();
     }
 

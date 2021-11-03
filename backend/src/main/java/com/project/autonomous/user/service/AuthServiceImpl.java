@@ -7,12 +7,10 @@ import com.project.autonomous.jwt.dto.TokenDto;
 import com.project.autonomous.jwt.dto.TokenRequestDto;
 import com.project.autonomous.jwt.entity.RefreshToken;
 import com.project.autonomous.jwt.repository.RefreshTokenRepository;
-import com.project.autonomous.jwt.util.SecurityUtil;
-import com.project.autonomous.user.dto.request.CheckPasswordReq;
+import com.project.autonomous.picture.entity.Picture;
+import com.project.autonomous.picture.service.DBFileStorageService;
 import com.project.autonomous.user.dto.request.LoginReq;
 import com.project.autonomous.user.dto.request.UserRegisterReq;
-import com.project.autonomous.user.dto.response.MyProfileRes;
-import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +30,7 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final DBFileStorageService dbFileStorageService;
 
     @Transactional
     public void signup(UserRegisterReq userRegisterReq) {
@@ -39,7 +38,10 @@ public class AuthServiceImpl implements AuthService{
         if (userRepository.existsByEmail(userRegisterReq.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_JOIN);
         }
-        userRepository.save(userRegisterReq.toUser(passwordEncoder));
+        Picture picture;
+        if(userRegisterReq.getFile() == null) picture = null;
+        else picture = dbFileStorageService.storeFile(userRegisterReq.getFile());
+        userRepository.save(userRegisterReq.toUser(passwordEncoder, picture));
     }
 
     public boolean checkEmail(String email) {

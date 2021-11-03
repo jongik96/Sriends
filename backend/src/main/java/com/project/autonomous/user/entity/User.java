@@ -2,13 +2,17 @@ package com.project.autonomous.user.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.picture.entity.Picture;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +38,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private City city;
 
-    String picture_id;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
 
     @Enumerated(EnumType.STRING)
     private UserAuthority userAuthority;
@@ -58,20 +64,6 @@ public class User extends BaseEntity {
     // 비밀번호 변경
     public void changePassword(String password){
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-            "email='" + email + '\'' +
-            ", name='" + name + '\'' +
-            ", birth=" + birth +
-            ", gender='" + gender + '\'' +
-            ", phone='" + phone + '\'' +
-            ", city='" + city + '\'' +
-            ", picture_id='" + picture_id + '\'' +
-            ", password='" + password + '\'' +
-            '}';
     }
 
 }

@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         user.setPhone(modifyInfo.getPhone());
         user.setGender(modifyInfo.getGender());
         user.setCity(City.from(modifyInfo.getCity()));
-        user.setPicture_id(modifyInfo.getUuid());
+//        user.setPicture_id(modifyInfo.getUuid());
         userRepository.save(user);
         return null;
     }

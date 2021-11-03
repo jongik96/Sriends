@@ -24,7 +24,7 @@ public class ValidatorMessage {
     public static final String TIME_FORMAT = "HH:mm:ss";
     public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String USER_PW_FORMAT = "^.*(?=^.{8,20}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$";
-    public static final String USER_PHONE_FORMAT = "^\\d{11}$";
+    public static final String USER_PHONE_FORMAT = "^(\\d{11}|)$";
     public static final String RESERVATION_PW_FORMAT = "^[0-9]{4}$";
     public static final String ORGANIZATION_FORMAT = "^[ a-zA-Z0-9ㄱ-힣]{1,20}$";
     public static final String NAMING_FORMAT = "^[-_!?.,a-zA-Z0-9ㄱ-힣]{1,20}$";

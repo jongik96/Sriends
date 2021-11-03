@@ -60,7 +60,4 @@ public class TeamBoardController {
 
     }
 
-    @PostMapping("/{teamId}/{boardId}/comments")
-    public ResponseEntity<boolean>
-
 }
