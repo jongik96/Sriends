@@ -1,25 +1,34 @@
 package com.project.autonomous.user.service;
 
 import com.project.autonomous.common.entity.City;
-import com.project.autonomous.common.entity.Sport;
+import com.project.autonomous.common.exception.CustomException;
+import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.SportCategoryRepository;
-import com.project.autonomous.user.dto.request.*;
+import com.project.autonomous.user.dto.request.CheckPasswordReq;
+import com.project.autonomous.user.dto.request.InterestReq;
+import com.project.autonomous.user.dto.request.UserModifyPutReq;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.Interest;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserTeam;
-import com.project.autonomous.user.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.project.autonomous.user.repository.InterestRepository;
+import com.project.autonomous.user.repository.UserRepository;
+import com.project.autonomous.user.repository.UserRepositorySupport;
+import com.project.autonomous.user.repository.UserTeamRepository;
 import java.util.ArrayList;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -39,21 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     InterestRepository interestRepository;
-
-    @Override
-    public User createUser(UserRegisterPostReq registerInfo) {
-
-        User user = new User();
-        user.setEmail(registerInfo.getEmail());
-        user.setName(registerInfo.getName());
-        user.setBirth(registerInfo.getBirth());
-        user.setGender(registerInfo.getGender());
-        user.setCity(City.from(registerInfo.getCity()));
-        user.setPhone(registerInfo.getPhone());
-        user.setPassword(registerInfo.getPassword());
-        userRepository.save(user);
-        return user;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Boolean emailCheck(String email) {
@@ -64,6 +59,23 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         return true;
+    }
+
+    // 비밀번호 확인
+    public boolean checkPassword(CheckPasswordReq checkPasswordReq) {
+        String currentPass = userRepository.findById(SecurityUtil.getCurrentMemberId())
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)).getPassword();
+
+        return passwordEncoder.matches(checkPasswordReq.getPassword(), currentPass);
+    }
+
+    // 비밀번호 변경
+    @Transactional
+    public void changePassword(CheckPasswordReq checkPasswordReq) {
+        User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.changePassword(checkPasswordReq.encodePassword(passwordEncoder));
     }
 
     @Override
@@ -92,6 +104,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).get();
 
         MyProfileRes res = new MyProfileRes();
+        res.setId(userId);
         res.setEmail(user.getEmail());
         res.setName(user.getName());
         res.setBirth(user.getBirth());
@@ -136,8 +149,9 @@ public class UserServiceImpl implements UserService {
     public User getUser(String userEmail) {
         User user = userRepository.findByEmail(userEmail).get();
 
-        if (user == null)
+        if (user == null) {
             return null;
+        }
         return user;
     }
 
@@ -145,7 +159,7 @@ public class UserServiceImpl implements UserService {
     public void interest(InterestReq interestReq) {
         long userId = SecurityUtil.getCurrentMemberId();
 
-        for(String name : interestReq.getSportCategory()){
+        for (String name : interestReq.getSportCategory()) {
             long sportCategoryId = sportCategoryRepository.findByName(name).get().getId();
             Interest interest = new Interest();
             interest.setSportCategoryId(sportCategoryId);

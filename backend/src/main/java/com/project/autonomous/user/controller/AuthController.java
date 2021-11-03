@@ -4,12 +4,10 @@ import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.jwt.dto.TokenDto;
 import com.project.autonomous.user.dto.request.AuthCode;
 import com.project.autonomous.user.dto.request.LoginReq;
-import com.project.autonomous.user.dto.request.PasswordReq;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
-import com.project.autonomous.user.service.AuthServiceImpl;
+import com.project.autonomous.user.dto.request.UserRegisterReq;
+import com.project.autonomous.user.service.AuthService;
 import com.project.autonomous.user.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,10 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,21 +29,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthServiceImpl authService;
-
-    @Autowired
-    EmailService emailService;
+    private final AuthService authService;
+    private final EmailService emailService;
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원 가입", description = "<strong>입력 받은 정보</strong>를 사용해 회원 가입한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "정상 가입", content = @Content),
-        @ApiResponse(responseCode = "400", description = "ALREADY_JOIN",
+        @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> signUp(
-        @Valid @RequestBody UserRegisterPostReq userRegisterPostReq) {
-        authService.signup(userRegisterPostReq);
+    public ResponseEntity<String> signUp(@Valid @RequestBody UserRegisterReq userRegisterReq) {
+        authService.signup(userRegisterReq);
         return ResponseEntity.ok("정상 가입");
     }
 
@@ -62,23 +53,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.checkEmail(email));
     }
 
-    @PostMapping("/check-password")
-    public ResponseEntity<Boolean> checkPassword(@RequestBody PasswordReq checkInfo) {
-        System.out.println("비밀번호 확인");
-        String password = checkInfo.getPassword();
-        return ResponseEntity.status(400).body(Boolean.FALSE);
-    }
-
-    @GetMapping("/pageable-test")
-    public ResponseEntity<String> pageable(@ParameterObject Pageable pageable) {
-        return ResponseEntity.ok("fsda");
-    }
-
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "<strong>받은 이메일, 패스워드</strong>를 사용해 로그인한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "토큰 정보",
             content = @Content(schema = @Schema(implementation = TokenDto.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST (이메일, 비밀번호 형식 틀림)", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Unauthoriezed (아이디 또는 비밀번호 틀림)", content = @Content),
     })
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginReq loginReq) {
         return ResponseEntity.ok(authService.login(loginReq));

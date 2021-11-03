@@ -55,6 +55,11 @@ public class User extends BaseEntity {
         this.deleted = false;
     }
 
+    // 비밀번호 변경
+    public void changePassword(String password){
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
