@@ -25,7 +25,7 @@
                 <router-link to="/modify"><p class="hover:bg-yellow-500">정보 수정</p></router-link>
               </li>
               <li>
-                <router-link to="/"><p class="hover:bg-yellow-500">로그아웃</p></router-link>
+               <button class="hover:bg-yellow-500">로그아웃</button>
               </li>
             </ul>
           
@@ -58,8 +58,8 @@
             
             <ul v-if="listOne" @click="listOne = false" class="fixed border-2 w-20">
               
-              <li><a href=""><button class="text-center bg-white text-md p-1">로그아웃</button></a></li>
-              <li><a href="/modify"><button class="text-center bg-white text-md p-1">정보수정</button></a></li>
+              <li><button @click="logout" class="text-center bg-white text-md p-1">로그아웃</button></li>
+              <li><router-link to="/modify"><p class="text-center bg-white text-md p-1">정보수정</p></router-link></li>
             </ul>
           
           </transition></a>
@@ -84,6 +84,10 @@ export default {
       }else{
         this.listOne == false;
       }
+    },
+    logout: function(){
+      localStorage.removeItem('token')
+      this.$router.push('/')
     }
   }
 

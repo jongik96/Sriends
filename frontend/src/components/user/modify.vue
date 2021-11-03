@@ -10,7 +10,7 @@
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">profileImg</p>
-                          <input type="file"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="file" v-on:change="fileSelect()" ref="uuid"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">Password *</p>
@@ -67,7 +67,7 @@
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
-                            <option value="서울특별시">서울특별시</option>
+                            <option value="서울">서울특별시</option>
                             <option value="인천광역시">인천광역시</option>
                             <option value="고양시">고양시</option>
                             <option value="과천시">과천시</option>
@@ -212,12 +212,12 @@
                     <div class="flex justify-center p-2 mt-10">
                         <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">수정</button>
                     </div>
-                    <div class="flex justify-center p-2 mt-10">
-                        <button type="button"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">삭제</button>
+                    <div class="flex justify-center p-2">
+                        <button @click.self.prevent=""  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">삭제</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/main">
-                            <button class="rounded-md hover:bg-gray-200"><p>취소</p></button>
+                            <p class="rounded-md hover:bg-gray-200">취소</p>
                         </router-link>
                     </div>          
                   </form>
@@ -231,7 +231,8 @@
 
 <script>
 // import { validateEmail } from '@/utils/validation.js';
-import { validatePassword } from '@/utils/passwordValidation.js';
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 export default {
     data() {
@@ -250,16 +251,10 @@ export default {
     },
     computed: {
         btnDisabled(){
-            if(!this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
+            if(!this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
                 return false
             }
             return true
-        },
-        // isEmailValid(){
-        //     return validateEmail(this.form.email);
-        // },
-        isPasswordValid(){
-            return validatePassword(this.form.password);
         },
         isPhoneValid(){
             if((this.form.phone).length==0 || (validatePhone(this.form.phone) && (this.form.phone).length == 11)){
@@ -267,11 +262,48 @@ export default {
                 return true;
             }
             return false;
+        },
+        getToken(){
+        const token = sessionStorage.getItem('token')
+        const config = {
+            Authorization: `Bearer ${token}`
         }
+        return config
+    },
     },
     methods:{
+        fileSelect(){
+            console.log(this.$refs)
+            this.form.uuid = this.$refs.uuid.files[0]
+        },
         submitForm: function(){
-            console.log('click')
+            console.log('수정클릭')
+            const token = sessionStorage.getItem('token')
+            const formData = new FormData();
+            formData.append('uuid', this.form.uuid)
+            formData.append('name', this.form.name)
+            formData.append('bitrh', this.form.bitrh)
+            formData.append('phone', this.form.phone)
+            formData.append('city', this.form.city)
+            formData.append('gender', this.form.gender)
+
+            for(let key of formData.entries()){
+                console.log(`${key}`);
+            }
+            axios({
+                method: 'put',
+                url: `${SERVER_URL}/users/`,
+                headers: {
+                    'Authorization' : `Bearer ${token}`,
+                    'Content-Type' : 'multipart/form-data'
+                },
+                data: formData
+
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((err)=>{
+                console.log(err)
+            }) 
         }        
     }
 

@@ -9,10 +9,10 @@
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
               <div class="md:col-start-2 md:col-span-4 col-start-1 col-span-6 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
-                  <form>
+                  <form @submit.prevent="submitForm">
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">Password</p>
-                          <input id="password" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+                          <input id="password" type="password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                           <p class="mt-3">
                               <span class="text-yellow-600">Password 입력해주세요.</span>
                           </p>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
  data(){
    return{
@@ -39,7 +41,32 @@ export default {
        password:'',
      }
    }
- }
+ },
+ methods:{
+   submitForm(){
+     axios({
+      method:'post',
+      url: `${SERVER_URL}/user/check-password`,
+      headers: this.getToken,
+      data: this.form
+     }).then((res)=>{
+       console.log(res)
+     }).catch((err)=>{
+       console.log(err)
+     })
+   }
+ },
+ computed:{
+        getToken(){
+        const token = sessionStorage.getItem('token')
+        const config = {
+            Authorization: `Bearer ${token}`
+        }
+        return config
+        },
+
+    },
+
 }
 </script>
 

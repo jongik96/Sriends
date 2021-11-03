@@ -19,14 +19,14 @@
                           <p>
                               <span v-if="(form.email).length>0 && !isEmailValid" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
                           </p>
-                          <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">중복검사</button>
+                          <button @click.self.prevent="duplicateEmail" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">중복검사</button>
                           &nbsp;
-                          <button @click="clickEmailAuth" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">인증</button>
+                          <button @click.self.prevent="clickEmailAuth" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">인증</button>
                           <div v-if="EmailAuthBtn" class="mt-2">
-                            <p class="text-md font-bold">인증번호를 입력해주세요</p>
+                            <p class="text-md font-bold">5분 이내에 인증번호를 입력해주세요</p>
                             <input type="text" v-model="authCode" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                             <br/>
-                            <button class="border-solid border-2 mt-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">확인</button>
+                            <button @click.self.prevent="checkEmail" class="border-solid border-2 mt-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">확인</button>
                           </div>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
@@ -89,6 +89,7 @@
                             <option value="4">강원</option>
                             <option value="5">부산/울산/경남</option>
                             <option value="6">제주</option>
+                            <option value="7">광주/전라</option>
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
@@ -230,6 +231,46 @@
                             <option value="제주시">제주시</option>
                             <option value="서귀포시">서귀포시</option>
                         </select>
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='7'" v-model="form.city">
+                            <option disabled value="">시/군</option>
+                            <option value="광주광역시">광주</option>
+                            <option value="광양시">전주</option>
+                            <option value="광양시">군산</option>
+                            <option value="광양시">익산</option>
+                            <option value="광양시">남원</option>
+                            <option value="광양시">정읍</option>
+                            <option value="광양시">김제</option>
+                            <option value="광양시">완주</option>
+                            <option value="광양시">진안</option>
+                            <option value="광양시">무주</option>
+                            <option value="광양시">장수</option>
+                            <option value="광양시">임실</option>
+                            <option value="광양시">순창</option>
+                            <option value="광양시">고창</option>
+                            <option value="광양시">부안</option>
+                            <option value="광양시">광양</option>
+                            <option value="나주시">나주</option>
+                            <option value="목포시">목포</option>
+                            <option value="순천시">순천</option>
+                            <option value="여수시">여수</option>
+                            <option value="강진시">강진</option>
+                            <option value="고흥시">고흥</option>
+                            <option value="곡성시">곡성</option>
+                            <option value="구례시">구례</option>
+                            <option value="담양시">담양</option>
+                            <option value="무안시">무안</option>
+                            <option value="보성시">보성</option>
+                            <option value="신안시">신안</option>
+                            <option value="영광시">영광</option>
+                            <option value="영암시">영암</option>
+                            <option value="완도시">완도</option>
+                            <option value="장성시">장성</option>
+                            <option value="장흥시">장흥</option>
+                            <option value="진도시">진도</option>
+                            <option value="함평시">함평</option>
+                            <option value="해남시">해남</option>
+                            <option value="화순시">화순</option>
+                        </select>
                         <br/>
                         <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
 
@@ -252,6 +293,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import axios from 'axios'
 import { validateEmail } from '@/utils/validation.js';
 import { validatePassword } from '@/utils/passwordValidation.js';
@@ -264,6 +306,7 @@ export default {
             EmailAuthBtn : false,
             authCode: '',
             passwordConfirm: '',
+            isDuplicated: true,
             form:{
                 email: '',
                 password: '',
@@ -278,7 +321,7 @@ export default {
     },
     computed: {
         btnDisabled(){
-            if(!this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
+            if(this.isDuplicated || !this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
                 return false
             }
             return true
@@ -298,23 +341,68 @@ export default {
         }
     },
     methods:{
+        //회원가입
         submitForm: function(){
-            console.log('click')
             axios({
                 method: 'post',
                 url: `${SERVER_URL}/auth/sign-up`,
                 data: this.form
             }).then((res)=>{
+                console.log('회원가입')
                 console.log(res.data)
-                this.$router.push({name: 'login'})
+                this.$router.push('/')
             }).catch((err)=>{
                 console.log(err)
             }) 
         },
-
+        // 이메일 인증번호 전송
         clickEmailAuth: function(){
             this.EmailAuthBtn = true;
-        }        
+            axios({
+                method:'get',
+                url: `${SERVER_URL}/auth/${this.form.email}`,
+            }).then((res)=>{
+                console.log(res)
+                if(res.data == true){
+                    Swal.fire('인증번호가 전송되었습니다!')
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+
+        checkEmail: function(){
+            this.EmailAuthBtn = false;
+            axios({
+                method:'post',
+                url: `${SERVER_URL}/auth/${this.form.email}`,
+                data: {
+                    code : this.authCode
+                }
+            }).then((res)=>{
+                console.log(res)
+                Swal.fire('인증이 완료되었습니다.')
+            }).catch((err)=>{
+                console.log(err)
+                Swal.fire('인증번호 전송에 실패했습니다.')
+            })
+        },
+        //이메일 중복검사
+        duplicateEmail: function(){
+            axios({
+                method: 'get',
+                url: `${SERVER_URL}/auth/sign-up/${this.form.email}`,
+            }).then((res)=>{
+                if(res.data == true){
+                    Swal.fire('이미 가입된 ID입니다.')
+                    this.isDuplicated = false
+                }else{
+                    Swal.fire('사용가능한 ID입니다.')
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
     }
 
 }
