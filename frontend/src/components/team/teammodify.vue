@@ -8,28 +8,33 @@
                       <div class="pt-10">
                           <p class="text-3xl font-bold flex justify-center">S-riends 수정</p>
                       </div>
+                      <!-- name -->
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">S-riends 명</p>
                           <input type="text"  class=" text-xl w-2/4 rounded-md border-2 border-yellow-400">
                       </div>
+                      <!-- leaderId -->
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">S-riends 대표</p>
                           <input type="text"  class=" text-xl w-2/4 rounded-md border-2 border-yellow-400">
                       </div>
+                      <!-- membershipFee -->
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">회비가격</p>
                           <input type="text"  class=" text-xl w-2/4 rounded-md border-2 border-yellow-400">
                       </div>
+                      <!-- description -->
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">특이사항</p>
                           <input type="text"  class=" text-xl w-3/4 h-24  rounded-md border-2 border-yellow-400">
                       </div>
+                      <!-- sportCategory -->
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                         <p class="text-xl font-bold">종목</p>
                         <p> 
                             <span v-if="!form.city" class="text-yellow-600">종목</span>
                         </p>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="selectDo">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="sportCategory">
                             <option disabled value="">종목을 선택하세요 </option>
                             <option value="1">풋살/축구</option>
                             <option value="2">배구</option>
@@ -38,6 +43,7 @@
                             <option value="5">야구</option>
                         </select>  
                       </div>
+                      <!-- city -->
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                         <p class="text-xl font-bold">거주 지역</p>
                         <p>
@@ -72,13 +78,16 @@ export default {
             selectDo : '',
             selectDo2 : '',
             form:{
-                email: '',
-                name: '',
-                bitrh: '',
-                phone: '',
+                name : '',
+                leaderId : '',
+                pictureId : '',
+                memberCount : '',
+                maxCount : '',
+                description : '',
+                recruitmentState : '',
+                membershipFee : '',
                 city : '',
-                money: '',
-                uuid:'',
+                sportCategory : '',
             }
             
         }
