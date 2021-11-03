@@ -51,7 +51,7 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> signUp(@Valid @ModelAttribute UserRegisterReq userRegisterReq, BindingResult theBindingReuslt) {
+    public ResponseEntity<String> signUp(@Valid @ModelAttribute UserRegisterReq userRegisterReq, BindingResult theBindingResult) {
         authService.signup(userRegisterReq);
         return ResponseEntity.ok("정상 가입");
     }

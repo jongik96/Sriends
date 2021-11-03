@@ -3,6 +3,8 @@ package com.project.autonomous.user.entity;
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
 import com.project.autonomous.picture.entity.Picture;
+import com.project.autonomous.user.dto.request.UserModifyReq;
+import com.project.autonomous.user.dto.response.UserInfoRes;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +64,17 @@ public class User extends BaseEntity {
     }
 
     // 비밀번호 변경
-    public void changePassword(String password){
+    public void changePassword(String password) {
         this.password = password;
+    }
+
+    // 회원 정보 수정
+    public void update(UserModifyReq userModifyReq, Picture picture) {
+        this.name = userModifyReq.getName();
+        this.birth = userModifyReq.getBirth();
+        this.phone = userModifyReq.getPhone();
+        this.city = City.from(userModifyReq.getCity());
+        this.picture = picture;
     }
 
 }
