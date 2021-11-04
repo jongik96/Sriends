@@ -1,6 +1,5 @@
 package com.project.autonomous.team.service;
 
-import com.project.autonomous.common.entity.City;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
@@ -15,10 +14,9 @@ import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.RequestJoinRepository;
 import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.team.repository.TeamRepository;
-import com.project.autonomous.user.entity.Interest;
-import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.UserTeam;
-import com.project.autonomous.user.repository.InterestRepository;
+import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,7 @@ public class TeamServiceImpl implements TeamService{
     SportCategoryRepository sportCategoryRepository;
 
     @Autowired
-    InterestRepository interestRepository;
+    UserInterestRepository userInterestRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -90,7 +88,7 @@ public class TeamServiceImpl implements TeamService{
     public ArrayList<TeamListRes> getList() {
         long userId = SecurityUtil.getCurrentMemberId();
 
-        List<Interest> interests = interestRepository.findAllByUserId(userId).get();
+        List<UserInterest> userInterests = userInterestRepository.findAllByUserInterestIdUserId(userId).get();
         String city = userRepository.findById(userId).get().getCity().value();
         List<Team> teams = teamRepository.findAll();
 
@@ -99,14 +97,15 @@ public class TeamServiceImpl implements TeamService{
         for(Team team : teams){
             if(team.getCity().equals(city)){//위치 일치
                 //종목일치하는거 찾아야함
-                for(Interest interest : interests){
-                    if(interest.getSportCategoryId() == team.getSportCategoryId()){
+                for(UserInterest userInterest : userInterests){
+                    if(userInterest.getUserInterestId().getSportCategory().getId() == team.getSportCategoryId()){
                         TeamListRes teamListRes1 = new TeamListRes();
                         teamListRes1.setId(team.getId());
                         teamListRes1.setDescription(team.getDescription());
                         teamListRes1.setName(team.getName());
                         teamListRes1.setMembershipFee(team.isMembershipFee());
-                        teamListRes1.setSportsCategory(sportCategoryRepository.findById(interest.getSportCategoryId()).get().getName());
+                        teamListRes1.setSportsCategory(sportCategoryRepository.findById(
+                            userInterest.getUserInterestId().getSportCategory().getId()).get().getName());
                         teamListRes1.setCity(city.toString());
 
                         teamListRes1.setMemberCount(team.getMemberCount());
@@ -225,7 +224,7 @@ public class TeamServiceImpl implements TeamService{
         teamInfoRes.setMemberCount(team.getMemberCount());
         teamInfoRes.setName(team.getName());
         teamInfoRes.setMembershipFee(team.isMembershipFee());
-        teamInfoRes.setPictureId(team.getPictureId());
+//        teamInfoRes.setPictureId(team.getPictureId());
         teamInfoRes.setRecruitmentState(team.isRecruitmentState());
         teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
 
