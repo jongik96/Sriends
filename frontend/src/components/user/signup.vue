@@ -14,6 +14,10 @@
                           <p class="text-3xl font-bold flex justify-center">Sign Up</p>
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
+                          <p class="text-base font-bold">profileImg</p>
+                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-base w-3/4 rounded-md border-2 border-yellow-400">
+                      </div>
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">E-mail *</p>
                           <input type="text" v-model="form.email" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
@@ -93,7 +97,7 @@
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
-                            <option value="서울">서울특별시</option>
+                            <option value="서울특별시">서울특별시</option>
                             <option value="인천광역시">인천광역시</option>
                             <option value="고양시">고양시</option>
                             <option value="과천시">과천시</option>
@@ -276,7 +280,7 @@
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button @click="submitForm"  class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button type="submit"  class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/">
@@ -298,6 +302,9 @@ import axios from 'axios'
 import { validateEmail } from '@/utils/validation.js';
 import { validatePassword } from '@/utils/passwordValidation.js';
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
+import { duplicatedCheckEmail } from '@/api/index.js'
+import { certificationEmail } from '@/api/index.js'
+import { certificationEmailCode } from '@/api/index.js'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
@@ -315,6 +322,7 @@ export default {
                 phone: '',
                 city : '',
                 gender: '',
+                file:'',
             }
             
         }
@@ -341,15 +349,37 @@ export default {
         }
     },
     methods:{
+        fileSelect(){
+            console.log(this.$refs.image.files[0])
+            // this.form.uuid = this.$refs.image.files[0]
+        },
         //회원가입
         submitForm: function(){
+            if(this.form.phone==''){
+                this.form.phone = null
+            }
+            const formData = new FormData();
+            formData.append('file', this.$refs.image.files[0])
+            formData.append('email', this.form.email)
+            formData.append('password', this.form.password)
+            formData.append('name', this.form.name)
+            formData.append('birth', this.form.birth)
+            formData.append('phone', this.form.phone)
+            formData.append('city', this.form.city)
+            formData.append('gender', this.form.gender)
+            for(const element of formData){
+                console.log(element)
+            }
             axios({
                 method: 'post',
                 url: `${SERVER_URL}/auth/sign-up`,
-                data: this.form
+                headers: {'Content-Type' : 'multipart/form-data'},
+                data: formData
             }).then((res)=>{
-                console.log('회원가입')
                 console.log(res.data)
+                console.log(this.form.password)
+                if(res.data=='정상 가입'){
+                Swal.fire('회원가입이 완료되었습니다!')}
                 this.$router.push('/')
             }).catch((err)=>{
                 console.log(err)
@@ -358,10 +388,8 @@ export default {
         // 이메일 인증번호 전송
         clickEmailAuth: function(){
             this.EmailAuthBtn = true;
-            axios({
-                method:'get',
-                url: `${SERVER_URL}/auth/${this.form.email}`,
-            }).then((res)=>{
+            certificationEmail(this.form.email)
+            .then((res)=>{
                 console.log(res)
                 if(res.data == true){
                     Swal.fire('인증번호가 전송되었습니다!')
@@ -373,13 +401,8 @@ export default {
 
         checkEmail: function(){
             this.EmailAuthBtn = false;
-            axios({
-                method:'post',
-                url: `${SERVER_URL}/auth/${this.form.email}`,
-                data: {
-                    code : this.authCode
-                }
-            }).then((res)=>{
+            certificationEmailCode(this.form.email, this.authCode)
+            .then((res)=>{
                 console.log(res)
                 Swal.fire('인증이 완료되었습니다.')
             }).catch((err)=>{
@@ -389,10 +412,8 @@ export default {
         },
         //이메일 중복검사
         duplicateEmail: function(){
-            axios({
-                method: 'get',
-                url: `${SERVER_URL}/auth/sign-up/${this.form.email}`,
-            }).then((res)=>{
+            duplicatedCheckEmail(this.form.email)
+            .then((res)=>{
                 if(res.data == true){
                     Swal.fire('이미 가입된 ID입니다.')
                     this.isDuplicated = false

@@ -34,9 +34,11 @@
 </template>
 
 <script>
-import axios from 'axios'
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import Swal from 'sweetalert2'
+// import axios from 'axios'
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import { validatePassword } from '@/utils/passwordValidation.js';
+import { modifyPassword } from '@/api/index.js'
 export default {
  data(){
    return{
@@ -48,13 +50,17 @@ export default {
  },
  methods:{
    submitForm(){
-     axios({
-      method:'put',
-      url: `${SERVER_URL}/users/password`,
-      headers: this.getToken,
-      data: this.form
-     }).then((res)=>{
+    //  axios({
+    //   method:'put',
+    //   url: `${SERVER_URL}/users/password`,
+    //   headers: this.getToken,
+    //   data: this.form
+    //  })
+    modifyPassword(this.form)
+     .then((res)=>{
        console.log(res)
+       Swal.fire('비밀번호가 변경되었습니다.')
+       this.$router.push('/main')
      }).catch((err)=>{
        console.log(err)
      })
@@ -71,7 +77,7 @@ export default {
         return true;
     },
     getToken(){
-        const token = sessionStorage.getItem('token')
+        const token = localStorage.getItem('token')
         const config = {
             Authorization: `Bearer ${token}`
         }

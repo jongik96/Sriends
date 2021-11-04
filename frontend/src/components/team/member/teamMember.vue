@@ -39,6 +39,9 @@
 export default {
     data(){
         return{
+            applyList:[
+
+            ],
             member:[
                 { id: 1,
                     name: "하지훈",

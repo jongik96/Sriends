@@ -12,7 +12,7 @@
                   <form @submit.prevent="submitForm">
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">Password</p>
-                          <input id="password" type="password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+                          <input id="password" v-model="form.password" type="password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                           <p class="mt-3">
                               <span class="text-yellow-600">Password 입력해주세요.</span>
                           </p>
@@ -32,8 +32,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import Swal from 'sweetalert2'
+import { confirmPassword } from '@/api/index.js'
+import { deleteUser } from '@/api/index.js'
 export default {
  data(){
    return{
@@ -44,13 +45,35 @@ export default {
  },
  methods:{
    submitForm(){
-     axios({
-      method:'post',
-      url: `${SERVER_URL}/user/check-password`,
-      headers: this.getToken,
-      data: this.form
-     }).then((res)=>{
+     const userid = localStorage.getItem('userid')
+    //  axios({
+    //   method:'post',
+    //   url: `${SERVER_URL}/users/password`,
+    //   headers: this.getToken,
+    //   data: this.form
+    //  })
+    confirmPassword(this.form)
+     .then((res)=>{
        console.log(res)
+       if(res.data==true){
+        //  axios({
+        //   method:'delete',
+        //   url: `${SERVER_URL}/users/${userid}`,
+        //   headers: this.getToken,
+        //  })
+        deleteUser(userid)
+         .then((res)=>{
+           console.log(res)
+           localStorage.removeItem('token')
+           localStorage.removeItem('userid')
+           Swal.fire('회원삭제 되었습니다.')
+           this.$router.push('/')
+         }).catch((err)=>{
+           console.log(err)
+         })
+       }else{
+         Swal.fire('비밀번호가 틀린데요?')
+       }
      }).catch((err)=>{
        console.log(err)
      })
@@ -58,7 +81,7 @@ export default {
  },
  computed:{
         getToken(){
-        const token = sessionStorage.getItem('token')
+        const token = localStorage.getItem('token')
         const config = {
             Authorization: `Bearer ${token}`
         }
