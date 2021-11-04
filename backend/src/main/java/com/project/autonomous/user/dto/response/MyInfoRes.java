@@ -1,11 +1,9 @@
 package com.project.autonomous.user.dto.response;
 
 import com.project.autonomous.picture.entity.Picture;
-import com.project.autonomous.user.entity.Interest;
 import com.project.autonomous.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,9 +38,6 @@ public class MyInfoRes {
 
     @Schema(description = "유저 사진", example = "경로 아직")
     private String pictureUrl;
-
-    @Schema(description = "관심 스포츠", example = "")
-    private List<Interest> interests;
 
     public void setPictureUrl(Picture picture){
         if(picture == null) {

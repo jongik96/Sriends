@@ -1,5 +1,6 @@
 package com.project.autonomous.team.controller;
 
+import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
@@ -9,13 +10,21 @@ import com.project.autonomous.team.dto.response.TeamInfoRes;
 import com.project.autonomous.team.dto.response.TeamListRes;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.service.TeamService;
-import com.project.autonomous.user.entity.User;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/teams")
@@ -39,7 +48,6 @@ public class TeamController {
         System.out.println("회원가입 정보로 팀 리스트 조회");
 
         ArrayList<TeamListRes> list = teamService.getList();
-
         return ResponseEntity.ok(list);
     }
 
@@ -48,6 +56,9 @@ public class TeamController {
         System.out.println("선택한 정보로 팀 리스트 조회");
 
         ArrayList<TeamListRes> list = teamService.getChooseList(city, sportCategory);
+        if(list.isEmpty()){
+            return ResponseEntity.status(400).body(list);
+        }
 
         return ResponseEntity.ok(list);
     }
@@ -98,6 +109,11 @@ public class TeamController {
     }
 
     @GetMapping("/apply-list/{teamId}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "리스트 조회", content = @Content),
+            @ApiResponse(responseCode = "400", description = "NO_INTERESTING_ITEMS\n\nBAD_REQUEST",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
     public ResponseEntity<ArrayList<ApplyListRes>> applyList(@PathVariable("teamId") long teamId){
         System.out.println("팀 가입 신청 리스트 조회");
 

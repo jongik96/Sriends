@@ -1,7 +1,11 @@
 package com.project.autonomous.team.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
+import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.user.entity.UserTeam;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,14 +22,17 @@ import java.util.List;
 @Setter
 public class Team extends BaseEntity {
     Long leaderId;
-    String pictureId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
+
     String name;
     LocalDateTime createDate;
     int memberCount;
     int maxCount;
     String description;
     boolean recruitmentState;
-    boolean is_active;
     boolean membershipFee;
     boolean publicState;
     String city;

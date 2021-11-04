@@ -8,8 +8,6 @@ import com.project.autonomous.team.dto.response.AuthorityRes;
 import com.project.autonomous.team.dto.response.TeamInfoRes;
 import com.project.autonomous.team.dto.response.TeamListRes;
 import com.project.autonomous.team.entity.Team;
-import com.project.autonomous.user.entity.User;
-
 import java.util.ArrayList;
 
 public interface TeamService {
@@ -38,4 +36,5 @@ public interface TeamService {
     AuthorityRes checkAuthority(long teamId);
 
     boolean giveAuthority(long teamId, long userId);
+
 }
