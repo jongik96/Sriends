@@ -2,12 +2,10 @@ package com.project.autonomous.picture.service;
 
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
-import com.project.autonomous.picture.dto.PictureInfoDto;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.exception.FileStorageException;
 import com.project.autonomous.picture.repository.PictureRepository;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +13,6 @@ import java.nio.file.Paths;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -34,7 +31,7 @@ public class DBFileStorageService {
     private String IMAGE_PATH;
 
     @Transactional
-    public PictureInfoDto storeFile(MultipartFile file) {
+    public Picture storeFile(MultipartFile file) {
         // 디렉토리 경로 확인 후 없으면 디렉토리 생성 (경로 설정을 확실히 한다면 불필요)
         Path directory = Paths.get(IMAGE_PATH);
         try {
@@ -69,9 +66,8 @@ public class DBFileStorageService {
             }
             // 파일 저장
             file.transferTo(new File(filePath));
-            Picture picture = Picture.of(uuid, fileName, fileType, filePath);
-
-            return PictureInfoDto.from(pictureRepository.save(picture));
+            return pictureRepository.save(Picture.of(uuid, fileName, fileType, filePath));
+//            return PictureInfoDto.from(pictureRepository.save(picture));
         } catch (IOException ex) {
             throw new FileStorageException(
                 "Could not store file " + fileName + ". Please try again!", ex);

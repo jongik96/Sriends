@@ -4,13 +4,17 @@ import com.project.autonomous.common.entity.City;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
+import com.project.autonomous.picture.service.DBFileStorageService;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
-import com.project.autonomous.user.dto.request.UserModifyPutReq;
+import com.project.autonomous.user.dto.request.UserModifyReq;
+import com.project.autonomous.user.dto.response.MyInfoRes;
 import com.project.autonomous.user.dto.response.MyProfileRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.Interest;
@@ -49,17 +53,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     InterestRepository interestRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Override
-    public Boolean emailCheck(String email) {
-        User user = new User();
-        boolean check = userRepository.findByEmail(email).isPresent();
-
-        if (check) {//이미 있는 이메일
-            return false;
-        }
-        return true;
-    }
+    private final DBFileStorageService dbFileStorageService;
 
     // 비밀번호 확인
     public boolean checkPassword(CheckPasswordReq checkPasswordReq) {
@@ -78,18 +72,17 @@ public class UserServiceImpl implements UserService {
         user.changePassword(checkPasswordReq.encodePassword(passwordEncoder));
     }
 
-    @Override
-    public User modifyUser(Long userId, UserModifyPutReq modifyInfo) {
-        SecurityUtil.getCurrentMemberId();
-        User user = userRepository.findById(userId).get();
-        user.setName(modifyInfo.getName());
-        user.setBirth(modifyInfo.getBirth());
-        user.setPhone(modifyInfo.getPhone());
-        user.setGender(modifyInfo.getGender());
-        user.setCity(City.from(modifyInfo.getCity()));
-        user.setPicture_id(modifyInfo.getUuid());
-        userRepository.save(user);
-        return null;
+    // 회원 수정
+    @Transactional
+    public MyInfoRes modifyUser(UserModifyReq userModifyReq) {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+
+        Picture picture;
+        if (userModifyReq.getFile() == null) picture = null;
+        else picture = dbFileStorageService.storeFile(userModifyReq.getFile());
+
+        user.update(userModifyReq, picture);
+        return MyInfoRes.from(user);
     }
 
     @Override
@@ -171,5 +164,10 @@ public class UserServiceImpl implements UserService {
         return;
     }
 
-
+    public User findMember(long userId) {
+        User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if(user.isDeleted()) throw new CustomException(ErrorCode.DELETED_USER);
+        return user;
+    }
 }
