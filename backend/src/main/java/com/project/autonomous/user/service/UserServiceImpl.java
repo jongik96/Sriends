@@ -12,17 +12,13 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
-import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
-import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.User;
-import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;
-import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -91,43 +88,14 @@ public class UserServiceImpl implements UserService {
         return teams.map(p -> UserTeamListRes.from(p));
     }
 
-    @Override
-    public User deleteUser(Long userId) {
-        return null;
+    // 나의 개인 정보 조회
+    public MyInfoRes getMyInfo() {
+        return MyInfoRes.from(findMember(SecurityUtil.getCurrentMemberId()));
     }
 
     @Override
-    public MyProfileRes getMyProfile() {
-        long userId = SecurityUtil.getCurrentMemberId();
-
-        User user = userRepository.findById(userId).get();
-
-        MyProfileRes res = new MyProfileRes();
-        res.setId(userId);
-        res.setEmail(user.getEmail());
-        res.setName(user.getName());
-        res.setBirth(user.getBirth());
-        res.setPhone(user.getPhone());
-        res.setGender(user.getGender());
-        res.setCity(user.getCity().toString());
-
-        ArrayList<UserTeamListRes> teamList = new ArrayList<>();
-        for (UserTeam userTeam : userTeamRepository.findAll()) {
-            if (userTeam.getUser().equals(user)) {
-                Team team = userTeam.getTeam();
-//                UserTeamListRes utl = new UserTeamListRes();
-//                utl.setId(team.getId());
-//                utl.setName(team.getName());
-//                utl.setPictureDownloadUri(pictureRepository.findById(team.getPicture_id()).get().getDownload_uri());
-
-//                teamList.add(utl);
-            }
-        }
-
-        //사진 주소 넣기
-//        res.setPictureDownloadUri(pictureRepository.findById(user.getPicture_id()).get().getDownload_uri());
-
-        return res;
+    public User deleteUser(Long userId) {
+        return null;
     }
 
     @Override

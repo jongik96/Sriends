@@ -5,7 +5,6 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
-import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
@@ -22,9 +21,9 @@ public interface UserService {
 
     Slice<UserTeamListRes> getMyTeams(Pageable pageable);
 
-    User deleteUser(Long userId);
+    MyInfoRes getMyInfo();
 
-    MyProfileRes getMyProfile();
+    User deleteUser(Long userId);
 
     UserProfileRes getUserProfile(Long userId);
 
