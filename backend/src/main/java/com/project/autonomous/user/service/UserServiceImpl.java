@@ -1,6 +1,5 @@
 package com.project.autonomous.user.service;
 
-import com.project.autonomous.common.entity.City;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
@@ -14,19 +13,20 @@ import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
 import com.project.autonomous.user.dto.response.MyProfileRes;
-import com.project.autonomous.user.dto.response.UserInfoRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
-import com.project.autonomous.user.entity.Interest;
+import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserTeam;
-import com.project.autonomous.user.repository.InterestRepository;
+import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     SportCategoryRepository sportCategoryRepository;
 
     @Autowired
-    InterestRepository interestRepository;
+    UserInterestRepository userInterestRepository;
     private final PasswordEncoder passwordEncoder;
     private final DBFileStorageService dbFileStorageService;
 
@@ -85,6 +85,12 @@ public class UserServiceImpl implements UserService {
         return MyInfoRes.from(user);
     }
 
+    // 나의 팀 조회 (무한 스크롤)
+    public Slice<UserTeamListRes> getMyTeams(Pageable pageable) {
+        Slice<Team> teams = userTeamRepository.findTeamByUser(findMember(SecurityUtil.getCurrentMemberId()), pageable);
+        return teams.map(p -> UserTeamListRes.from(p));
+    }
+
     @Override
     public User deleteUser(Long userId) {
         return null;
@@ -109,12 +115,12 @@ public class UserServiceImpl implements UserService {
         for (UserTeam userTeam : userTeamRepository.findAll()) {
             if (userTeam.getUser().equals(user)) {
                 Team team = userTeam.getTeam();
-                UserTeamListRes utl = new UserTeamListRes();
-                utl.setId(team.getId());
-                utl.setName(team.getName());
+//                UserTeamListRes utl = new UserTeamListRes();
+//                utl.setId(team.getId());
+//                utl.setName(team.getName());
 //                utl.setPictureDownloadUri(pictureRepository.findById(team.getPicture_id()).get().getDownload_uri());
 
-                teamList.add(utl);
+//                teamList.add(utl);
             }
         }
 
@@ -148,17 +154,16 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public void interest(InterestReq interestReq) {
+    public void updateInterest(InterestReq interestReq) {
         long userId = SecurityUtil.getCurrentMemberId();
 
         for (String name : interestReq.getSportCategory()) {
             long sportCategoryId = sportCategoryRepository.findByName(name).get().getId();
-            Interest interest = new Interest();
-            interest.setSportCategoryId(sportCategoryId);
-            interest.setUserId(userId);
+//            UserInterest userInterest = new UserInterest();
+//            userInterest.setSportCategoryId(sportCategoryId);
+//            userInterest.setUserId(userId);
 
-            interestRepository.save(interest);
+//            userInterestRepository.save(userInterest);
         }
 
         return;
@@ -167,7 +172,7 @@ public class UserServiceImpl implements UserService {
     public User findMember(long userId) {
         User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if(user.isDeleted()) throw new CustomException(ErrorCode.DELETED_USER);
+//        if(user.isDeleted()) throw new CustomException(ErrorCode.DELETED_USER);
         return user;
     }
 }

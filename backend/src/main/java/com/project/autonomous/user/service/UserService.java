@@ -7,7 +7,10 @@ import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
+import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface UserService {
 
@@ -17,6 +20,8 @@ public interface UserService {
 
     MyInfoRes modifyUser(UserModifyReq modifyInfo);
 
+    Slice<UserTeamListRes> getMyTeams(Pageable pageable);
+
     User deleteUser(Long userId);
 
     MyProfileRes getMyProfile();
@@ -25,5 +30,5 @@ public interface UserService {
 
     User getUser(String userEmail);
 
-    void interest(InterestReq interestReq);
+    void updateInterest(InterestReq interestReq);
 }

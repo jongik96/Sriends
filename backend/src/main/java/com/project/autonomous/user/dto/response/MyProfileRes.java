@@ -36,8 +36,7 @@ public class MyProfileRes {
     @Schema(description = "유저 사진", example = "경로 아직")
     private String pictureUrl;
 
-    @Schema(description = "유저가 속한 팀 리스트", example = "[{\"id\":\"4\", \"pictureUrl\":\"경로 아직\", \"name\":\"BStory\"}, {\"id\":\"6\", \"pictureUrl\":\"경로 아직\", \"name\":\"조코피\"}]")
-    private ArrayList<UserTeamListRes> teams;
+
 
 
 }
