@@ -197,36 +197,36 @@ public class TeamBoardService {
         return commentRes;
     }
 
-    public CommentListRes getCommentList(long boardId, long parentId) {
-        if(!teamBoardRepository.findById(boardId).isPresent()){
-            throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
-        }
-        if(teamBoardCommentRepository.findAllByParentIdAAndTeamBoardId(parentId, boardId).isEmpty()){
-            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
-        }
-        CommentListRes commentListRes = new CommentListRes();
-
-        List<TeamBoardComment> teamBoardCommentList = teamBoardCommentRepository.findAllByParentIdAAndTeamBoardId(parentId,boardId);
-        commentListRes.setReplyCount(teamBoardCommentList.size());
-
-        ArrayList<CommentRes> commentResArrayList = new ArrayList<>();
-        for (TeamBoardComment teamBoardComment : teamBoardCommentList){
-            CommentRes commentRes = new CommentRes();
-            commentRes.setId(teamBoardComment.getId());
-            commentRes.setWriterId(teamBoardComment.getWriterId());
-            commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
-            commentRes.setContent(teamBoardComment.getContent());
-            commentRes.setCreateDate(teamBoardComment.getCreateDate());
-            commentRes.setModifyDate(teamBoardComment.getModifiyDate());
-            commentRes.setModified(teamBoardComment.isModified());
-            commentRes.setParentId(teamBoardComment.getParentId());
-            commentRes.setDepth(teamBoardComment.getDepth());
-            commentRes.setReplyCount(teamBoardComment.getReplycount());
-
-            commentResArrayList.add(commentRes);
-        }
-        commentListRes.setCommentsList(commentResArrayList);
-
-        return commentListRes;
-    }
+//    public CommentListRes getCommentList(long boardId, long parentId) {
+//        if(!teamBoardRepository.findById(boardId).isPresent()){
+//            throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
+//        }
+//        if(teamBoardCommentRepository.findAllByParentIdAAndTeamBoardId(parentId, boardId).isEmpty()){
+//            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
+//        }
+//        CommentListRes commentListRes = new CommentListRes();
+//
+//        List<TeamBoardComment> teamBoardCommentList = teamBoardCommentRepository.findAllByParentIdAAndTeamBoardId(parentId,boardId);
+//        commentListRes.setReplyCount(teamBoardCommentList.size());
+//
+//        ArrayList<CommentRes> commentResArrayList = new ArrayList<>();
+//        for (TeamBoardComment teamBoardComment : teamBoardCommentList){
+//            CommentRes commentRes = new CommentRes();
+//            commentRes.setId(teamBoardComment.getId());
+//            commentRes.setWriterId(teamBoardComment.getWriterId());
+//            commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
+//            commentRes.setContent(teamBoardComment.getContent());
+//            commentRes.setCreateDate(teamBoardComment.getCreateDate());
+//            commentRes.setModifyDate(teamBoardComment.getModifiyDate());
+//            commentRes.setModified(teamBoardComment.isModified());
+//            commentRes.setParentId(teamBoardComment.getParentId());
+//            commentRes.setDepth(teamBoardComment.getDepth());
+//            commentRes.setReplyCount(teamBoardComment.getReplycount());
+//
+//            commentResArrayList.add(commentRes);
+//        }
+//        commentListRes.setCommentsList(commentResArrayList);
+//
+//        return commentListRes;
+//    }
 }
