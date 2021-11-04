@@ -1,10 +1,15 @@
 package com.project.autonomous.team.controller;
 
+import com.project.autonomous.team.dto.request.CommentModifyPutReq;
+import com.project.autonomous.team.dto.request.CommentPostReq;
 import com.project.autonomous.team.dto.request.PostingReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
+import com.project.autonomous.team.dto.response.CommentListRes;
+import com.project.autonomous.team.dto.response.CommentRes;
 import com.project.autonomous.team.dto.response.PostViewListRes;
 import com.project.autonomous.team.dto.response.PostViewRes;
 import com.project.autonomous.team.entity.Team;
+import com.project.autonomous.team.entity.TeamBoardComment;
 import com.project.autonomous.team.service.TeamBoardService;
 import com.project.autonomous.team.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +64,45 @@ public class TeamBoardController {
         return ResponseEntity.ok(teamBoardService.postingViewList(teamId));
 
     }
+
+    @PostMapping("/{boardId}/comments")
+    public ResponseEntity<TeamBoardComment> comment(@PathVariable("boardId") long boardId, @RequestBody CommentPostReq commentPostReq){
+        System.out.println("댓글 작성");
+
+        return ResponseEntity.ok(teamBoardService.comment(commentPostReq, boardId));
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<TeamBoardComment> modifyComment(@PathVariable("commentId") long commentId, @RequestBody CommentModifyPutReq commentModifyPutReq){
+        System.out.println("댓글 수정");
+
+        return ResponseEntity.ok(teamBoardService.modifyComment(commentModifyPutReq, commentId));
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Boolean> deleteComment(@PathVariable("commentId") long commentId){
+        System.out.println("댓글 삭제");
+
+        return ResponseEntity.ok(teamBoardService.deleteComment(commentId));
+    }
+
+    @GetMapping("/comments/{commentId}")
+    public ResponseEntity<CommentRes> getComment(@PathVariable("commentId") long commentId){
+        System.out.println("댓글 조회");
+
+        return ResponseEntity.ok(teamBoardService.getComment(commentId));
+    }
+
+    @GetMapping("/{boardId}/comments/{parentId}")
+    public ResponseEntity<CommentListRes> getCommentsList(@PathVariable("boardId") long boardId, @PathVariable("parentId") long parentId){
+        System.out.println("댓글 리스트 조회");
+
+        return ResponseEntity.ok(teamBoardService.getCommentList(boardId, parentId));
+    }
+
+
+
+
 
 
 }

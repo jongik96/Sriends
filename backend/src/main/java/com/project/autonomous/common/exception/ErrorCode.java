@@ -23,6 +23,8 @@ public enum ErrorCode {
     ALREADY_JOIN(BAD_REQUEST, "이미 가입되어있습니다."),
     ALREADY_APPLY(BAD_REQUEST, "이미 신청되어있습니다."),
     NOT_ALLOW_TYPE(BAD_REQUEST, "JPG와 PNG 형식만 지원합니다."),
+    NO_INTERESTING_ITEMS(BAD_REQUEST, "흥미있는 종목 설정이 없습니다."),
+
 
 //    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
 //    EMAIL_MESSAGE(BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
@@ -53,6 +55,7 @@ public enum ErrorCode {
     ARTICLE_NOT_FOUND(NOT_FOUND, "게시글을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
     TOKEN_NOT_FOUND(NOT_FOUND, "해당 토큰을 찾을 수 없습니다"),
+    LIST_NOT_FOUND(NOT_FOUND, "해당 리스트를 찾을 수 없습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),

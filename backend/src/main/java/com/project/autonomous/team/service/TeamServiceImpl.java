@@ -1,6 +1,8 @@
 package com.project.autonomous.team.service;
 
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.common.exception.CustomException;
+import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
@@ -68,7 +70,6 @@ public class TeamServiceImpl implements TeamService{
         team.setDescription(teamInfo.getDescription());
         team.setSportCategoryId(sportCategoryRepository.findByName(teamInfo.getSportCategory()).get().getId());
         team.setCity(teamInfo.getCity());
-        team.set_active(true);
         team.setRecruitmentState(teamInfo.getRecruitmentState());
         team.setMembershipFee(teamInfo.getMembershipFee());
 //        team.setPictureId(teamInfo.getPictureId());
@@ -78,19 +79,22 @@ public class TeamServiceImpl implements TeamService{
         UserTeam userTeam = new UserTeam();
         userTeam.setUser(userRepository.getById(userId));
         userTeam.setTeam(team);
-        userTeam.set_active(true);
-        userTeam.setRegister_date(LocalDateTime.now());
+        userTeam.setRegisterDate(LocalDateTime.now());
         userTeam.setAuthority("매니저");
         userTeamRepository.save(userTeam);
 
         return null;
     }
 
+
     @Override
     public ArrayList<TeamListRes> getList() {
         long userId = SecurityUtil.getCurrentMemberId();
 
-        List<Interest> interests = interestRepository.findAllByUserId(userId).get();
+        ArrayList<Interest> interests = interestRepository.findAllByUserId(userId).get();
+        if(interests.isEmpty()){
+            throw new CustomException(ErrorCode.NO_INTERESTING_ITEMS);
+        }
         String city = userRepository.findById(userId).get().getCity().value();
         List<Team> teams = teamRepository.findAll();
 
@@ -120,8 +124,11 @@ public class TeamServiceImpl implements TeamService{
                 }
 
             }
-        }
 
+        }
+        if(teamListRes.isEmpty()){
+            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
+        }
 
 
         return teamListRes;
@@ -136,10 +143,10 @@ public class TeamServiceImpl implements TeamService{
 
         ArrayList<TeamListRes> teamListRes = new ArrayList<>();
 
-        for(Team team : teams){
+        for(Team team : teams) {
 //            System.out.println(team.getCity());
-            if(team.getCity().equals(city)){//위치 일치
-                if(sportCategoryRepository.findByName(sportCategoryName).get().getId() == team.getSportCategoryId()){
+            if (team.getCity().equals(city)) {//위치 일치
+                if (sportCategoryRepository.findByName(sportCategoryName).get().getId() == team.getSportCategoryId()) {
                     TeamListRes teamListRes1 = new TeamListRes();
                     teamListRes1.setId(team.getId());
                     teamListRes1.setDescription(team.getDescription());
@@ -156,6 +163,9 @@ public class TeamServiceImpl implements TeamService{
                 }
 
             }
+        }
+        if(teamListRes.isEmpty()){
+            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
         }
 
         return teamListRes;
@@ -195,20 +205,21 @@ public class TeamServiceImpl implements TeamService{
         Team team = teamRepository.findById(teamId).get();
 
         if(team.getLeaderId().equals(userId)){
-            team.set_active(false);
 
             ArrayList<UserTeam> list = userTeamRepository.findAllByTeamId(teamId);
 
             for(UserTeam userTeam : list){
-                userTeam.set_active(false);
-                userTeamRepository.save(userTeam);
+                userTeamRepository.delete(userTeam);
             }
+
+            teamRepository.delete(team);
 
             //게시물을 다 지우는지??
             return true;
         }
 
-        return false;
+        throw new CustomException(ErrorCode.COMMON_MEMBER_CANNOT_REMOVE);
+
     }
 
     @Override
@@ -272,14 +283,13 @@ public class TeamServiceImpl implements TeamService{
         if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
 
             if(!requestJoinRepository.findByUserIdAndTeamId(userId,teamId).isPresent())
-                return false;
+                throw new CustomException(ErrorCode.APPLIY_FORM_NOT_FOUND);
 
             if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 탈퇴했던 사람이 다시 신청할 경우
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
                 UserTeam applyUser = userTeamRepository.findByUserId(userId).get();
-                applyUser.set_active(true);
                 applyUser.setAuthority("회원");
-                applyUser.setRegister_date(LocalDateTime.now());
+                applyUser.setRegisterDate(LocalDateTime.now());
                 userTeamRepository.save(applyUser);
 
                 requestJoinRepository.delete(requestJoin);
@@ -288,22 +298,24 @@ public class TeamServiceImpl implements TeamService{
                 UserTeam applyUser = new UserTeam();
                 applyUser.setUser(userRepository.findById(userId).get());
                 applyUser.setTeam(teamRepository.findById(teamId).get());
-                applyUser.set_active(true);
                 applyUser.setAuthority("회원");
-                applyUser.setRegister_date(LocalDateTime.now());
+                applyUser.setRegisterDate(LocalDateTime.now());
                 userTeamRepository.save(applyUser);
 
                 requestJoinRepository.delete(requestJoin);
             }
             return true;
+        }else {
+            throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
-        return false;
     }
 
     @Override
     public AuthorityRes checkAuthority(long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
+        if(!userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent())
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
 
         AuthorityRes authorityRes = new AuthorityRes();
@@ -323,34 +335,38 @@ public class TeamServiceImpl implements TeamService{
 
             return true;
         }
-        return false;
+        throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
     }
+
 
     @Override
     public void quit(long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
+        if(!userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent())
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         UserTeam userTeam = userTeamRepository.findByUserId(userId).get();
 
-        userTeam.set_active(false);
-
-        userTeamRepository.save(userTeam);
+        userTeamRepository.delete(userTeam);
         return;
     }
 
     @Override
     public void kickout(long teamId, long userId) {
         long leaderId = SecurityUtil.getCurrentMemberId();
+        if(!userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent())
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+
         Team team = teamRepository.findById(teamId).get();
 
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(leaderId,teamId).get();
         if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
             UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
-            kickOutUser.set_active(false);
-            userTeamRepository.save(kickOutUser);
+            userTeamRepository.delete(kickOutUser);
+            return;
         }
+        throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
 
-        return;
     }
 
 
