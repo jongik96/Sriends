@@ -6,8 +6,8 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
-import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
+import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.service.EmailService;
 import com.project.autonomous.user.service.UserService;
@@ -19,8 +19,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -42,8 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
     @Autowired
     EmailService emailService;
@@ -93,6 +96,33 @@ public class UserController {
         return ResponseEntity.ok(userService.modifyUser(modifyInfo));
     }
 
+    @GetMapping("/team")
+    @Operation(summary = "나의 팀 정보 조회", description = "<strong>페이징</strong>을 사용해 유저의 팀 정보를 조회한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "팀 정보 조회",
+            content = @Content(schema = @Schema(implementation = UserTeamListRes.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nDELETED_USER",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<Slice<UserTeamListRes>> getMyTeams(@ParameterObject
+        @PageableDefault(size = 5) Pageable pageable) {
+        return ResponseEntity.ok(userService.getMyTeams(pageable));
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "나의 개인 정보 조회", description = "유저의 개인 정보를 조회한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "팀 정보 조회",
+            content = @Content(schema = @Schema(implementation = MyInfoRes.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nDELETED_USER",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<MyInfoRes> getMyInfo() {
+        return ResponseEntity.ok(userService.getMyInfo());
+    }
+
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") Long userId) {
         System.out.println("회원 탈퇴");
@@ -103,18 +133,6 @@ public class UserController {
         }
 
         return;
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<MyProfileRes> getMyProfile() {
-        //토큰으로 userid 찾는거 추가
-
-        System.out.println("본인 회원정보 조회");
-
-        MyProfileRes userRes = userService.getMyProfile();
-
-        return ResponseEntity.status(200).body(userRes);
-
     }
 
     @GetMapping("/{userId}")
@@ -133,7 +151,7 @@ public class UserController {
     public void interest(@RequestBody InterestReq interestReq) {
         System.out.println("흥미있는 종목 선택");
 
-        userService.interest(interestReq);
+//        userService.interest(interestReq);
     }
 
 
