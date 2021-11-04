@@ -71,7 +71,6 @@ public class User extends BaseEntity {
     // 회원 정보 수정
     public void update(UserModifyReq userModifyReq, Picture picture) {
         this.name = userModifyReq.getName();
-        this.birth = userModifyReq.getBirth();
         this.phone = userModifyReq.getPhone();
         this.city = City.from(userModifyReq.getCity());
         this.picture = picture;
