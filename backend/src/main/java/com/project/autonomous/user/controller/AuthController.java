@@ -15,8 +15,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,14 +38,20 @@ public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
 
-    @PostMapping("/sign-up")
+    @InitBinder
+    public void InitBinder(WebDataBinder dataBinder) {
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
+
+    @PostMapping(path = "/sign-up", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "회원 가입", description = "<strong>입력 받은 정보</strong>를 사용해 회원 가입한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "정상 가입", content = @Content),
         @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> signUp(@Valid @RequestBody UserRegisterReq userRegisterReq) {
+    public ResponseEntity<String> signUp(@Valid @ModelAttribute UserRegisterReq userRegisterReq, BindingResult theBindingResult) {
         authService.signup(userRegisterReq);
         return ResponseEntity.ok("정상 가입");
     }
@@ -66,7 +78,7 @@ public class AuthController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Boolean> sendMail(@PathVariable("email") String email){
+    public ResponseEntity<Boolean> sendMail(@PathVariable("email") String email) {
         System.out.println("이메일 발송");
 
         emailService.sendMail(email);
@@ -75,17 +87,16 @@ public class AuthController {
     }
 
     @PostMapping("/{email}")
-    public ResponseEntity<Boolean> checkMail(@PathVariable("email") String email, @RequestBody AuthCode authCode){
+    public ResponseEntity<Boolean> checkMail(@PathVariable("email") String email,
+        @RequestBody AuthCode authCode) {
         System.out.println("이메일 확인");
 
-        if(emailService.checkCode(authCode, email)){
+        if (emailService.checkCode(authCode, email)) {
 
             return ResponseEntity.status(200).body(true);
         }
         return ResponseEntity.status(500).body(false);
     }
-
-
 
 
 }

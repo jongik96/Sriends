@@ -4,7 +4,8 @@ package com.project.autonomous.user.controller;
 import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
-import com.project.autonomous.user.dto.request.UserModifyPutReq;
+import com.project.autonomous.user.dto.request.UserModifyReq;
+import com.project.autonomous.user.dto.response.MyInfoRes;
 import com.project.autonomous.user.dto.response.MyProfileRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.entity.User;
@@ -19,9 +20,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,6 +48,12 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
+    @InitBinder
+    public void InitBinder(WebDataBinder dataBinder) {
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
+
     @PostMapping("/password")
     @Operation(summary = "비밀번호 확인 (비밀번호 수정 페이지에 사용)", description = "<strong>입력 받은 비밀번호</strong>를 사용해 현 사용자의 비밀번호와 비교한다.")
     @ApiResponses({
@@ -48,7 +61,8 @@ public class UserController {
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<Boolean> checkPassword(@Valid @RequestBody CheckPasswordReq checkPasswordReq) {
+    public ResponseEntity<Boolean> checkPassword(
+        @Valid @RequestBody CheckPasswordReq checkPasswordReq) {
         return ResponseEntity.ok(userService.checkPassword(checkPasswordReq));
     }
 
@@ -59,27 +73,32 @@ public class UserController {
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> changePassword(@Valid @RequestBody CheckPasswordReq checkPasswordReq) {
+    public ResponseEntity<String> changePassword(
+        @Valid @RequestBody CheckPasswordReq checkPasswordReq) {
         userService.changePassword(checkPasswordReq);
         return ResponseEntity.ok("변경되었습니다.");
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<Boolean> modifyUserInfo(@PathVariable("userId") Long userId, @RequestBody UserModifyPutReq modifyInfo){
-        System.out.println("회원정보 수정");
-
-        User user = userService.modifyUser(userId, modifyInfo);
-
-        return ResponseEntity.status(200).body(true);
+    @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @Operation(summary = "회원 정보 수정 (회원 정보 수정 페이지에 사용)", description = "<strong>입력 받은 정보</strong>를 사용해 유저 정보를 변경한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "변경된 회원 정보 조회",
+            content = @Content(schema = @Schema(implementation = MyInfoRes.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nDELETED_USER",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<MyInfoRes> modifyUserInfo(
+        @Valid @ModelAttribute UserModifyReq modifyInfo, BindingResult theBindingResult) {
+        return ResponseEntity.ok(userService.modifyUser(modifyInfo));
     }
 
-
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId){
+    public void deleteUser(@PathVariable("userId") Long userId) {
         System.out.println("회원 탈퇴");
 
         //userId가 토큰이랑 일치하면 회원탈퇴 진행
-        if(true){
+        if (true) {
             User user = userService.deleteUser(userId);
         }
 
@@ -87,7 +106,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MyProfileRes> getMyProfile(){
+    public ResponseEntity<MyProfileRes> getMyProfile() {
         //토큰으로 userid 찾는거 추가
 
         System.out.println("본인 회원정보 조회");
@@ -99,7 +118,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserProfileRes> getUserProfile(@PathVariable("userId") Long userId){
+    public ResponseEntity<UserProfileRes> getUserProfile(@PathVariable("userId") Long userId) {
         //토큰으로 userid 찾는거 추가
         System.out.println("다른 회원정보 조회");
 
@@ -111,12 +130,11 @@ public class UserController {
 
 
     @PostMapping("/interest")
-    public void interest(@RequestBody InterestReq interestReq){
+    public void interest(@RequestBody InterestReq interestReq) {
         System.out.println("흥미있는 종목 선택");
 
         userService.interest(interestReq);
     }
-
 
 
 }

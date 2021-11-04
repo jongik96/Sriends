@@ -19,7 +19,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OpenApiConfig {
-
+    // http://localhost:8080/api/swagger-ui.html
+    // http://k5d106.p.ssafy.io:8080/api/swagger-ui.html
     @Bean
     public OpenAPI openAPI(@Value("${springdoc.version}") String appVersion) {
         Info info = new Info().title("S-riends").version(appVersion)
