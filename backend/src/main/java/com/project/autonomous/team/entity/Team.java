@@ -33,7 +33,6 @@ public class Team extends BaseEntity {
     int maxCount;
     String description;
     boolean recruitmentState;
-    boolean is_active;
     boolean membershipFee;
     boolean publicState;
     String city;
