@@ -26,6 +26,11 @@ export default new VueRouter({
             path: '/main',
             component: () => import('@/views/user/mainPage.vue')
         },
+        // 다른사람 프로필 들어갔을 때
+        {
+            path: '/user',
+            component: () => import('@/views/user/memberProfile.vue')
+        },
         // 비밀번호 찾기 페이지
         {
             path: '/findPassword',
@@ -95,10 +100,30 @@ export default new VueRouter({
             component: () => import('@/views/team/member/waitingMemberPage.vue')
         },
         
-        // 팀찾기 목록
+        // 회원가입 후 관심종목 선택
+        {
+            path: '/selectCategory',
+            component: () => import('@/views/sriends/selectCategoryPage.vue')
+        },
+
+        // 관심목록 팀찾기 목록
         {
             path: '/team/list',
             component: () => import('@/views/sriends/teamListPage.vue')
+        },
+
+        // 검색할 지역/종목 선택 페이지
+        {
+            path: '/searchTeam',
+            component: () => import('@/views/sriends/searchTeamPage.vue')
+        },
+
+        // 지역/종목에 해당하는 팀 리스트페이지
+        {
+            path: '/searchTeamList',
+            name: 'searchTeamList',
+            component: () => import('@/views/sriends/searchTeamListPage.vue'),
+            props: true
         },
 
         // 경기/스렌드 찾기 목록페이지

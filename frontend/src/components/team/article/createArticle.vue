@@ -9,11 +9,11 @@
                   <form @submit.prevent="submitForm">
                       <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">제목</p>
-                          <input type="text"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="text" v-model="form.title"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">내용</p>
-                          <input type="text"  class=" text-xl w-3/4 h-60  rounded-md border-2 border-yellow-400">
+                          <input type="text" v-model="form.content" class=" text-xl w-3/4 h-60  rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="flex justify-center p-2 mt-10">
                         <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">작성</button>
@@ -31,23 +31,16 @@
 export default {
     data() {
         return {
-            selectDo : '',
-            selectDo2 : '',
             form:{
-                email: '',
-                name: '',
-                bitrh: '',
-                phone: '',
-                city : '',
-                money: '',
-                uuid:'',
+                title:'',
+                content:''
             }
             
         }
     },
     computed: {
         btnDisabled(){
-            if(!this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.money){
+            if(!this.form.title || !this.form.content ){
                 return false
             }
             return true

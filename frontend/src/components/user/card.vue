@@ -4,43 +4,23 @@
     <article>
         <h2 class="text-2xl font-extrabold text-gray-900">나의 스렌즈</h2>
         <section class="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
-            <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
+            <article v-for="item, index in teams" :key="index" class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
                 <div class="relative w-full h-80 md:h-64 lg:h-44">
                     <router-link to="/team">
-                    <img src="@/assets/sideImg.png"
+                    <img :src=teams.pictureUrl alt="teamImg"
                         class="w-full h-full object-center object-cover">
                         </router-link>
                 </div>
                 <div class="px-3 py-4 flex items-center justify-center">
                         <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="#">
-                            동호회1
+                            {{item.name}}
                         </a>
                 </div>
             </article>
-            <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
-                <div class="relative w-full h-80 md:h-64 lg:h-44">
-                    <img src="@/assets/sideImg.png"
-                        alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
-                        class="w-full h-full object-center object-cover">
-                </div>
-                <div class="px-3 py-4 flex items-center justify-center">
-                        <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="#">
-                            동호회2
-                        </a>
-                </div>
-            </article>
-            <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
-                <div class="relative w-full h-80 md:h-64 lg:h-44">
-                    <img src="@/assets/sideImg.png"
-                        alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
-                        class="w-full h-full object-center object-cover">
-                </div>
-                <div class="px-3 py-4 flex items-center justify-center">
-                        <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="#">                         
-                            동호회3
-                        </a>      
-                </div>
-            </article>
+            <infinite-loading @infinite="infiniteHandler" spinner="sprial">
+                <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+            </infinite-loading>
+
             <!-- 새 스렌즈 만들기 -->
             <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
                 <div class="relative w-full h-80 md:h-64 lg:h-44">
@@ -63,48 +43,79 @@
 </template>
 
 <script>
-import {getProfileInfo} from '@/api/index.js'
+// import {getProfileInfo} from '@/api/index.js'
+import axios from 'axios'
+import InfiniteLoading from 'vue-infinite-loading';
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
-      data(){
-    return{
-      id: '',
-      email : '',
-      name : '',
-      birth : '',
-      phone : '',
-      gender : '',
-      city : '',
-      age :'',
-      pictureDownloadUri : '',
-      teams : [
-        {    
-          id : '',
-          pictureDownloadUri: '',
-          name : ''
-        },
-        {    
-          id : '',
-          pictureDownloadUri: '',
-          name : ''
-        },
-      ],
-    }
-  },
-    created: function(){
-        getProfileInfo()
-        .then((res)=>{
-        console.log(res.data)
-        this.id = res.data.id
-        this.name = res.data.name
-        this.birth = res.data.birth
-        this.phone = res.data.phone
-        this.gender = res.data.gender
-        this.pictureDownloadUri = res.data.pictureDownloadUri
-        this.city = res.data.city
-        }).catch((err)=>{
-        console.log(err)
+    components:{
+        InfiniteLoading
+    },
+    data(){
+        return{
+            page:0,
+            teams : [
+                {    
+                id : '',
+                pictureUrl: '',
+                name : ''
+                },
+            ],
+        }
+    },
+    // created: function(){
+    //     getProfileInfo()
+    //     .then((res)=>{
+    //     console.log(res.data)
+    //     this.id = res.data.id
+    //     this.name = res.data.name
+    //     this.birth = res.data.birth
+    //     this.phone = res.data.phone
+    //     this.gender = res.data.gender
+    //     this.pictureDownloadUri = res.data.pictureDownloadUri
+    //     this.city = res.data.city
+    //     }).catch((err)=>{
+    //     console.log(err)
+    //     })
+    // },
+    methods:{
+    infiniteHandler($state) {
+      axios({
+        method: 'get',
+        url: `${SERVER_URL}/users/team?page=` + (this.page),
+        headers: this.getToken
+        }).then(res => {
+            console.log(res.data)
+          setTimeout(() => {
+            if(res.data.content.length) {
+              this.teams = this.teams.concat(res.data.content)
+              $state.loaded()
+              this.page += 1
+              // 끝인지 판별
+              if(res.data.content.length / 5 < 1) {
+                $state.complete()
+              }
+            } else {
+              // 끝 지정(No more data)
+              $state.complete()
+            }
+          }, 1000)
+        }).catch(err => {
+          console.error(err);
         })
     },
+    
+
+    },
+    computed:{
+        getToken(){
+            const token = localStorage.getItem('token')
+            const config = {
+                Authorization: `Bearer ${token}`
+            }
+            return config
+        },
+    }
 }
 </script>
 

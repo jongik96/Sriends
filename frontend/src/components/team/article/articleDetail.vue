@@ -23,7 +23,14 @@
 
 <script>
 export default {
-
+    data(){
+        return{
+            name: '',
+            title: '',
+            content: '',
+            createDate:'',
+        }
+    }
 }
 </script>
 

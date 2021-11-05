@@ -77,6 +77,7 @@
 </template>
 
 <script> 
+import { getTeamInfo } from '@/api/index.js'
 export default {
     data(){
         return{
@@ -93,6 +94,14 @@ export default {
             sportCategory : ''
         }
     },
+    created(){
+        getTeamInfo()
+        .then((res)=>{
+            console.log(res)
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
 
 }
 </script>

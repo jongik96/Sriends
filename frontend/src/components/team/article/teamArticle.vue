@@ -26,6 +26,7 @@
 export default {
     data() {
         return{
+            post: [],
             items: [
             { id: 1,
                 title: "This is the post title",

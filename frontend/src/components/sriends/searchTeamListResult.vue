@@ -1,26 +1,22 @@
 <template>
   <div class="grid grid-cols-6">
         <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
+            <div class="flex justify-start">
+                종목 : {{sportCategory}} 지역 : {{city}}
+            </div>
             <div class="flex justify-end">
-                <router-link to="/searchTeam">
+                <router-link to="/teamList">
                 <button class="bg-yellow-500 px-2 py-1 
                     text-white font-semibold text-sm rounded block text-center 
                     sm:inline-block mr-5">
-                            다른 지역, 종목 찾아보기
-                </button>
-                </router-link>
-                <router-link to="/team/createArticle">
-                <button class="bg-yellow-500 px-2 py-1 
-                    text-white font-semibold text-sm rounded block text-center 
-                    sm:inline-block mr-5">
-                            모집글 작성하기
+                            관심 리스트 보기
                 </button>
                 </router-link>
             </div>
-            <div v-for="item in items" :key="item.id" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
+            <div v-for="item in teams" :key="item.id" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
                 <div class="grid col-start-1 col-span-2">
                     <img src='@/assets/logo.png' class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
-                    <p class="visible md:invisible ml-14 w-36">{{item.title}}</p>
+                    <p class="visible md:invisible ml-14 w-36">{{item.name}}</p>
                     <button class="bg-yellow-500 px-2 py-1 w-24
                     text-white font-semibold text-sm rounded block text-center md:ml-8 ml-12
                     sm:inline-block mr-5 h-10" 
@@ -31,13 +27,13 @@
                 </div>
                 <div class="invisible md:visible grid md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
                     <div class="flex ">
-                        <p>팀명 : {{item.title}} </p>
+                        <p>팀명 : {{item.name}} </p>
                     </div>
                     <div class="invisible md:visible">
-                        <p >대표 : {{item.postedBy}} </p>
+                        <p>대표 : {{item.postedBy}} </p>
                     </div>
                     <div class="invisible md:visible">
-                        <p>연락처 : 01012341234 </p>
+                        <p>인원 : {{item.memberCount}} </p>
                     </div>
                     <div class="">
                         <p class="truncate w-96 invisible lg:visible">소개 : {{item.description}} </p>
@@ -49,11 +45,25 @@
 </template>
 
 <script>
-import { getInterestTeam } from '@/api/index.js'
-// import Swal from 'sweetalert2'
+import { getTeamList } from '@/api/index.js'
 export default {
+    props:{
+        city:String,
+        sportCategory:String
+    },
+    created(){
+        getTeamList(this.selectCity, this.selectSportCategory)
+        .then((res)=>{
+            console.log(res)
+            this.teams = res.data
+        }).catch((err)=>{
+            console.log(err)
+        })
+    },
     data() {
         return{
+            selectCity: this.city,
+            selectSportCategory: this.sportCategory,
             teams:[
                 {    
                     id : '',
@@ -110,18 +120,6 @@ export default {
             }
             ]
         }
-  },
-  created: function(){
-
-        getInterestTeam()
-        .then((res)=>{
-            console.log(res.data)
-        }).catch((err)=>{
-            console.log(err)
-            
-            
-        })
-      
   },
   methods:{
       joinBtn: function(){
