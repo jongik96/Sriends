@@ -93,7 +93,7 @@
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
-                            <option value="서울">서울특별시</option>
+                            <option value="서울특별시">서울특별시</option>
                             <option value="인천광역시">인천광역시</option>
                             <option value="고양시">고양시</option>
                             <option value="과천시">과천시</option>
@@ -233,7 +233,7 @@
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='7'" v-model="form.city">
                             <option disabled value="">시/군</option>
-                            <option value="광주광역시">광주</option>
+                            <option value="광주광역시">광주광역시</option>
                             <option value="광양시">전주</option>
                             <option value="광양시">군산</option>
                             <option value="광양시">익산</option>
