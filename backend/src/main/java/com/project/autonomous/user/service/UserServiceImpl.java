@@ -13,8 +13,8 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
 import com.project.autonomous.user.dto.response.UserInterestRes;
-import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserInterest;
@@ -129,39 +129,24 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public User deleteUser(Long userId) {
-        return null;
+    @Transactional
+    public void deleteUser() {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+
+        // 소유자인 동호회 확인 로직
+        // 이외 동호회 탈퇴 로직
+        // 본인이 작성한 게시글, 댓글 삭제 로직
+
+        userRepository.delete(user);
     }
 
-    @Override
-    public UserProfileRes getUserProfile(Long userId) {
-        User user = userRepository.findById(userId).get();
-
-        UserProfileRes res = new UserProfileRes();
-        res.setEmail(user.getEmail());
-        res.setName(user.getName());
-        res.setBirth(user.getBirth());
-        res.setPhone(user.getPhone());
-        res.setCity(user.getCity().toString());
-
-        return res;
+    // 다른 유저 조회
+    public UserInfoRes getUserInfo(long userId) {
+        return UserInfoRes.from(findMember(userId));
     }
-
-    @Override
-    public User getUser(String userEmail) {
-        User user = userRepository.findByEmail(userEmail).get();
-
-        if (user == null) {
-            return null;
-        }
-        return user;
-    }
-
-
 
     public User findMember(long userId) {
-        return userRepository.findById(SecurityUtil.getCurrentMemberId())
+        return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 

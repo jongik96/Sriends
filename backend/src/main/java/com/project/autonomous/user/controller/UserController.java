@@ -6,10 +6,9 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
 import com.project.autonomous.user.dto.response.UserInterestRes;
-import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
-import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.service.EmailService;
 import com.project.autonomous.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -125,6 +124,19 @@ public class UserController {
         return ResponseEntity.ok(userService.getMyInfo());
     }
 
+    @GetMapping("/{userId}")
+    @Operation(summary = "다른 유저의 개인 정보 조회", description = "다른 유저의 개인 정보를 조회한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "다른 유저 개인 정보 조회",
+            content = @Content(schema = @Schema(implementation = UserInfoRes.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<UserInfoRes> getUserInfo(@PathVariable("userId") long userId) {
+        return ResponseEntity.ok(userService.getUserInfo(userId));
+    }
+
     @GetMapping("/interest")
     @Operation(summary = "나의 관심 정보 목록 조회", description = "관심 정보 목록을 조회한다.")
     @ApiResponses({
@@ -150,31 +162,18 @@ public class UserController {
         return ResponseEntity.ok("변경되었습니다.");
     }
 
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId) {
-        System.out.println("회원 탈퇴");
-
-        //userId가 토큰이랑 일치하면 회원탈퇴 진행
-        if (true) {
-            User user = userService.deleteUser(userId);
-        }
-
-        return;
+    @DeleteMapping
+    @Operation(summary = "회원 탈퇴", description = "비밀번호 확인이 끝난 회원이 탈퇴한다. (본인이 소유자인 스렌즈가 있다면 탈퇴 불가, 속한 동호회는 탈퇴)")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "탈퇴되었습니다.", content = @Content),
+        @ApiResponse(responseCode = "400", description = "STILL_YOU_HAVE_SREINEDS",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<String> deleteUser() {
+        userService.deleteUser();
+        return ResponseEntity.ok("탈퇴되었습니다.");
     }
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserProfileRes> getUserProfile(@PathVariable("userId") Long userId) {
-        //토큰으로 userid 찾는거 추가
-        System.out.println("다른 회원정보 조회");
-
-        UserProfileRes userRes = userService.getUserProfile(userId);
-
-        return ResponseEntity.status(200).body(userRes);
-
-    }
-
-
-
-
 
 }

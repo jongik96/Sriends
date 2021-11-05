@@ -24,6 +24,7 @@ public enum ErrorCode {
     ALREADY_APPLY(BAD_REQUEST, "이미 신청되어있습니다."),
     NOT_ALLOW_TYPE(BAD_REQUEST, "JPG와 PNG 형식만 지원합니다."),
     NO_INTERESTING_ITEMS(BAD_REQUEST, "흥미있는 종목 설정이 없습니다."),
+    STILL_YOU_HAVE_SREINEDS(BAD_REQUEST, "아직 대표인 스렌즈가 존재합니다."),
 
 
 //    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
