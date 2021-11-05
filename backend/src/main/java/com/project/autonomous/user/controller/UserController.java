@@ -138,6 +138,18 @@ public class UserController {
         return ResponseEntity.ok(userService.getMyInterest());
     }
 
+    @PutMapping("/interest")
+    @Operation(summary = "나의 관심 정보 목록 업데이트", description = "관심 정보 목록을 생성, 및 수정한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "변경되었습니다.", content = @Content),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nSPORT_CATEGORY_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<String> updateInterest(@RequestBody InterestReq interestReq) {
+        userService.updateInterest(interestReq);
+        return ResponseEntity.ok("변경되었습니다.");
+    }
+
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") Long userId) {
         System.out.println("회원 탈퇴");
@@ -162,12 +174,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/interest")
-    public void interest(@RequestBody InterestReq interestReq) {
-        System.out.println("흥미있는 종목 선택");
 
-//        userService.interest(interestReq);
-    }
 
 
 }

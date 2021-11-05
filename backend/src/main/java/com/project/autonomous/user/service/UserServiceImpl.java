@@ -6,6 +6,7 @@ import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.picture.service.DBFileStorageService;
+import com.project.autonomous.team.entity.SportCategory;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.user.dto.request.CheckPasswordReq;
@@ -17,6 +18,7 @@ import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserInterest;
+import com.project.autonomous.user.entity.UserInterestId;
 import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
@@ -101,12 +103,30 @@ public class UserServiceImpl implements UserService {
         return MyInfoRes.from(findMember(SecurityUtil.getCurrentMemberId()));
     }
 
+    // 유저 관심 목록 조회
     public List<UserInterestRes> getMyInterest() {
         List<UserInterest> interests = userInterestRepository.findAllByUserInterestIdUser(
             findMember(SecurityUtil.getCurrentMemberId()));
         return interests.stream()
             .map(UserInterestRes::from)
             .collect(Collectors.toList());
+    }
+
+    // 유저 관심 목록 업데이트
+    @Transactional
+    public void updateInterest(InterestReq interestReq) {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+        userInterestRepository.deleteAllByUserInterestIdUser(user);
+
+        if(interestReq.getInterests() == null) return;
+
+        for (String interest : interestReq.getInterests()) {
+            SportCategory sportCategory = findSportCategory(interest);
+            UserInterestId id = new UserInterestId(user, sportCategory);
+
+            userInterestRepository.save(new UserInterest(id));
+        }
+
     }
 
     @Override
@@ -138,24 +158,15 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public void updateInterest(InterestReq interestReq) {
-        long userId = SecurityUtil.getCurrentMemberId();
 
-        for (String name : interestReq.getSportCategory()) {
-            long sportCategoryId = sportCategoryRepository.findByName(name).get().getId();
-//            UserInterest userInterest = new UserInterest();
-//            userInterest.setSportCategoryId(sportCategoryId);
-//            userInterest.setUserId(userId);
-
-//            userInterestRepository.save(userInterest);
-        }
-
-        return;
-    }
 
     public User findMember(long userId) {
-        User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
+        return userRepository.findById(SecurityUtil.getCurrentMemberId())
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return user;
+    }
+
+    public SportCategory findSportCategory(String name){
+        return sportCategoryRepository.findByName(name)
+            .orElseThrow(() -> new CustomException(ErrorCode.SPORT_CATEGORY_NOT_FOUND));
     }
 }
