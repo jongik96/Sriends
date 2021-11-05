@@ -4,7 +4,6 @@ import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
