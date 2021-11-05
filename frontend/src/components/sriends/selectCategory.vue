@@ -134,7 +134,7 @@
 // import axios from 'axios'
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import Swal from 'sweetalert2'
-import { selectSports } from '@/api/index.js'
+import { selectSports } from '@/api/auth.js'
 export default {
     data(){
         return{
@@ -161,16 +161,6 @@ export default {
                 console.log(this.sportCategory)
             })
         }
-    },
-    computed:{
-        getToken(){
-        const token = localStorage.getItem('token')
-        const config = {
-            Authorization: `Bearer ${token}`
-        }
-        return config
-        },
-
     },
 
 }

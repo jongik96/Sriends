@@ -2,22 +2,19 @@
   <div>
     <topmenu></topmenu>
     <teamMenu></teamMenu>
-    <teamMain v-bind:teamId="this.teamId"></teamMain>
+    <modifyArticle></modifyArticle>
   </div>
 </template>
 
 <script>
 import topmenu from '@/components/topMenu.vue'
 import teamMenu from '@/components/team/teamMenu.vue'
-import teamMain from '@/components/team/teamMain.vue'
-export default {
-    props:{
-      teamId: [String,Number]
-    },
+import modifyArticle from '@/components/team/article/modifyArticle.vue'
+export default { 
     components: {
         topmenu,
         teamMenu,
-        teamMain,
+        modifyArticle,
     }
 }
 </script>

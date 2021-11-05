@@ -33,8 +33,9 @@
 
 <script>
 import Swal from 'sweetalert2'
-import { confirmPassword } from '@/api/index.js'
-import { deleteUser } from '@/api/index.js'
+import { confirmPassword } from '@/api/auth.js'
+import { deleteUser } from '@/api/auth.js'
+import store from '@/store/index.js'
 export default {
  data(){
    return{
@@ -45,27 +46,16 @@ export default {
  },
  methods:{
    submitForm(){
-     const userid = localStorage.getItem('userid')
-    //  axios({
-    //   method:'post',
-    //   url: `${SERVER_URL}/users/password`,
-    //   headers: this.getToken,
-    //   data: this.form
-    //  })
+     const userid = store.state.userId
+
     confirmPassword(this.form)
      .then((res)=>{
        console.log(res)
        if(res.data==true){
-        //  axios({
-        //   method:'delete',
-        //   url: `${SERVER_URL}/users/${userid}`,
-        //   headers: this.getToken,
-        //  })
+
         deleteUser(userid)
          .then((res)=>{
            console.log(res)
-           localStorage.removeItem('token')
-           localStorage.removeItem('userid')
            Swal.fire('회원삭제 되었습니다.')
            this.$router.push('/')
          }).catch((err)=>{
@@ -79,16 +69,7 @@ export default {
      })
    }
  },
- computed:{
-        getToken(){
-        const token = localStorage.getItem('token')
-        const config = {
-            Authorization: `Bearer ${token}`
-        }
-        return config
-        },
 
-    },
 
 }
 </script>

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { getInterestTeam } from '@/api/index.js'
+import { getInterestTeam } from '@/api/team.js'
 // import Swal from 'sweetalert2'
 export default {
     data() {

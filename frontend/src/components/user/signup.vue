@@ -302,9 +302,9 @@ import axios from 'axios'
 import { validateEmail } from '@/utils/validation.js';
 import { validatePassword } from '@/utils/passwordValidation.js';
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
-import { duplicatedCheckEmail } from '@/api/index.js'
-import { certificationEmail } from '@/api/index.js'
-import { certificationEmailCode } from '@/api/index.js'
+import { duplicatedCheckEmail } from '@/api/auth.js'
+import { certificationEmail } from '@/api/auth.js'
+import { certificationEmailCode } from '@/api/auth.js'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
@@ -407,7 +407,7 @@ export default {
                 Swal.fire('인증이 완료되었습니다.')
             }).catch((err)=>{
                 console.log(err)
-                Swal.fire('인증번호 전송에 실패했습니다.')
+                Swal.fire('코드가 일치하지 않습니다ㅠ')
             })
         },
         //이메일 중복검사

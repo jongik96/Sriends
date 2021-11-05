@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { getTeamMemberList } from '@/api/team.js'
+import store from '@/store/index.js'
 export default {
     data(){
         return{
@@ -75,6 +77,15 @@ export default {
                 },
             ]
         }
+    },
+    created: function(){
+        const teamId = store.state.teamId
+        getTeamMemberList(teamId)
+        .then((res)=>{
+            console.log(res)
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
 }
 </script>

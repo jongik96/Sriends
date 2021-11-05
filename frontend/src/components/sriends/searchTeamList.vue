@@ -215,16 +215,16 @@
                             <option value="탁구">탁구</option>
                             <option value="기타">기타</option>
                         </select>
-                        <p v-if="this.form.sportCategory" class="mt-2 text-xl font-medium">선택지역 : {{ this.form.sportCategory }} </p>
+                        <p v-if="this.form.sportCategory" class="mt-2 text-xl font-medium">선택종목 : {{ this.form.sportCategory }} </p>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="mt-10 flex justify-end">
-                <router-link :to="{'name':'searchTeamList', params:{'city':this.form.city, 'sportCategory': this.form.sportCategory}}">
+                <!-- <router-link :to="{'name':'searchTeamList', props:{'city':this.form.city, 'sportCategory': this.form.sportCategory}}">
                 <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">조회하기</button>
-                </router-link>
-                <!-- <button @click="clickBtn()" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">조회하기</button> -->
+                </router-link> -->
+                <button @click="clickBtn()" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">조회하기</button>
             </div>
         </div>
   </div>
@@ -242,9 +242,11 @@ export default {
         }
     },
     methods:{
-        // clickBtn(){
-        //     this.$router.push({path:'/searchTeamList', params:{city:this.form.city, sportCategory:this.form.sportCategory}})
-        // }
+        clickBtn(){
+            this.$store.commit("setCity",this.form.city)
+            this.$store.commit("setSportCategory",this.form.sportCategory)
+            this.$router.push('/searchTeamList')
+        }
     }
 }
 </script>

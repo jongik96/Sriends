@@ -279,6 +279,7 @@
 <script>
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import store from '@/store/index.js'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
@@ -298,14 +299,8 @@ export default {
         }
     },
     computed: {
-        // btnDisabled(){
-        //     if(){
-        //         return false
-        //     }
-        //     return true
-        // },
         getToken(){
-            const token = localStorage.getItem('token')
+            const token = store.state.accessToken
             const config = {
                 Authorization: `Bearer ${token}`
             }

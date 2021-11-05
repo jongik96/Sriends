@@ -91,7 +91,7 @@ export default {
       }
     },
     logout: function(){
-      localStorage.removeItem('token')
+      localStorage.removeItem('vuex')
       this.$router.push('/')
     }
   }

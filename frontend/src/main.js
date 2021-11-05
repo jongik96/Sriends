@@ -8,7 +8,7 @@ import "../fontAwesomeIcon.js"
 import Notifications from 'vue-notification'
 import axios from 'axios'
 import AxiosPlugin from 'vue-axios-cors'
-
+import store from '@/store/index.js';
 Vue.use(AxiosPlugin)
 axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -20,6 +20,7 @@ Vue.use(VCalendar, {
 });
 new Vue({
   render: h => h(App),
+  store,
   router,
 
 }).$mount('#app')

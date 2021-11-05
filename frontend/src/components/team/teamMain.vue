@@ -12,7 +12,7 @@
         <div class="w-6/12 md:w-6/12 = md:ml-5 ml-4 2xl:ml-20">
             <div class="md:flex md:flex-wrap md:items-center mb-4">
             <h2 class="text-3xl font-semibold inline-block md:mr-2 mb-2 sm:mb-0">
-                스렌즈이름
+                {{this.name}}
             </h2>
 
             <!-- badge -->
@@ -33,31 +33,33 @@
             <li>
                 대표자
                 <span class="font-semibold">박범진</span>
+                종목
+                <span class="font-semibold">{{this.sportCategory}}</span>
             </li>
             <li>
-                인원
-                <span class="font-semibold">1명</span>
+                총 인원
+                <span class="font-semibold">{{this.memberCount}}</span>
+                회비 유무
+                <span class="font-semibold">{{this.membershipFee}}</span>
             </li>
             <li>
-                연락처
-                <span class="font-semibold">010-1234-1234</span>
+                지역
+                <span class="font-semibold">{{this.city}}</span>
             </li>
             </ul>
 
             <!-- user meta form medium screens -->
             <div class="hidden md:block">
-            <h1 class="font-semibold">우리팀의 짱 박범진.</h1>
-            <span>Travel, Nature and Music</span>
-            <p>Lorem ipsum dolor sit amet consectetur</p>
+            <!-- <h1 class="font-semibold">우리팀의 짱 박범진.</h1>
+            <span>Travel, Nature and Music</span> -->
+            <p>{{this.description}}</p>
             </div>
 
         </div>
 
         <!-- user meta form small screens -->
         <div class="md:hidden text-sm my-2">
-            <h1 class="font-semibold">내 이름은 박범진</h1>
-            <span>Travel, Nature and Music</span>
-            <p>Lorem ipsum dolor sit amet consectetur</p>
+            <p>{{this.description}}</p>
         </div>
 
         </header>
@@ -77,8 +79,12 @@
 </template>
 
 <script> 
-import { getTeamInfo } from '@/api/index.js'
+import { getTeamInfo } from '@/api/team.js'
+import store from '@/store/index.js'
 export default {
+    props:{
+        teamId: [Number,String]
+    },
     data(){
         return{
             name : '',
@@ -95,11 +101,26 @@ export default {
         }
     },
     created(){
-        getTeamInfo()
+        // this.$store.commit('setTeamId',this.teamId)
+        const teamId = store.state.teamId
+        getTeamInfo(teamId)
         .then((res)=>{
             console.log(res)
+            this.name = res.data.name
+            this.createDate = res.data.createDate
+            this.leaderId = res.data.leaderId
+            this.pictureId = res.data.pictureId
+            this.memberCount = res.data.memberCount
+            this.maxCount = res.data.maxCount
+            this.description = res.data.description
+            this.recruitmentState = res.data.recruitmentState
+            this.membershipFee = res.data.membershipFee
+            this.city = res.data.city
+            this.sportCategory = res.data.sportCategory
+
         }).catch((err)=>{
             console.log(err)
+            console.log(this.teamId)
         })
     }
 

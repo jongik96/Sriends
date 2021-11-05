@@ -50,7 +50,7 @@
           </li>
           <li class="md:ml-5">
             관심종목 :
-            <span class="">농구</span>
+            <span class=""></span>
           </li>
           
         </ul>
@@ -310,7 +310,9 @@
 
 <script>
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
-import {getProfileInfo} from '@/api/index.js'
+import {getProfileInfo} from '@/api/auth.js'
+import { getInterest } from '@/api/auth.js'
+import store from '@/store/index.js'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
@@ -354,7 +356,14 @@ export default {
       let today = new Date();
       this.age = today.getFullYear() - new Date(res.data.birth).getFullYear()+1;
       console.log(new Date(res.data.birth))
-      localStorage.setItem('userid',res.data.id)
+      // localStorage.setItem('userid',res.data.id)
+      this.$store.commit("setUserId", res.data.id)
+    }).catch((err)=>{
+      console.log(err)
+    }),
+    getInterest()
+    .then((res)=>{
+      console.log(res)      
     }).catch((err)=>{
       console.log(err)
     })
@@ -376,13 +385,11 @@ export default {
         this.$router.push('/confirmPassword')
     },
     ModifyUser: function(){
-      const userid = localStorage.getItem('userid')
-            console.log(userid)
             if(this.form.phone==''){
                 this.form.phone = null
             }
             console.log('수정클릭')
-            const token = localStorage.getItem('token')
+            const token = store.state.accessToken
             const formData = new FormData();
             formData.append('file', this.$refs.image.files[0])
             formData.append('name', this.form.name)
