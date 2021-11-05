@@ -233,7 +233,7 @@ public class TeamServiceImpl implements TeamService{
         teamInfoRes.setMemberCount(team.getMemberCount());
         teamInfoRes.setName(team.getName());
         teamInfoRes.setMembershipFee(team.isMembershipFee());
-        teamInfoRes.setPictureId(team.getPicture().getId());
+//        teamInfoRes.setPictureId(team.getPicture().getId());
         teamInfoRes.setRecruitmentState(team.isRecruitmentState());
         teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
 
