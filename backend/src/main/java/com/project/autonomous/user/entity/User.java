@@ -30,12 +30,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-    String email;
-    String password;
-    String name;
+    private String email;
+
+    private String password;
+
+    private String name;
+
     private LocalDate birth;
-    String gender;
-    String phone;
+
+    private String gender;
+
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     private City city;
@@ -45,23 +50,8 @@ public class User extends BaseEntity {
     private Picture picture;
 
     @Enumerated(EnumType.STRING)
-    private UserAuthority userAuthority;
-
     @NotNull
-    private boolean deleted;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserTeam> userTeamList = new ArrayList<>();
-
-    // 유저 삭제
-    public void delete() {
-        this.deleted = true;
-    }
-
-    // 유저 복구
-    public void restore() {
-        this.deleted = false;
-    }
+    private UserAuthority userAuthority;
 
     // 비밀번호 변경
     public void changePassword(String password) {

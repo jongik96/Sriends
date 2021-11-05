@@ -8,10 +8,9 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 @Getter
-@Setter
 public class InterestReq {
-    ArrayList<String> sportCategory;
 
     @Schema(description = "관심 스포츠", example = "[\"축구\", \"풋살\"]")
     private List<String> interests;
+
 }
