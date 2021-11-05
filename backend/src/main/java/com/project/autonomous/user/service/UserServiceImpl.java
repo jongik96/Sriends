@@ -12,13 +12,17 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
+import com.project.autonomous.user.dto.response.UserInterestRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -75,8 +79,11 @@ public class UserServiceImpl implements UserService {
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
         Picture picture;
-        if (userModifyReq.getFile() == null) picture = null;
-        else picture = dbFileStorageService.storeFile(userModifyReq.getFile());
+        if (userModifyReq.getFile() == null) {
+            picture = null;
+        } else {
+            picture = dbFileStorageService.storeFile(userModifyReq.getFile());
+        }
 
         user.update(userModifyReq, picture);
         return MyInfoRes.from(user);
@@ -84,13 +91,22 @@ public class UserServiceImpl implements UserService {
 
     // 나의 팀 조회 (무한 스크롤)
     public Slice<UserTeamListRes> getMyTeams(Pageable pageable) {
-        Slice<Team> teams = userTeamRepository.findTeamByUser(findMember(SecurityUtil.getCurrentMemberId()), pageable);
+        Slice<Team> teams = userTeamRepository.findTeamByUser(
+            findMember(SecurityUtil.getCurrentMemberId()), pageable);
         return teams.map(p -> UserTeamListRes.from(p));
     }
 
     // 나의 개인 정보 조회
     public MyInfoRes getMyInfo() {
         return MyInfoRes.from(findMember(SecurityUtil.getCurrentMemberId()));
+    }
+
+    public List<UserInterestRes> getMyInterest() {
+        List<UserInterest> interests = userInterestRepository.findAllByUserInterestIdUser(
+            findMember(SecurityUtil.getCurrentMemberId()));
+        return interests.stream()
+            .map(UserInterestRes::from)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -140,7 +156,6 @@ public class UserServiceImpl implements UserService {
     public User findMember(long userId) {
         User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-//        if(user.isDeleted()) throw new CustomException(ErrorCode.DELETED_USER);
         return user;
     }
 }

@@ -6,6 +6,7 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
+import com.project.autonomous.user.dto.response.UserInterestRes;
 import com.project.autonomous.user.dto.response.UserProfileRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
@@ -113,7 +115,7 @@ public class UserController {
     @GetMapping("/me")
     @Operation(summary = "나의 개인 정보 조회", description = "유저의 개인 정보를 조회한다.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "팀 정보 조회",
+        @ApiResponse(responseCode = "200", description = "개인 정보 조회",
             content = @Content(schema = @Schema(implementation = MyInfoRes.class))),
         @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nDELETED_USER",
@@ -121,6 +123,19 @@ public class UserController {
     })
     public ResponseEntity<MyInfoRes> getMyInfo() {
         return ResponseEntity.ok(userService.getMyInfo());
+    }
+
+    @GetMapping("/interest")
+    @Operation(summary = "나의 관심 정보 목록 조회", description = "관심 정보 목록을 조회한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "관심 정보 목록 조회",
+            content = @Content(schema = @Schema(implementation = UserInterestRes.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nDELETED_USER",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<List<UserInterestRes>> getMyInterest() {
+        return ResponseEntity.ok(userService.getMyInterest());
     }
 
     @DeleteMapping("/{userId}")
