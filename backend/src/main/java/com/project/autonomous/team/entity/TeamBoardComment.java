@@ -15,9 +15,9 @@ public class TeamBoardComment extends BaseEntity {
     long writerId;
     String content;
     LocalDateTime createDate;
-    LocalDateTime modifiyDate;
+    LocalDateTime modifyDate;
     boolean isModified;
     long parentId;
     int depth;
-    int replycount;
+    int replyCount;
 }

@@ -7,11 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class PostViewRes {
-    long id;
-    long writerId;
+public class MemberListRes {
+    long userId;
     String name;
-    String title;
-    String content;
-    LocalDateTime createDate;
+    String email;
+    LocalDateTime registerDate;
 }

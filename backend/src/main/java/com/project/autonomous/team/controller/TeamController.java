@@ -4,10 +4,7 @@ import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
-import com.project.autonomous.team.dto.response.ApplyListRes;
-import com.project.autonomous.team.dto.response.AuthorityRes;
-import com.project.autonomous.team.dto.response.TeamInfoRes;
-import com.project.autonomous.team.dto.response.TeamListRes;
+import com.project.autonomous.team.dto.response.*;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.service.TeamService;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -110,7 +107,7 @@ public class TeamController {
 
     @GetMapping("/apply-list/{teamId}")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "리스트 조회", content = @Content),
+            @ApiResponse(responseCode = "200", description = "신청 리스트 조회", content = @Content),
             @ApiResponse(responseCode = "400", description = "NO_INTERESTING_ITEMS\n\nBAD_REQUEST",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
@@ -148,6 +145,13 @@ public class TeamController {
            return ResponseEntity.ok(true);
         }
         return ResponseEntity.status(400).body(false);
+    }
+
+    @GetMapping("/member-list/{teamId}")
+    public ResponseEntity<ArrayList<MemberListRes>> memberList(@PathVariable("teamId") long teamId){
+        System.out.println("회원 리스트 조회");
+
+        return ResponseEntity.ok(teamService.memberList(teamId));
     }
 
     @DeleteMapping("/{teamId}/me")
