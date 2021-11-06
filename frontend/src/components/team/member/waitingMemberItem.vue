@@ -16,6 +16,15 @@
                         <button @click="open = true">신청서</button>
                     </div>
                 </div>
+                <div v-if="open" class="grid grid-cols-7 mt-2 border-2">
+                    <div class="col-start-3 col-span-3">
+                        <button @click="open=false">숨기기</button>
+                        <button class="float-right">가입 승인</button>
+                    </div>
+                    <div class="col-start-3 col-span-3 border-b mt-3">
+                        <p>{{description}}</p>
+                    </div>
+                </div>
             </div>
 </template>
 
@@ -24,7 +33,13 @@ export default {
     props:{
         userId: [String,Number],
         createDate: [String, Date],
-        name: [String]
+        name: [String],
+        description:[String]
+    },
+    data(){
+        return{
+            open:false
+        }
     }
 }
 </script>

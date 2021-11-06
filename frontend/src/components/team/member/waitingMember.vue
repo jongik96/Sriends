@@ -10,6 +10,7 @@
                 :createDate="item.createDate"
                 :name="item.name"
                 :userId="item.userId"
+                :description="item.description"
             >
                 <!-- <div class="grid grid-cols-7">
                     <div class="col-start-1 col-span-1">
@@ -52,6 +53,7 @@
 import waitingMemberItem from '@/components/team/member/waitingMemberItem.vue'
 import { lookupApplyList } from '@/api/team.js'
 import store from '@/store/index.js'
+
 export default {
     components:{
         waitingMemberItem

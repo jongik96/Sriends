@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-6">
         <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
-            댓글 {{this.replyCount}} 개
+            <p v-if="replyCount>0"> 댓글 {{this.replyCount}} 개</p>
             <articleCommentItem v-for="item in comments" :key="item.id" class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300"
                 :commentId="item.id"
             >
@@ -32,7 +32,7 @@ export default {
         return{
             parentId:0,
             comments:[],
-            replyCount:'',
+            replyCount:0,
         }
   },
   created(){

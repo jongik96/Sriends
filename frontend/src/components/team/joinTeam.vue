@@ -49,6 +49,7 @@ export default {
             joinTeam(teamId,userId,this.description)
             .then((res)=>{
                 console.log(res)
+                this.$router.push('/searchTeam')
             }).catch((err)=>{
                 console.log(err)
             })

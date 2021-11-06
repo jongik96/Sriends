@@ -7,7 +7,7 @@
         <router-link to="/team">
             <h3>Main</h3>
         </router-link>
-        <div class="space-x-4">
+        <div v-if="authority!=''" class="space-x-4">
             <router-link to="/team/articleList">
                 <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-md rounded">
                     <p>공지사항</p>
@@ -30,8 +30,25 @@
 </template>
 
 <script>
+import { getPermitState } from '@/api/team.js'
+import store from '@/store/index.js'
 export default {
-
+    data(){
+        return{
+            teamId : store.state.teamId,
+            authority:'',
+        }
+    },
+    created(){
+        
+        getPermitState(this.teamId).
+            then((res)=>{
+                console.log(res)
+                this.authority = res.data.authority
+            }).catch((err)=>{
+                console.log(err)
+            })
+    }
 }
 </script>
 

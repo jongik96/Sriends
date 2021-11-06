@@ -99,7 +99,6 @@ export default {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(res => {
-                    console.log(res.data)
                 setTimeout(() => {
                     if(res.data.content.length) {
                     this.teams = this.teams.concat(res.data.content)

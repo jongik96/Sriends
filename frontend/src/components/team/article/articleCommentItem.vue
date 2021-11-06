@@ -26,7 +26,7 @@
                 <button @click="reCommentState=false" class="ml-5">취소</button>
             </div>
         </div>
-        <div v-if="replyCount" class="w-4/5 ml-5">
+        <div v-if="rereplyCount>0" class="w-4/5 ml-5">
             <p>답글 {{rereplyCount}} 개 </p>
             <div v-if="!hideComment">
                 <button @click="hideComment=true">답글 확인하기</button>
@@ -83,9 +83,9 @@ export default {
                 writerId: '',
                 userId: store.state.userId
             },
-            replyCount:'',
+            replyCount:0,
             reply:[],
-            rereplyCount:'',
+            rereplyCount:0,
         }
     },
     mounted(){

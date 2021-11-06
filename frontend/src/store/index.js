@@ -12,6 +12,7 @@ export default new Vuex.Store({
     teamId: '',
     boardId: '',
     commentId:'',
+    calendarId:'',
     selectCity: '',
     selectSportCategory: '',
   },
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     setCommentId(state,commentId){
       state.commentId = commentId
+    },
+    setCalendarId(state,calendarId){
+      state.calendarId = calendarId
     },
     setCity(state,selectCity){
       state.selectCity = selectCity

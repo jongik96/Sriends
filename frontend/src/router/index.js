@@ -85,6 +85,12 @@ export default new VueRouter({
             path: '/team/calendar',
             component: () => import('@/views/team/schedule/teamCalendarPage.vue')
         },
+        
+        // 팀 일정 상세페이지
+        {
+            path: '/team/calendar/detail',
+            component: () => import('@/views/team/schedule/scheduleDetailPage.vue')
+        },
 
         // 팀 일정 추가페이지
         {

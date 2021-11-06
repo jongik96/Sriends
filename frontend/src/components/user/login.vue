@@ -89,7 +89,7 @@ export default {
         submitForm: function(){
             loginUser(this.form)
             .then((res)=>{
-                console.log(res.data)
+                console.log(res.data.accessToken)
                 // localStorage.setItem('token',res.data.accessToken)
                 this.$store.commit('setAccessToken',res.data.accessToken)
                 Swal.fire('로그인되었습니다.')
