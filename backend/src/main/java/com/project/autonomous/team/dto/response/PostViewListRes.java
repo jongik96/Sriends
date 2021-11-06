@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class PostViewListRes {
     long id;
     String name;
+    long writerId;
     String title;
     String content;
     LocalDateTime createDate;

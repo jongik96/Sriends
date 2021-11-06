@@ -7,10 +7,7 @@ import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
-import com.project.autonomous.team.dto.response.ApplyListRes;
-import com.project.autonomous.team.dto.response.AuthorityRes;
-import com.project.autonomous.team.dto.response.TeamInfoRes;
-import com.project.autonomous.team.dto.response.TeamListRes;
+import com.project.autonomous.team.dto.response.*;
 import com.project.autonomous.team.entity.RequestJoin;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.RequestJoinRepository;
@@ -104,6 +101,8 @@ public class TeamServiceImpl implements TeamService{
                     if(interest.getUserInterestId().getSportCategory().getId() == team.getSportCategoryId()){
                         TeamListRes teamListRes1 = new TeamListRes();
                         teamListRes1.setId(team.getId());
+                        teamListRes1.setLeaderId(team.getLeaderId());
+                        teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
                         teamListRes1.setDescription(team.getDescription());
                         teamListRes1.setName(team.getName());
                         teamListRes1.setMembershipFee(team.isMembershipFee());
@@ -146,6 +145,8 @@ public class TeamServiceImpl implements TeamService{
                 if (sportCategoryRepository.findByName(sportCategoryName).get().getId() == team.getSportCategoryId()) {
                     TeamListRes teamListRes1 = new TeamListRes();
                     teamListRes1.setId(team.getId());
+                    teamListRes1.setLeaderId(team.getLeaderId());
+                    teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
                     teamListRes1.setDescription(team.getDescription());
                     teamListRes1.setName(team.getName());
                     teamListRes1.setMembershipFee(team.isMembershipFee());
@@ -261,11 +262,32 @@ public class TeamServiceImpl implements TeamService{
 
         for(RequestJoin rj : list){
             ApplyListRes applyListRes = new ApplyListRes();
+            applyListRes.setUserId(rj.getUserId());
+            applyListRes.setName(userRepository.findById(rj.getUserId()).get().getName());
             applyListRes.setEmail(userRepository.findById(rj.getUserId()).get().getEmail());
             applyListRes.setDescription(rj.getDescription());
             applyListRes.setCreateDate(rj.getCreate_date());
 
             ret.add(applyListRes);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public ArrayList<MemberListRes> memberList(long teamId) {
+        ArrayList<MemberListRes> ret = new ArrayList<>();
+
+        ArrayList<UserTeam> list = userTeamRepository.findAllByTeamId(teamId);
+
+        for(UserTeam userTeam : list){
+            MemberListRes memberListRes = new MemberListRes();
+            memberListRes.setUserId(userTeam.getUser().getId());
+            memberListRes.setName(userTeam.getUser().getName());
+            memberListRes.setEmail(userTeam.getUser().getEmail());
+            memberListRes.setRegisterDate(userTeam.getRegisterDate());
+
+            ret.add(memberListRes);
         }
 
         return ret;

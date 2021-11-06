@@ -11,6 +11,7 @@ public class TeamInfoRes {
     String name;
     LocalDateTime createDate;
     long leaderId;
+    String leaderName;
     String pictureId;
     int memberCount;
     int maxCount;

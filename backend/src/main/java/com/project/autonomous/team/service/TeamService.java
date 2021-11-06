@@ -3,10 +3,7 @@ package com.project.autonomous.team.service;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
-import com.project.autonomous.team.dto.response.ApplyListRes;
-import com.project.autonomous.team.dto.response.AuthorityRes;
-import com.project.autonomous.team.dto.response.TeamInfoRes;
-import com.project.autonomous.team.dto.response.TeamListRes;
+import com.project.autonomous.team.dto.response.*;
 import com.project.autonomous.team.entity.Team;
 import java.util.ArrayList;
 
@@ -26,6 +23,8 @@ public interface TeamService {
     void apply(long teamId, long userId, ApplyPostReq applyPostReq);
 
     ArrayList<ApplyListRes> applyList(long teamId);
+
+    ArrayList<MemberListRes> memberList(long teamId);
 
     boolean permit(long teamId, long userId);
 
