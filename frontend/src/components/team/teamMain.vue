@@ -63,7 +63,8 @@
         </div>
 
         </header>
-        <div class="grid justify-center">
+        <div v-if="this.authority" class="grid justify-end">회원님은 {{this.authority}}입니다!</div>
+        <div v-if="!this.authority" class="grid justify-center">
             <div class="mt-7">
                 <router-link to='/joinTeam'>
                     <button class="bg-yellow-500 px-2 py-1 
@@ -79,6 +80,7 @@
 </template>
 
 <script> 
+import { getPermitState } from '@/api/team.js'
 import { getTeamInfo } from '@/api/team.js'
 import store from '@/store/index.js'
 export default {
@@ -97,7 +99,8 @@ export default {
             recruitmentState : '',
             membershipFee : '',
             city : '',
-            sportCategory : ''
+            sportCategory : '',
+            authority:'',
         }
     },
     created(){
@@ -117,6 +120,14 @@ export default {
             this.membershipFee = res.data.membershipFee
             this.city = res.data.city
             this.sportCategory = res.data.sportCategory
+
+            getPermitState(teamId).
+            then((res)=>{
+                console.log(res)
+                this.authority = res.data.authority
+            }).catch((err)=>{
+                console.log(err)
+            })
 
         }).catch((err)=>{
             console.log(err)

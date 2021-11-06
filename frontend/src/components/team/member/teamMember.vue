@@ -41,48 +41,15 @@ import store from '@/store/index.js'
 export default {
     data(){
         return{
-            applyList:[
-
-            ],
-            member:[
-                { id: 1,
-                    name: "하지훈",
-                    phone: "01012341234",
-                    level: "대표",
-                },
-                { id: 2,
-                    name: "박범진",
-                    phone: "01012341234",
-                    level: "매니저",
-                },
-                { id: 3,
-                    name: "권현지",
-                    phone: "01012341234",
-                    level: "회원",
-                },
-                { id: 4,
-                    name: "권준엽",
-                    phone: "01012341234",
-                    level: "회원",
-                },
-                { id: 5,
-                    name: "박종익",
-                    phone: "01012341234",
-                    level: "회원",
-                },
-                { id: 6,
-                    name: "ㅎㅇㅎㅇ",
-                    phone: "01012341234",
-                    level: "회원",
-                },
-            ]
+            member:[]
         }
     },
     created: function(){
         const teamId = store.state.teamId
         getTeamMemberList(teamId)
         .then((res)=>{
-            console.log(res)
+            console.log(res.data)
+            this.member = res.data
         }).catch((err)=>{
             console.log(err)
         })

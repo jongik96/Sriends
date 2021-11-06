@@ -5,7 +5,7 @@
     <div class="flex justify-between flex-wrap items-center  md:justify-around">
         <!-- logo -->
         <router-link to="/team">
-            <h3>팀이름 적을곳</h3>
+            <h3>Main</h3>
         </router-link>
         <div class="space-x-4">
             <router-link to="/team/articleList">

@@ -47,7 +47,7 @@ function modifyTeamInfo(teamId,form){
 }
 
 // 팀 가입신청 api
-function joinTeam(teamId,userId, description){
+function joinTeam(teamId, userId, description){
     // return axios({
     //     method:'get',
     //     url: `${SERVER_URL}/teams/${teamId}/${userId}`,

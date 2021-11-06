@@ -3,8 +3,8 @@
     <topmenu></topmenu>
     <teamMenu></teamMenu>
     <articleDetail v-bind:boardId="this.boardId"></articleDetail>
-    <articleComment></articleComment>
-    <articleCommentList></articleCommentList>
+    <articleComment v-bind:boardId="this.boardId"></articleComment>
+    <articleCommentList v-bind:boardId="this.boardId"></articleCommentList>
   </div>
 </template>
 

@@ -5,13 +5,13 @@
                         <img src='@/assets/logo.png' class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
                     </button>
                     <p class="visible md:invisible ml-14 w-36">{{this.name}}</p>
-                    <button class="bg-yellow-500 px-2 py-1 w-24
+                    <!-- <button class="bg-yellow-500 px-2 py-1 w-24
                     text-white font-semibold text-sm rounded block text-center md:ml-8 ml-12
                     sm:inline-block mr-5 h-10" 
                     @click="joinBtn"
                     >
                         가입 요청
-                    </button>
+                    </button> -->
                 </div>
                 <div class="invisible md:visible grid md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
                     <div class="flex ">
@@ -65,9 +65,10 @@ export default {
         })
     },
     methods:{
-        joinBtn:function(){
-
-        },
+        // joinBtn:function(){
+        //     this.$store.commit('setTeamId',this.id)
+        //     this.$router.push('/joinTeam')
+        // },
         clickTeam: function(){
             this.$store.commit('setTeamId',this.id)
             this.$router.push('/team')
