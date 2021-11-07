@@ -19,6 +19,7 @@ import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.UserInterestId;
+import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
@@ -114,11 +115,13 @@ public class UserServiceImpl implements UserService {
 
     // 유저 관심 목록 업데이트
     @Transactional
-    public void updateInterest(InterestReq interestReq) {
+    public List<UserInterestRes> updateInterest(InterestReq interestReq) {
         User user = findMember(SecurityUtil.getCurrentMemberId());
         userInterestRepository.deleteAllByUserInterestIdUser(user);
 
-        if(interestReq.getInterests() == null) return;
+        if (interestReq.getInterests() == null) {
+            return getMyInterest();
+        }
 
         for (String interest : interestReq.getInterests()) {
             SportCategory sportCategory = findSportCategory(interest);
@@ -126,15 +129,21 @@ public class UserServiceImpl implements UserService {
 
             userInterestRepository.save(new UserInterest(id));
         }
-
+        return getMyInterest();
     }
 
     @Transactional
     public void deleteUser() {
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
-        // 소유자인 동호회 확인 로직
-        // 이외 동호회 탈퇴 로직
+        // 소유자인 동호회 확인, 동호회 탈퇴 로직
+        List<UserTeam> userTeams = userTeamRepository.findAllByUser(user);
+        for (UserTeam userTeam : userTeams) {
+            if (userTeam.getAuthority().equals("대표")) {
+                throw new CustomException(ErrorCode.STILL_YOU_HAVE_SREINEDS);
+            }
+            userTeamRepository.delete(userTeam);
+        }
         // 본인이 작성한 게시글, 댓글 삭제 로직
 
         userRepository.delete(user);
@@ -150,7 +159,7 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
-    public SportCategory findSportCategory(String name){
+    public SportCategory findSportCategory(String name) {
         return sportCategoryRepository.findByName(name)
             .orElseThrow(() -> new CustomException(ErrorCode.SPORT_CATEGORY_NOT_FOUND));
     }

@@ -2,6 +2,8 @@ package com.project.autonomous.user.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.matchboard.comment.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.UserInfoRes;
@@ -52,6 +54,12 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NotNull
     private UserAuthority userAuthority;
+
+    @OneToMany(mappedBy = "user")
+    private List<MatchBoardPost> matchBoardPosts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<MatchBoardComment> comments = new ArrayList<>();
 
     // 비밀번호 변경
     public void changePassword(String password) {
