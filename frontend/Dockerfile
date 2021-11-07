@@ -14,12 +14,11 @@ RUN npm run build
 ### 필요없는 기존 conf 문서를 삭제하고, nginx에 설정하기 위한 conf를 복사
 ### build-stage(=상위 node 이미지)에서 빌드한 결과물을 nginx로 옮긴 후,
 ### 80번 포트 개방과 "nginx -g daemon off;" 명령을 실행
-FROM nginx:stable-alpine as production-stage
+# FROM nginx:stable-alpine as production-stage
+FROM nginx
 RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx/homepage.conf /etc/nginx/conf.d/default.conf
-RUN systemctl restart nginx
 COPY --from=build-stage ./homepage/dist /usr/share/nginx/html/homepage
 # COPY ./ssl ./ssl
 EXPOSE 80
-# ENTRYPOINT ["/bin/sh", "-c", "/bin/bash"]
 CMD ["nginx", "-g", "daemon off;"]
