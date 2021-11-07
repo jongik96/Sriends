@@ -115,12 +115,12 @@ public class UserServiceImpl implements UserService {
 
     // 유저 관심 목록 업데이트
     @Transactional
-    public void updateInterest(InterestReq interestReq) {
+    public List<UserInterestRes> updateInterest(InterestReq interestReq) {
         User user = findMember(SecurityUtil.getCurrentMemberId());
         userInterestRepository.deleteAllByUserInterestIdUser(user);
 
         if (interestReq.getInterests() == null) {
-            return;
+            return getMyInterest();
         }
 
         for (String interest : interestReq.getInterests()) {
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
             userInterestRepository.save(new UserInterest(id));
         }
-
+        return getMyInterest();
     }
 
     @Transactional

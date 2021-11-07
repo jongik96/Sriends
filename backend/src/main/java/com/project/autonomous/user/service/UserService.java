@@ -30,5 +30,5 @@ public interface UserService {
 
     UserInfoRes getUserInfo(long userId);
 
-    void updateInterest(InterestReq interestReq);
+    List<UserInterestRes> updateInterest(InterestReq interestReq);
 }
