@@ -5,7 +5,7 @@
 ### 나머지 프론트 소스코드와 리소스를 복사하여 빌드 진행
 FROM node:lts-alpine as build-stage
 WORKDIR /homepage
-ADD package*.json ./
+COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
@@ -16,7 +16,7 @@ RUN npm run build
 ### 80번 포트 개방과 "nginx -g daemon off;" 명령을 실행
 FROM nginx:stable-alpine as production-stage
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx/homepage.conf /etc/nginx/conf.d/homepage.conf
+COPY ./nginx/homepage.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage ./homepage/dist /usr/share/nginx/html/homepage
 # COPY ./ssl ./ssl
 EXPOSE 80
