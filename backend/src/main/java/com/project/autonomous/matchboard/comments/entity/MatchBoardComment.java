@@ -1,4 +1,4 @@
-package com.project.autonomous.matchboard.comment.entity;
+package com.project.autonomous.matchboard.comments.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
