@@ -44,13 +44,15 @@
           </li>
         </ul>
         <ul class="md:flex text-xl">
-          <li>
+          <li v-if="phone!=null">
             전화번호 :
             <span class="">{{this.phone}}</span>
           </li>
-          <li class="md:ml-5">
+        </ul>
+        <ul class="md:flex text-xl">
+          <li class="">
             관심종목 :
-            <span class=""></span>
+            <span v-for="item in sports" :key="item.id" class=""> {{item.interest}}</span>
           </li>
           
         </ul>
@@ -338,6 +340,7 @@ export default {
       city : '',
       age :'',
       pictureUrl : '',
+      sports:[]
     }
   },
   created: function(){
@@ -363,7 +366,8 @@ export default {
     }),
     getInterest()
     .then((res)=>{
-      console.log(res)      
+      console.log(res)  
+      this.sports = res.data    
     }).catch((err)=>{
       console.log(err)
     })
@@ -412,7 +416,9 @@ export default {
             }).then((res)=>{
                 console.log(res.data)
                 Swal.fire('수정 완료!')
-                this.$router.push('/main')
+                this.modifyState=false
+                this.$router.go()
+                // this.$router.push('/main')
             }).catch((err)=>{
                 console.log(formData)
                 console.log(err)

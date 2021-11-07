@@ -19,7 +19,7 @@
                 <div v-if="open" class="grid grid-cols-7 mt-2 border-2">
                     <div class="col-start-3 col-span-3">
                         <button @click="open=false">숨기기</button>
-                        <button class="float-right">가입 승인</button>
+                        <button @click="okBtn" class="float-right">가입 승인</button>
                     </div>
                     <div class="col-start-3 col-span-3 border-b mt-3">
                         <p>{{description}}</p>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import store from '@/store/index.js'
+import { permitTeam } from '@/api/team.js'
 export default {
     props:{
         userId: [String,Number],
@@ -39,6 +41,17 @@ export default {
     data(){
         return{
             open:false
+        }
+    },
+    methods:{
+        okBtn:function(){
+            const teamId = store.state.teamId
+            permitTeam(teamId, this.userId)
+            .then((res)=>{
+                console.log(res)
+            }).catch((err)=>{
+                console.log(err)
+            })
         }
     }
 }

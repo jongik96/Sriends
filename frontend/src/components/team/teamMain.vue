@@ -23,16 +23,16 @@
             </span>
 
             <!-- follow button -->
-            <a href="#" class="bg-yellow-500 px-2 py-1 
+            <router-link to="/teamModify" class="bg-yellow-500 px-2 py-1 
                             text-white font-semibold text-sm rounded block text-center 
-                            sm:inline-block">정보수정</a>
+                            sm:inline-block">정보수정</router-link>
             </div>
 
             <!-- post, following, followers list for medium screens -->
             <ul class=" md:inline-block  mb-4">
             <li>
                 대표자
-                <span class="font-semibold">박범진</span>
+                <span class="font-semibold">{{leaderName}}</span>
                 종목
                 <span class="font-semibold">{{this.sportCategory}}</span>
             </li>
@@ -92,6 +92,7 @@ export default {
             name : '',
             createDate : '',
             leaderId : '',
+            leaderName:'',
             pictureId : '',
             memberCount : '',
             maxCount : '',
@@ -112,6 +113,7 @@ export default {
             this.name = res.data.name
             this.createDate = res.data.createDate
             this.leaderId = res.data.leaderId
+            this.leaderName = res.data.leaderName
             this.pictureId = res.data.pictureId
             this.memberCount = res.data.memberCount
             this.maxCount = res.data.maxCount

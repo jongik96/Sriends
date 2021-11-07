@@ -54,7 +54,7 @@ function deleteUser(userid){
 
 // 관심종목 선택 api
 function selectSports(sports){
-    return instance.put('users/interest',{'sportCategory':sports})
+    return instance.put('users/interest',{'interests':sports})
 }
 
 function getInterest(){

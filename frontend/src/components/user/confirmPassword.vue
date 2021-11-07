@@ -66,6 +66,7 @@ export default {
        }
      }).catch((err)=>{
        console.log(err)
+       Swal.fire('비밀번호가 틀립니다!')
      })
    }
  },

@@ -6,7 +6,7 @@
                 <textarea v-model="content" id="comment" rows=3 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
             </div>
             <div class="flex justify-end">
-                <button @click="postComment" class="bg-yellow-500 px-2 py-1 
+                <button @click="postComment" :disabled="this.content" class="bg-yellow-500 px-2 py-1 
                     text-white font-semibold text-sm rounded block text-center 
                     sm:inline-block mr-5">
                             댓글 작성하기

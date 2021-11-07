@@ -45,6 +45,7 @@ export default {
     methods:{
         clickTeam: function(){
             this.$store.commit('setTeamId',this.id)
+            this.$store.commit('setTeamName',this.name)
             this.$router.push('/team')
         }
 

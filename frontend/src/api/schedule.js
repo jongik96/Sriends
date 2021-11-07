@@ -28,21 +28,23 @@ function deleteSchedule(calendarId){
 }
 
 // 일정 추가하기
-function postSchedule(teamId,wrtierId,name,content,schedule){
-    return instance.post(`teams/calendar/${teamId}`,{
+function postSchedule(teamId,writerId,name,content,schedule){
+    return instance.post(`teams/calendar/${teamId}`,
+    {
         "teamId": teamId,
-        "writerId": wrtierId,
+        "writerId": writerId,
         "name": name,
         "content": content,
         "schedule": schedule
-    })
+    }
+    )
 }
 
 // 일정 수정하기
-function putSchedule(calendarId,teamId,wrtierId,name,content,schedule){
+function putSchedule(calendarId,teamId,writerId,name,content,schedule){
     return instance.put(`teams/calendar/${calendarId}`,{
         "teamId": teamId,
-        "writerId": wrtierId,
+        "writerId": writerId,
         "name": name,
         "content": content,
         "schedule": schedule

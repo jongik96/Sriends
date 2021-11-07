@@ -28,7 +28,7 @@
                 </div>
                 <div class="mt-5 ml-3">
                     <p class="text-xl">날짜</p>
-                    <input type="date" v-model="modifyDate" class=" text-medium w-2/4 rounded-md border-2 border-yellow-400">
+                    <input type="datetime-local" v-model="modifyDate" class=" text-medium w-2/4 rounded-md border-2 border-yellow-400">
                 </div>
                 <div class="mt-5 ml-3">
                     <p class="text-xl">내용</p>
@@ -49,6 +49,9 @@
 import store from '@/store/index.js'
 import { getSchedule } from '@/api/schedule.js'
 import { putSchedule } from '@/api/schedule.js'
+// import axios from 'axios'
+// const baseURL = process.env.VUE_APP_SERVER_URL
+
 import { deleteSchedule } from '@/api/schedule.js'
 import Swal from 'sweetalert2'
 export default {
@@ -86,9 +89,24 @@ export default {
         modifyCalendar: function(){
             const calendarId = store.state.calendarId
             const teamId = store.state.teamId
-            putSchedule(calendarId,teamId,this.writerId,this.modifyName,this.modifyContent,this.modifyDate)
+            // axios({
+            //     method:'post',
+            //     url:`${baseURL}/teams/calendar/${calendarId}`,
+            //     headers: this.getToken,
+            //     data: {
+            //         teamId:teamId,
+            //         writerId:this.writerId,
+            //         content:this.content,
+            //         createDate:this.createDate,
+            //         name:this.name
+            //     }
+            // })
+            putSchedule(calendarId,teamId,this.writerId,this.name,this.content,this.schedule)
             .then((res)=>{
                 console.log(res.data)
+                Swal.fire('일정이 수정되었습니다.')
+                this.modifyState = false
+                // this.$router.go()
             }).catch((err)=>{
                 console.log(err)
             })
@@ -104,6 +122,15 @@ export default {
                 console.log(err)
             })
         }
+    },
+    computed:{
+        getToken(){
+            const token = store.state.accessToken
+            const config = {
+                Authorization: `Bearer ${token}`
+            }
+            return config
+        },
     }
 }
 </script>

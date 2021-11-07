@@ -260,7 +260,7 @@
                         </p>
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">생성하기</button>
+                        <button type="submit"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">생성하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/main">
@@ -299,6 +299,18 @@ export default {
         }
     },
     computed: {
+        btnDisabled(){
+            if(!this.form.name || !this.form.membershipFee || !this.form.city
+                || !this.form.description || !this.form.sportCategory
+                || !this.form.recruitmentState
+                || !this.form.maxCount
+            ){
+                return false
+            }
+            return true
+            
+            
+        },
         getToken(){
             const token = store.state.accessToken
             const config = {
@@ -309,21 +321,30 @@ export default {
     },
     methods:{
         submitForm: function(){
-            axios({
-                method: 'post',
-                url: `${SERVER_URL}/teams/`,
-                headers: this.getToken,
-                    // 'Content-Type' : 'multipart/form-data',
-                    // // 'Content-Type' : 'application/json',
-                data: this.form
 
-            }).then((res)=>{
-                console.log(res.data)
-                Swal.fire('팀 등록이 완료되었습니다.')
-                this.$router.push('/main')
-            }).catch((err)=>{
-                console.log(err)
-            }) 
+            if(!this.form.name || !this.form.membershipFee || !this.form.city
+                || !this.form.description || !this.form.sportCategory
+                || !this.form.recruitmentState
+                || !this.form.maxCount
+            ){
+                Swal.fire('입력되지 않은 칸이 있습니다.')
+            }else{
+                axios({
+                    method: 'post',
+                    url: `${SERVER_URL}/teams/`,
+                    headers: this.getToken,
+                        // 'Content-Type' : 'multipart/form-data',
+                        // // 'Content-Type' : 'application/json',
+                    data: this.form
+
+                }).then((res)=>{
+                    console.log(res.data)
+                    Swal.fire('팀 등록이 완료되었습니다.')
+                    this.$router.push('/main')
+                }).catch((err)=>{
+                    console.log(err)
+                })
+            } 
         }        
     }
 

@@ -30,7 +30,7 @@ function postArticleComments(boardId,content,parentId){
 }
 
 // 댓글 수정하기
-function putArticleComments(commentId,content){
+function putArticleComments(commentId ,content){
     return instance.put(`teams/board/comments/${commentId}`,content)
 }
 

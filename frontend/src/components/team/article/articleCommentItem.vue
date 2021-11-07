@@ -8,7 +8,7 @@
         <div v-if="modifyState">
             
             <textarea v-model="modifyContent" id="comment" rows=2 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
-            <button @click="modifyComment" class="">수정하기</button>
+            <button @click="modifyComment" :disabled="!modifyContent" class="">수정하기</button>
             <button @click="modifyState=false" class="ml-5">취소</button>
         </div>
         <div v-if="!modifyState" class="">
@@ -57,7 +57,10 @@ import { getDate } from '@/utils/date.js'
 import { getArticleComments } from '@/api/comment.js'
 import { deleteArticleComments } from '@/api/comment.js'
 import { getArticleCommentsList } from '@/api/comment.js'
-import { putArticleComments } from '@/api/comment.js'
+// import { putArticleComments } from '@/api/comment.js'
+import axios from 'axios'
+const baseURL = process.env.VUE_APP_SERVER_URL
+
 import { postArticleComments } from '@/api/comment.js'
 import reCommentItem from '@/components/team/article/articleReCommentItem.vue'
 import store from '@/store/index.js'
@@ -124,7 +127,14 @@ export default {
             })
         },
         modifyComment:function(){
-            putArticleComments(this.commentId,this.modifyContent)
+            axios({
+                method:'put',
+                url:`${baseURL}/teams/board/comments/${this.commentId}`,
+                headers:this.getToken,
+                data:{
+                    content:this.modifyContent
+                },
+            })
             .then((res)=>{
                 console.log(res)
                 // Swal.fire('댓글이수정되었습니다')
@@ -144,6 +154,15 @@ export default {
                 console.log(err)
             })
         }
+    },
+    computed:{
+        getToken(){
+            const token = store.state.accessToken
+            const config = {
+                Authorization: `Bearer ${token}`
+            }
+            return config
+        },
     }
 }
 </script>

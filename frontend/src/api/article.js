@@ -54,7 +54,12 @@ function createArticleInfo(teamId,form){
     //     data: form
     // })
 
-    return instance.post(`teams/board/${teamId}`,form)
+    return instance.post(`teams/board/${teamId}`,form
+    // {
+    //     "title":title,
+    //     "content":content
+    // }
+    )
 }
 
 // 팀 공지사항 수정 api

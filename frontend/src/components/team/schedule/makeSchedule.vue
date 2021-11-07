@@ -8,7 +8,6 @@
         <div class="col-start-2 col-span-4 ">
             <div class="grid grid-cols-6  mt-10">
                 <div class="col-start-2 col-span-4 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
-                    <form>
                         <div class="pt-5 pl-20">
                             <p class="text-xl font-bold">제목</p>
                             <input v-model="name" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
@@ -19,21 +18,19 @@
                         </div>
                         <div class="pt-5 pl-20">
                             <p class="text-xl font-bold">일시</p>
-                            <input v-model="createDate" type="date" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+                            <input v-model="createDate" type="datetime-local" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                         </div>
                         <div class="flex justify-center p-2 mt-10">
                             <!-- <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">Log In</button> -->
-                            <router-link to="/team/calendar">
-                            <button type="submit"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">
-                                취소
-                            </button>
-                            </router-link>
-                            <button @click="addSchedule"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ml-3">
+                            <button @click="addSchedule"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">
                                 작성
                             </button>
+                            <router-link to="/team/calendar">
+                                <button   class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ml-3">
+                                    취소
+                                </button>
+                            </router-link>
                         </div>
-                    </form>
-
                 </div>
             </div>
         </div>
@@ -43,27 +40,40 @@
 <script>
 import store from '@/store/index.js'
 import { postSchedule } from '@/api/schedule.js'
-// import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
 export default {
     data(){
         return{
             name:'',
             createDate:'',
             content:'',
-            teamId : store.state.teamId,
-            writerId : store.state.userId,
         }
     },
     methods:{
         addSchedule: function(){
-            postSchedule(this.teamId,this.writerId,this.name,this.content,this.createDate)
+            const teamId = store.state.teamId
+            const writerId = store.state.userId
+
+            ///// 현지님이랑 얘기해서 문제 해결되면 다시 schedule.js에 함수 불러서 쓰기
+            postSchedule(teamId,writerId,this.name,this.content,this.createDate)
+
             .then((res)=>{
                 console.log(res)
+                Swal.fire('일정이 등록되었습니다.')
                 this.$router.push('/team/calendar')
             }).catch((err)=>{
                 console.log(err)
             })
         }
+    },
+    computed:{
+        getToken(){
+            const token = store.state.accessToken
+            const config = {
+                Authorization: `Bearer ${token}`
+            }
+            return config
+        },
     }
 }
 </script>

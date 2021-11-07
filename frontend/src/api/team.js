@@ -56,7 +56,7 @@ function joinTeam(teamId, userId, description){
     // })
 
 
-    return instance.get(`teams/${teamId}/${userId}`,{'description':description})
+    return instance.post(`teams/${teamId}/${userId}`,{'description':description})
 }
 
 // 팀 가입승인 api
