@@ -16,4 +16,7 @@ public class Calendar extends BaseEntity {
     String name;
     String content;
     LocalDateTime schedule;
+    int year;
+    int month;
+    int day;
 }

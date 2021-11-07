@@ -9,6 +9,8 @@ public class TeamListRes {
     long id;
     String pictureDownloadUri;
     String name;
+    long leaderId;
+    String leaderName;
     String description;
     boolean membershipFee;
     int memberCount;

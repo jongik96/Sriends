@@ -7,6 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface TeamBoardCommentRepository extends JpaRepository<TeamBoardComment, Long> {
-//    List<TeamBoardComment> findAllByTeamBoardId(long teamBoardId);
-//    List<TeamBoardComment> findAllByParentIdAAndTeamBoardId(long parentId, long teamBoardId);
+    List<TeamBoardComment> findAllByTeamBoardId(long teamBoardId);
+    List<TeamBoardComment> findAllByParentIdAndTeamBoardId(long parentId, long teamBoardId);
 }

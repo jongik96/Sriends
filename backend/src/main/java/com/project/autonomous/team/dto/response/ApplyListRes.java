@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ApplyListRes {
+    long userId;
+    String name;
     String email;
     String description;
     LocalDateTime createDate;
