@@ -74,7 +74,7 @@ public class TeamServiceImpl implements TeamService{
         userTeam.setUser(userRepository.getById(userId));
         userTeam.setTeam(team);
         userTeam.setRegisterDate(LocalDateTime.now());
-        userTeam.setAuthority("매니저");
+        userTeam.setAuthority("대표");
         userTeamRepository.save(userTeam);
 
         return null;
@@ -174,7 +174,7 @@ public class TeamServiceImpl implements TeamService{
 
         long userId = SecurityUtil.getCurrentMemberId();
 
-        if(userTeamRepository.findByUserIdAndTeamId(userId, teamId).get().getAuthority().equals("매니저")){
+        if(userTeamRepository.findByUserIdAndTeamId(userId, teamId).get().getAuthority().equals("매니저")||userTeamRepository.findByUserIdAndTeamId(userId, teamId).get().getAuthority().equals("대표")){
             //수정할 항목 보고 결정하기 (지금은 생성이랑 같음)
             Team team = teamRepository.findById(teamId).get();
 
@@ -234,6 +234,8 @@ public class TeamServiceImpl implements TeamService{
         teamInfoRes.setMemberCount(team.getMemberCount());
         teamInfoRes.setName(team.getName());
         teamInfoRes.setMembershipFee(team.isMembershipFee());
+        teamInfoRes.setLeaderId(team.getLeaderId());
+        teamInfoRes.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
 //        teamInfoRes.setPictureId(team.getPicture().getId());
         teamInfoRes.setRecruitmentState(team.isRecruitmentState());
         teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
@@ -243,6 +245,10 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public void apply(long teamId, long userId, ApplyPostReq applyPostReq) {
+
+        if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){
+            throw new CustomException(ErrorCode.ALREADY_APPLY);
+        }
         RequestJoin requestJoin = new RequestJoin();
         requestJoin.setUserId(userId);
         requestJoin.setTeamId(teamId);
@@ -299,19 +305,22 @@ public class TeamServiceImpl implements TeamService{
         Team team = teamRepository.findById(teamId).get();
 
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(managerId, teamId).get();
-        if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
+        if(userTeam.getAuthority().equals("매니저")||userTeam.getAuthority().equals("대표")){//조회하는 사람이 관리자 이상이면 가능
 
-            if(!requestJoinRepository.findByUserIdAndTeamId(userId,teamId).isPresent())
+            if(!requestJoinRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){
                 throw new CustomException(ErrorCode.APPLIY_FORM_NOT_FOUND);
+            }
 
             if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 탈퇴했던 사람이 다시 신청할 경우
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
-                UserTeam applyUser = userTeamRepository.findByUserId(userId).get();
-                applyUser.setAuthority("회원");
-                applyUser.setRegisterDate(LocalDateTime.now());
-                userTeamRepository.save(applyUser);
-
+                System.out.println("회원 있는데");
+//                UserTeam applyUser = userTeamRepository.findByUserId(userId).get();
+//                applyUser.setAuthority("회원");
+//                applyUser.setRegisterDate(LocalDateTime.now());
+//                userTeamRepository.save(applyUser);
                 requestJoinRepository.delete(requestJoin);
+                throw new CustomException(ErrorCode.ALREADY_APPLY);
+
             }else{
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
                 UserTeam applyUser = new UserTeam();
@@ -346,7 +355,7 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public boolean giveAuthority(long teamId, long userId) {
         long managerId = SecurityUtil.getCurrentMemberId();
-        if(userTeamRepository.findByUserIdAndTeamId(managerId,teamId).get().getAuthority().equals("매니저")){
+        if(userTeamRepository.findByUserIdAndTeamId(managerId,teamId).get().getAuthority().equals("대표")){
             UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
 
             userTeam.setAuthority("매니저");
@@ -379,7 +388,7 @@ public class TeamServiceImpl implements TeamService{
         Team team = teamRepository.findById(teamId).get();
 
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(leaderId,teamId).get();
-        if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
+        if(userTeam.getAuthority().equals("매니저")||userTeam.getAuthority().equals("대표")){//조회하는 사람이 관리자 이상이면 가능
             UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
             userTeamRepository.delete(kickOutUser);
             return;

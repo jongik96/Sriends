@@ -33,7 +33,7 @@ public class TeamCalendarController {
     }
 
     @DeleteMapping("/{calendarId}")
-    public ResponseEntity<Boolean> deleteCalendar(@PathVariable("calendardId") long calendarId){
+    public ResponseEntity<Boolean> deleteCalendar(@PathVariable("calendarId") long calendarId){
         System.out.println("일정 삭제");
 
         return ResponseEntity.ok(teamCalendarService.delete(calendarId));
