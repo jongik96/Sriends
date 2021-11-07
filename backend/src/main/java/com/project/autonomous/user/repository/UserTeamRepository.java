@@ -26,6 +26,10 @@ public interface UserTeamRepository extends CrudRepository<UserTeam, UserTeamId>
     @Query("select ut.team from UserTeam ut where ut.user = :user")
     Slice<Team> findTeamByUser(@Param("user") User user, Pageable pageable);
 
-    // 유저가 가입된 팀 리스트
+    // 유저가 가입된 팀 정보
     List<UserTeam> findAllByUser(User user);
+
+    // 유저가 가입된 팀 리스트
+    @Query("select ut.team from UserTeam ut where ut.user = :user")
+    List<Team> findTeamByUserList(@Param("user") User user);
 }
