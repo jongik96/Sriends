@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class PostViewRes {
+public class CalendarRes {
     long id;
     long writerId;
+    String writerName;
     String name;
-    String title;
     String content;
-    LocalDateTime createDate;
+    LocalDateTime schedule;
 }

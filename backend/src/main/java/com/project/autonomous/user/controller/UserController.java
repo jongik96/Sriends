@@ -153,13 +153,13 @@ public class UserController {
     @PutMapping("/interest")
     @Operation(summary = "나의 관심 정보 목록 업데이트", description = "관심 정보 목록을 생성, 및 수정한다.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "변경되었습니다.", content = @Content),
+        @ApiResponse(responseCode = "200", description = "변경된 관심 정보 목록 조회",
+            content = @Content(schema = @Schema(implementation = UserInterestRes.class))),
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nSPORT_CATEGORY_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> updateInterest(@RequestBody InterestReq interestReq) {
-        userService.updateInterest(interestReq);
-        return ResponseEntity.ok("변경되었습니다.");
+    public ResponseEntity<List<UserInterestRes>> updateInterest(@RequestBody InterestReq interestReq) {
+        return ResponseEntity.ok(userService.updateInterest(interestReq));
     }
 
     @DeleteMapping
