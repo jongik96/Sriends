@@ -2,7 +2,7 @@ package com.project.autonomous.matchboard.posts.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
-import com.project.autonomous.matchboard.comment.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
 import com.project.autonomous.team.entity.SportCategory;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.entity.User;
@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -60,7 +61,7 @@ public class MatchBoardPost extends BaseEntity {
 
     private String content;
 
-    @OneToMany(mappedBy = "matchBoardPost")
+    @OneToMany(mappedBy = "matchBoardPost" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MatchBoardComment> comments = new ArrayList<>();
 
 
