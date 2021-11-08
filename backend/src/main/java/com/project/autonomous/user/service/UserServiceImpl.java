@@ -1,25 +1,42 @@
 package com.project.autonomous.user.service;
 
-import com.project.autonomous.common.entity.City;
+import com.project.autonomous.common.exception.CustomException;
+import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
+import com.project.autonomous.picture.service.DBFileStorageService;
+import com.project.autonomous.team.entity.SportCategory;
 import com.project.autonomous.team.entity.Team;
-import com.project.autonomous.user.dto.request.UserModifyPutReq;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
-import com.project.autonomous.user.dto.response.MyProfileRes;
-import com.project.autonomous.user.dto.response.UserProfileRes;
+import com.project.autonomous.team.repository.SportCategoryRepository;
+import com.project.autonomous.user.dto.request.CheckPasswordReq;
+import com.project.autonomous.user.dto.request.InterestReq;
+import com.project.autonomous.user.dto.request.UserModifyReq;
+import com.project.autonomous.user.dto.response.MyInfoRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
+import com.project.autonomous.user.dto.response.UserInterestRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.entity.UserInterest;
+import com.project.autonomous.user.entity.UserInterestId;
 import com.project.autonomous.user.entity.UserTeam;
+import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -34,104 +51,116 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PictureRepository pictureRepository;
 
-    @Override
-    public User createUser(UserRegisterPostReq registerInfo) {
+    @Autowired
+    SportCategoryRepository sportCategoryRepository;
 
-        User user = new User();
-        user.setEmail(registerInfo.getEmail());
-        user.setName(registerInfo.getName());
-        user.setBirth(registerInfo.getBirth());
-        user.setGender(registerInfo.getGender());
-        user.setCity(City.from(registerInfo.getCity()));
-        user.setPhone(registerInfo.getPhone());
-        user.setPassword(registerInfo.getPassword());
-        userRepository.save(user);
-        return user;
+    @Autowired
+    UserInterestRepository userInterestRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final DBFileStorageService dbFileStorageService;
+
+    // 비밀번호 확인
+    public boolean checkPassword(CheckPasswordReq checkPasswordReq) {
+        String currentPass = userRepository.findById(SecurityUtil.getCurrentMemberId())
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)).getPassword();
+
+        return passwordEncoder.matches(checkPasswordReq.getPassword(), currentPass);
     }
 
-    @Override
-    public Boolean emailCheck(String email) {
-        User user = new User();
-        boolean check = userRepository.findByEmail(email).isPresent();
+    // 비밀번호 변경
+    @Transactional
+    public void changePassword(CheckPasswordReq checkPasswordReq) {
+        User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (check) {//이미 있는 이메일
-            return false;
+        user.changePassword(checkPasswordReq.encodePassword(passwordEncoder));
+    }
+
+    // 회원 수정
+    @Transactional
+    public MyInfoRes modifyUser(UserModifyReq userModifyReq) {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+
+        Picture picture;
+        if (userModifyReq.getFile() == null) {
+            picture = null;
+        } else {
+            picture = dbFileStorageService.storeFile(userModifyReq.getFile());
         }
-        return true;
+
+        user.update(userModifyReq, picture);
+        return MyInfoRes.from(user);
     }
 
-    @Override
-    public User modifyUser(Long userId, UserModifyPutReq modifyInfo) {
-        SecurityUtil.getCurrentMemberId();
-        User user = userRepository.findById(userId).get();
-        user.setName(modifyInfo.getName());
-        user.setBirth(modifyInfo.getBirth());
-        user.setPhone(modifyInfo.getPhone());
-        user.setGender(modifyInfo.getGender());
-        user.setCity(City.from(modifyInfo.getCity()));
-        user.setPicture_id(modifyInfo.getUuid());
-        userRepository.save(user);
-        return null;
+    // 나의 팀 조회 (무한 스크롤)
+    public Slice<UserTeamListRes> getMyTeams(Pageable pageable) {
+        Slice<Team> teams = userTeamRepository.findTeamByUser(
+            findMember(SecurityUtil.getCurrentMemberId()), pageable);
+        return teams.map(p -> UserTeamListRes.from(p));
     }
 
-    @Override
-    public User deleteUser(Long userId) {
-        return null;
+    // 나의 개인 정보 조회
+    public MyInfoRes getMyInfo() {
+        return MyInfoRes.from(findMember(SecurityUtil.getCurrentMemberId()));
     }
 
-    @Override
-    public MyProfileRes getMyProfile() {
-        long userId = SecurityUtil.getCurrentMemberId();
+    // 유저 관심 목록 조회
+    public List<UserInterestRes> getMyInterest() {
+        List<UserInterest> interests = userInterestRepository.findAllByUserInterestIdUser(
+            findMember(SecurityUtil.getCurrentMemberId()));
+        return interests.stream()
+            .map(UserInterestRes::from)
+            .collect(Collectors.toList());
+    }
 
-        User user = userRepository.findById(userId).get();
+    // 유저 관심 목록 업데이트
+    @Transactional
+    public List<UserInterestRes> updateInterest(InterestReq interestReq) {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+        userInterestRepository.deleteAllByUserInterestIdUser(user);
 
-        MyProfileRes res = new MyProfileRes();
-        res.setEmail(user.getEmail());
-        res.setName(user.getName());
-        res.setBirth(user.getBirth());
-        res.setPhone(user.getPhone());
-        res.setGender(user.getGender());
-        res.setCity(user.getCity().toString());
+        if (interestReq.getInterests() == null) {
+            return getMyInterest();
+        }
 
-        ArrayList<UserTeamListRes> teamList = new ArrayList<>();
-        for (UserTeam userTeam : userTeamRepository.findAll()) {
-            if (userTeam.getUser().equals(user)) {
-                Team team = userTeam.getTeam();
-                UserTeamListRes utl = new UserTeamListRes();
-                utl.setId(team.getId());
-                utl.setName(team.getName());
-//                utl.setPictureDownloadUri(pictureRepository.findById(team.getPicture_id()).get().getDownload_uri());
+        for (String interest : interestReq.getInterests()) {
+            SportCategory sportCategory = findSportCategory(interest);
+            UserInterestId id = new UserInterestId(user, sportCategory);
 
-                teamList.add(utl);
+            userInterestRepository.save(new UserInterest(id));
+        }
+        return getMyInterest();
+    }
+
+    @Transactional
+    public void deleteUser() {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+
+        // 소유자인 동호회 확인, 동호회 탈퇴 로직
+        List<UserTeam> userTeams = userTeamRepository.findAllByUser(user);
+        for (UserTeam userTeam : userTeams) {
+            if (userTeam.getAuthority().equals("대표")) {
+                throw new CustomException(ErrorCode.STILL_YOU_HAVE_SREINEDS);
             }
+            userTeamRepository.delete(userTeam);
         }
+        // 본인이 작성한 게시글, 댓글 삭제 로직
 
-        //사진 주소 넣기
-//        res.setPictureDownloadUri(pictureRepository.findById(user.getPicture_id()).get().getDownload_uri());
-
-        return res;
+        userRepository.delete(user);
     }
 
-    @Override
-    public UserProfileRes getUserProfile(Long userId) {
-        User user = userRepository.findById(userId).get();
-
-        UserProfileRes res = new UserProfileRes();
-        res.setEmail(user.getEmail());
-        res.setName(user.getName());
-        res.setBirth(user.getBirth());
-        res.setPhone(user.getPhone());
-        res.setCity(user.getCity().toString());
-
-        return res;
+    // 다른 유저 조회
+    public UserInfoRes getUserInfo(long userId) {
+        return UserInfoRes.from(findMember(userId));
     }
 
-    @Override
-    public User getUser(String userEmail) {
-        User user = userRepository.findByEmail(userEmail).get();
+    public User findMember(long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 
-        if (user == null)
-            return null;
-        return user;
+    public SportCategory findSportCategory(String name) {
+        return sportCategoryRepository.findByName(name)
+            .orElseThrow(() -> new CustomException(ErrorCode.SPORT_CATEGORY_NOT_FOUND));
     }
 }

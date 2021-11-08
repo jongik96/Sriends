@@ -24,7 +24,6 @@ public class UserTeam {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    LocalDateTime register_date;
+    LocalDateTime registerDate;
     String authority;
-    boolean is_active;
 }

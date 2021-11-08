@@ -7,9 +7,10 @@ import com.project.autonomous.jwt.dto.TokenDto;
 import com.project.autonomous.jwt.dto.TokenRequestDto;
 import com.project.autonomous.jwt.entity.RefreshToken;
 import com.project.autonomous.jwt.repository.RefreshTokenRepository;
+import com.project.autonomous.picture.entity.Picture;
+import com.project.autonomous.picture.service.DBFileStorageService;
 import com.project.autonomous.user.dto.request.LoginReq;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
-import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.dto.request.UserRegisterReq;
 import com.project.autonomous.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,25 +23,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService{
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final DBFileStorageService dbFileStorageService;
 
     @Transactional
-    public void signup(UserRegisterPostReq userRegisterPostReq) {
+    public void signup(UserRegisterReq userRegisterReq) {
         // 가입되어있는지 확인 (회원을 삭제해도 DB에 회원 정보가 남아있어서 가입 안됨 고민해야할 일)
-        if (userRepository.existsByEmail(userRegisterPostReq.getEmail())) {
+        if (userRepository.existsByEmail(userRegisterReq.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_JOIN);
         }
-        User user = userRegisterPostReq.toUser(passwordEncoder);
-        userRepository.save(user);
+        Picture picture;
+        if(userRegisterReq.getFile() == null) picture = null;
+        else picture = dbFileStorageService.storeFile(userRegisterReq.getFile());
+        userRepository.save(userRegisterReq.toUser(passwordEncoder, picture));
     }
 
-    public boolean checkEmail(String email){
+    public boolean checkEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
@@ -51,7 +55,8 @@ public class AuthServiceImpl {
 
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        Authentication authentication = authenticationManagerBuilder.getObject()
+            .authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
@@ -76,7 +81,8 @@ public class AuthServiceImpl {
         }
 
         // 2. Access Token 에서 User ID 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(
+            tokenRequestDto.getAccessToken());
 
         // 3. 저장소에서 User ID 를 기반으로 Refresh Token 값 가져옴
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())

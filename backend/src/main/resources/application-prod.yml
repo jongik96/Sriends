@@ -29,6 +29,19 @@ spring:
 jwt: # $ echo 'spring-boot-security-jwt-bjp-secret-key-sriends-project-for-ssafy-final-autonomous-project' | base64
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWJqcC1zZWNyZXQta2V5LXNyaWVuZHMtcHJvamVjdC1mb3Itc3NhZnktZmluYWwtYXV0b25vbW91cy1wcm9qZWN0Cg==
 
+
+mail:
+  host: stmp.gmail.com
+  port: 587
+  username: ssafyD106@gmail.com
+  password: FinalProjD106
+  properties:
+    mail:
+      stmp:
+        auth: true
+        starttls:
+          enable: true
+
 logging:
   level:
     sriends: DEBUG
