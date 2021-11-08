@@ -44,13 +44,15 @@
           </li>
         </ul>
         <ul class="md:flex text-xl">
-          <li>
+          <li v-if="phone!=null">
             전화번호 :
             <span class="">{{this.phone}}</span>
           </li>
-          <li class="md:ml-5">
+        </ul>
+        <ul class="md:flex text-xl">
+          <li class="">
             관심종목 :
-            <span class="">농구</span>
+            <span v-for="item in sports" :key="item.id" class=""> {{item.interest}}</span>
           </li>
           
         </ul>
@@ -310,7 +312,9 @@
 
 <script>
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
-import {getProfileInfo} from '@/api/index.js'
+import {getProfileInfo} from '@/api/auth.js'
+import { getInterest } from '@/api/auth.js'
+import store from '@/store/index.js'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
@@ -336,6 +340,7 @@ export default {
       city : '',
       age :'',
       pictureUrl : '',
+      sports:[]
     }
   },
   created: function(){
@@ -354,7 +359,15 @@ export default {
       let today = new Date();
       this.age = today.getFullYear() - new Date(res.data.birth).getFullYear()+1;
       console.log(new Date(res.data.birth))
-      localStorage.setItem('userid',res.data.id)
+      // localStorage.setItem('userid',res.data.id)
+      this.$store.commit("setUserId", res.data.id)
+    }).catch((err)=>{
+      console.log(err)
+    }),
+    getInterest()
+    .then((res)=>{
+      console.log(res)  
+      this.sports = res.data    
     }).catch((err)=>{
       console.log(err)
     })
@@ -376,13 +389,11 @@ export default {
         this.$router.push('/confirmPassword')
     },
     ModifyUser: function(){
-      const userid = localStorage.getItem('userid')
-            console.log(userid)
             if(this.form.phone==''){
                 this.form.phone = null
             }
             console.log('수정클릭')
-            const token = localStorage.getItem('token')
+            const token = store.state.accessToken
             const formData = new FormData();
             formData.append('file', this.$refs.image.files[0])
             formData.append('name', this.form.name)
@@ -405,7 +416,9 @@ export default {
             }).then((res)=>{
                 console.log(res.data)
                 Swal.fire('수정 완료!')
-                this.$router.push('/main')
+                this.modifyState=false
+                this.$router.go()
+                // this.$router.push('/main')
             }).catch((err)=>{
                 console.log(formData)
                 console.log(err)

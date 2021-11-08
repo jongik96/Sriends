@@ -281,6 +281,7 @@
 // import { validateEmail } from '@/utils/validation.js';
 import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import store from '@/store/index.js'
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 export default {
     data() {
@@ -312,7 +313,7 @@ export default {
             return false;
         },
         getToken(){
-        const token = localStorage.getItem('token')
+        const token = store.state.accessToken
         const config = {
             Authorization: `Bearer ${token}`
         }
@@ -325,13 +326,13 @@ export default {
             // this.form.uuid = this.$refs.image.files[0]
         },
         submitForm: function(){
-            const userid = localStorage.getItem('userid')
+            const userid = store.state.userId
             console.log(userid)
             if(this.form.phone==''){
                 this.form.phone = null
             }
             console.log('수정클릭')
-            const token = localStorage.getItem('token')
+            const token = store.state.accessToken
             const formData = new FormData();
             formData.append('uuid', this.$refs.image.files[0])
             formData.append('name', this.form.name)

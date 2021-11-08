@@ -17,10 +17,13 @@
                 </button>
                 </router-link>
             </div>
-            <div v-for="item in items" :key="item.id" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
-                <div class="grid col-start-1 col-span-2">
+            <teamListItem v-for="item in teams" :key="item.id"
+                :id="item.id"
+                :leaderId="item.leaderId"
+             >
+                <!-- <div class="grid col-start-1 col-span-2">
                     <img src='@/assets/logo.png' class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
-                    <p class="visible md:invisible ml-14 w-36">{{item.title}}</p>
+                    <p class="visible md:invisible ml-14 w-36">{{item.name}}</p>
                     <button class="bg-yellow-500 px-2 py-1 w-24
                     text-white font-semibold text-sm rounded block text-center md:ml-8 ml-12
                     sm:inline-block mr-5 h-10" 
@@ -31,33 +34,39 @@
                 </div>
                 <div class="invisible md:visible grid md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
                     <div class="flex ">
-                        <p>팀명 : {{item.title}} </p>
+                        <p>팀명 : {{item.name}} </p>
                     </div>
                     <div class="invisible md:visible">
-                        <p >대표 : {{item.postedBy}} </p>
+                        <p>대표 : {{item.leaderName}} </p>
                     </div>
                     <div class="invisible md:visible">
-                        <p>연락처 : 01012341234 </p>
+                        <p>종목 : {{item.sportsCategory}} </p>
                     </div>
                     <div class="">
                         <p class="truncate w-96 invisible lg:visible">소개 : {{item.description}} </p>
                     </div>
-                </div>
-            </div>
+                </div> -->
+            </teamListItem>
         </div>
   </div>
 </template>
 
 <script>
-import { getInterestTeam } from '@/api/index.js'
+import teamListItem from '@/components/sriends/teamListItem.vue'
+import { getInterestTeam } from '@/api/team.js'
 // import Swal from 'sweetalert2'
 export default {
+    components:{
+        teamListItem
+    },
     data() {
         return{
             teams:[
                 {    
                     id : '',
                     pictureDownloadUri: '',
+                    leaderName:'',
+                    leaderId:'',
                     name : '',
                     description : '',
                     membershipFee : '',
@@ -65,57 +74,13 @@ export default {
                     sportsCategory : '',
                 }
             ],
-            items: [
-            { id: 1,
-                title: "동호회1",
-                description: "동호회소개 어쩌구저쩌구 ㅁㄴㅇㄻㄴ아럼ㄴ;이러",
-                datePosted: "10/09/2020",
-                postedBy: "user525"
-            },
-            { id: 2,
-                title: "Random post",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user120"
-            },
-            { id: 3,
-                title: "Urgent!!, this post is a test, click now!!",
-                description: "Lorem Ipsum is simply dumasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdmy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 4,
-                title: "Urgent!!, this post is a test, click now!!",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 5,
-                title: "Urgent!!, this post is a test, click now!!",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 6,
-                title: "Urgent!!, this post is a test, click now!!",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 7,
-                title: "Urgent!!, this post is a test, click now!!",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            }
-            ]
         }
   },
-  created: function(){
-
+  created(){
         getInterestTeam()
         .then((res)=>{
             console.log(res.data)
+            this.teams = res.data
         }).catch((err)=>{
             console.log(err)
             
@@ -123,11 +88,7 @@ export default {
         })
       
   },
-  methods:{
-      joinBtn: function(){
-          this.$router.push('/joinTeam')
-      }
-  }
+
 }
 </script>
 

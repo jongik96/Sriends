@@ -38,7 +38,7 @@ import Swal from 'sweetalert2'
 // import axios from 'axios'
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import { validatePassword } from '@/utils/passwordValidation.js';
-import { modifyPassword } from '@/api/index.js'
+import { modifyPassword } from '@/api/auth.js'
 export default {
  data(){
    return{

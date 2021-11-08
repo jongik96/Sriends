@@ -10,13 +10,31 @@
                 </button>
                 </router-link>
             </div>
-            <div v-for="item in items" :key="item.id" class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300 h-36 md:h-24">
+            <!-- <div v-for="item in items" :key="item.id" class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300 h-36 md:h-24">
                 <h2 class="text-2xl font-semibold"><a href="#">{{ item.title }}</a></h2>
                 <p class="truncate md:w-96 w-48 text-justify leading-tight text-gray-800">{{ item.description }}<p>
                 <div class="mt-2">
                 <span class="left">Posted On: {{ item.datePosted }}</span>
                 <span class="float-right">By: <a class="text-purple-500" href="#">{{ item.postedBy }}</a></span>
-            </div>
+                </div>
+            </div> -->
+            <div class="grid mt-10">
+                <div class="grid col-start-1 col-span-1">
+                    글 분류
+                </div>
+                <div class="grid col-start-2 col-span-1">
+                    종목
+                </div>
+                <div class="grid col-start-3 col-span-1">
+                    모집인원
+                </div>
+                <div class="grid col-start-4 col-span-1">
+                    작성자
+                </div>
+                <div class="grid col-start-5 col-span-2">
+                    작성일시
+                </div>
+            
         </div>
       </div>
   </div>
