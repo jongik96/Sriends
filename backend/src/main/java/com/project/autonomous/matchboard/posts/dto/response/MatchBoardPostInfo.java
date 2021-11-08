@@ -20,6 +20,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @AllArgsConstructor
 public class MatchBoardPostInfo {
 
+    @Schema(description = "게시글 id", example = "3")
+    private long postId;
+
     @Schema(description = "작성자 id", example = "3")
     private long writerId;
 
@@ -60,6 +63,7 @@ public class MatchBoardPostInfo {
 
     public static MatchBoardPostInfo from(MatchBoardPost matchBoardPost) {
         return MatchBoardPostInfo.builder()
+            .postId(matchBoardPost.getId())
             .writerId(matchBoardPost.getUser().getId())
             .writerName(matchBoardPost.getUser().getName())
             .createAt(matchBoardPost.getCreatedAt())

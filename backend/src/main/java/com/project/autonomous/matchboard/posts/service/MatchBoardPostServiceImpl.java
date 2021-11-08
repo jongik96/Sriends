@@ -64,6 +64,7 @@ public class MatchBoardPostServiceImpl {
         Team team = findTeam(matchBoardUpdateReq.getTeamId());
 
         MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
+        checkAuthority(SecurityUtil.getCurrentMemberId(), matchBoardPost.getUser().getId());
         matchBoardPost.update(matchBoardUpdateReq, sportCategory, team);
         return MatchBoardPostInfo.from(matchBoardPost);
     }
@@ -71,7 +72,9 @@ public class MatchBoardPostServiceImpl {
     // 게시글 삭제
     @Transactional
     public void deletePost(Long postId) {
-        matchBoardPostRepository.delete(findMatchBoardPost(postId));
+        MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
+        checkAuthority(SecurityUtil.getCurrentMemberId(), matchBoardPost.getUser().getId());
+        matchBoardPostRepository.delete(matchBoardPost);
     }
 
     public User findMember(long userId) {
@@ -96,4 +99,11 @@ public class MatchBoardPostServiceImpl {
         return matchBoardPostRepository.findById(postId)
             .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
     }
+
+    public void checkAuthority(long userId, long writerId) {
+        if(userId != writerId) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_CHANGE);
+        }
+    }
+
 }
