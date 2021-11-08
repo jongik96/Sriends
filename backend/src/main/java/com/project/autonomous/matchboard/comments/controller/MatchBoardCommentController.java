@@ -37,7 +37,7 @@ public class MatchBoardCommentController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 정보",
             content = @Content(schema = @Schema(implementation = MatchBoardCommentRes.class))),
-        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nBOARD_NOT_FOUND",
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nBOARD_NOT_FOUND\n\nCOMMENT_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public ResponseEntity<MatchBoardCommentRes> createComment(@PathVariable("postId") long postId, @RequestBody MatchBoardCreateCommentReq req) {
@@ -63,7 +63,7 @@ public class MatchBoardCommentController {
             content = @Content(schema = @Schema(implementation = MatchBoardCommentRes.class))),
         @ApiResponse(responseCode = "401", description = "UNAUTHORIZED_CHANGE",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nCOMMENT_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public ResponseEntity<MatchBoardCommentRes> updatePost(@PathVariable("commentId") long commentId, @RequestBody
@@ -75,6 +75,10 @@ public class MatchBoardCommentController {
     @Operation(summary = "댓글 삭제", description = "<strong>댓글 id</strong>를 사용해 댓글을 삭제한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "삭제되었습니다.", content = @Content),
+        @ApiResponse(responseCode = "401", description = "UNAUTHORIZED_CHANGE",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nCOMMENT_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public ResponseEntity<String> deleteComment(@PathVariable("commentId") long commentId) {
         matchBoardCommentService.deleteComment(commentId);

@@ -21,7 +21,7 @@ public class UserSimpleInfoRes {
     @Schema(description = "지역", example = "서울")
     private String city;
 
-    @Schema(description = "유저 사진", example = "경로 아직")
+    @Schema(description = "유저 사진", example = "https://matchhere.s3.ap-northeast-2.amazonaws.com/%EA%%B8_EC%A7%84.JPG")
     private String pictureUrl;
 
     public static UserSimpleInfoRes from(User user) {
