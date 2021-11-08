@@ -60,8 +60,11 @@
 </template>
 
 <script>
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// import axios from 'axios'
 import Swal from 'sweetalert2'
 import { validateEmail } from '@/utils/validation.js';
+import { loginUser } from '@/api/auth.js'
 export default {
     data() {
         return {
@@ -84,8 +87,18 @@ export default {
     },
     methods:{
         submitForm: function(){
-            console.log('click')
-            Swal.fire('로그인됨')
+            loginUser(this.form)
+            .then((res)=>{
+                console.log(res.data.accessToken)
+                // localStorage.setItem('token',res.data.accessToken)
+                this.$store.commit('setAccessToken',res.data.accessToken)
+                Swal.fire('로그인되었습니다.')
+                this.$router.push({path: '/main'})
+            }).catch((err)=>{
+                console.log(err)
+                Swal.fire('ID 또는 비밀번호를 확인해주세요.')
+            }) 
+            
         },
     }
 }

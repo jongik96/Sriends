@@ -4,11 +4,11 @@ import static com.project.autonomous.common.exception.ValidatorMessage.DATE_FORM
 import static com.project.autonomous.common.exception.ValidatorMessage.EMPTY_MESSAGE;
 
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
+import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,11 +21,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 @AllArgsConstructor
 public class MatchBoardPostInfo {
 
-    @Schema(description = "작성자 id", example = "3")
-    private long writerId;
+    @Schema(description = "게시글 id", example = "3")
+    private long postId;
 
-    @Schema(description = "작성자명", example = "박범진")
-    private String writerName;
+    @Schema(description = "작성자 정보", example = "[\"id\" : 4, \"name\" : \"박범진\", \"city\" : \"대구광역시\", \"pictureUrl\" : \"경로미정\"]")
+    private UserSimpleInfoRes writer;
 
     @Schema(description = "작성일자", example = "2021-09-06 06:57:37.667537")
     private LocalDateTime createAt;
@@ -61,8 +61,8 @@ public class MatchBoardPostInfo {
 
     public static MatchBoardPostInfo from(MatchBoardPost matchBoardPost) {
         return MatchBoardPostInfo.builder()
-            .writerId(matchBoardPost.getUser().getId())
-            .writerName(matchBoardPost.getUser().getName())
+            .postId(matchBoardPost.getId())
+            .writer(UserSimpleInfoRes.from(matchBoardPost.getUser()))
             .createAt(matchBoardPost.getCreatedAt())
             .recruited(matchBoardPost.isRecruited())
             .sportCategory(matchBoardPost.getSportCategory().getName())
