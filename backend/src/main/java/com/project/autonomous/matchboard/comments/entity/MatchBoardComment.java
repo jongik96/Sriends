@@ -31,7 +31,7 @@ public class MatchBoardComment extends BaseEntity {
 
     private String content;
 
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     private int depth;
 
@@ -43,5 +43,29 @@ public class MatchBoardComment extends BaseEntity {
 
     private boolean modified;
 
+    public void addReplyCount(){
+        replyCount++;
+    }
+    public void removeReplyCount(){
+        replyCount--;
+    } // 회원 탈퇴로 인해 삭제되면 어떻게?
+
+    public void setDepth(Long parentId){
+        if(parentId > 0){
+            this.depth = 1;
+        }else{
+            this.depth = 0;
+        }
+        this.parentId = parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+        this.modified = true;
+    }
 
 }

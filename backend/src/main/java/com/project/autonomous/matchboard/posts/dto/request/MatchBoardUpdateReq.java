@@ -3,21 +3,17 @@ package com.project.autonomous.matchboard.posts.dto.request;
 import static com.project.autonomous.common.exception.ValidatorMessage.DATE_FORMAT;
 import static com.project.autonomous.common.exception.ValidatorMessage.EMPTY_MESSAGE;
 
-import com.project.autonomous.common.entity.City;
-import com.project.autonomous.matchboard.posts.entity.MatchBoardCategory;
-import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
-import com.project.autonomous.team.entity.SportCategory;
-import com.project.autonomous.team.entity.Team;
-import com.project.autonomous.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
-public class MatchBoardCreateReq {
+public class MatchBoardUpdateReq {
+
+    @Schema(description = "모집 상태", example = "false(모집 중)")
+    private boolean recruited;
 
     @Schema(description = "종목명", example = "농구")
     @NotBlank(message = EMPTY_MESSAGE)
@@ -46,21 +42,5 @@ public class MatchBoardCreateReq {
 
     @Schema(description = "내용", example = "5 : 5 농구 인원구합니다.")
     private String content;
-
-    public MatchBoardPost toMatchBoardPost(User user, SportCategory sportCategory, Team team) {
-        return MatchBoardPost.builder()
-            .user(user)
-            .createdAt(LocalDateTime.now())
-            .recruited(false)
-            .sportCategory(sportCategory)
-            .matchBoardCategory(MatchBoardCategory.from(matchBoardCategory))
-            .playingTime(playingTime)
-            .city(City.from(city))
-            .place(place)
-            .recruitmentCount(recruitmentCount)
-            .team(team)
-            .content(content)
-            .build();
-    }
 
 }
