@@ -3,6 +3,7 @@ package com.project.autonomous.matchboard.posts.entity;
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
 import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.dto.request.MatchBoardUpdateReq;
 import com.project.autonomous.team.entity.SportCategory;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.entity.User;
@@ -64,5 +65,15 @@ public class MatchBoardPost extends BaseEntity {
     @OneToMany(mappedBy = "matchBoardPost" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MatchBoardComment> comments = new ArrayList<>();
 
-
+    public void update(MatchBoardUpdateReq matchBoardUpdateReq, SportCategory sportCategory, Team team) {
+        this.recruited = matchBoardUpdateReq.isRecruited();
+        this.sportCategory = sportCategory;
+        this.matchBoardCategory = MatchBoardCategory.from(matchBoardUpdateReq.getMatchBoardCategory());
+        this.playingTime = matchBoardUpdateReq.getPlayingTime();
+        this.city = City.from(matchBoardUpdateReq.getCity());
+        this.place = matchBoardUpdateReq.getPlace();
+        this.recruitmentCount = matchBoardUpdateReq.getRecruitmentCount();
+        this.team = team;
+        this.content = matchBoardUpdateReq.getContent();
+    }
 }
