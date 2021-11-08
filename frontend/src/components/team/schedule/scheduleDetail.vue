@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-6">
-        <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div v-if="!modifyState" class="border-2 border-yellow-500 rounded-md">
                 <div>
                     <p class="text-2xl">{{name}}</p>
@@ -9,14 +9,14 @@
                     <p>일시 : {{schedule}}</p>
                 </div>
                 <div>
-                    <p>작성자 : {{writerName}}</p>
+                    <p>작성자 : <button @click="clickUser">{{writerName}}</button></p>
                 </div>
                 <div class="mt-5">
                     <p>
                         {{content}}
                     </p>
                 </div>
-                <div class="mt-7">
+                <div v-if="userId==writerId" class="mt-7">
                     <button @click="modifyState=true">수정</button>
                 </div>
             </div>
@@ -67,7 +67,7 @@ export default {
             schedule:'',
             writerId:'',
             writerName:'',
-            
+            userId:store.state.userId
         }
     },
     created(){
@@ -121,6 +121,10 @@ export default {
             }).catch((err)=>{
                 console.log(err)
             })
+        },
+        clickUser: function(){
+            this.$store.commit('setTempUserId', this.writerId)
+            this.$router.push('/user')
         }
     },
     computed:{

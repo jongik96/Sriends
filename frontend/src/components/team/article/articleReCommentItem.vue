@@ -1,13 +1,17 @@
 <template>
+    <!-- 대댓글은 40자 이하로 설정할 것 -->
     <div class="bg-yellow-200 rounded-md border-2 border-yellow-500">
         <div v-if="!modifyState" class="grid grid-cols-6 h-10">
-            <p class="col-start-1 col-span-3 text-justify leading-tight text-gray-800">{{ this.reComment.content }}</p>
-            <span class="col-start-5 col-span-1">By: {{this.reComment.name}}</span>
-            <span class="col-start-6 col-span-2">{{this.reComment.createDate}}</span>
+            <p class="col-start-1 break-words col-span-5 text-justify leading-tight text-gray-800">{{ this.reComment.content }}</p>
+            <div class="col-start-6 col-span-1 ">
+                <p class=" text-yellow-600"><button @click="clickUser">{{this.reComment.name}}</button></p>
+                <p class="text-xs">{{this.reComment.createDate}}</p>
+            </div>
         </div>
         <div v-if="modifyState">
             <textarea v-model="modifyReContent" id="comment" rows=2 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
-            <button @click="modifyComment" :disabled="!modifyReContent" class="">수정하기</button>
+            <button @click="modifyComment" :disabled="btnDisabled" class="">수정하기</button>
+            <p v-if="modifyReContent.length>40"> 40자 이하로 작성 가능합니다</p>
             <button @click="modifyState=false" class="ml-5">취소</button>
         </div>
         <div v-if="!modifyState" class="">
@@ -108,6 +112,10 @@ export default {
                 console.log(err)
             })
         },
+        clickUser: function(){
+            this.$store.commit('setTempUserId', this.comments.writerId)
+            this.$router.push('/user')
+        }
     },
     computed:{
         getToken(){
@@ -117,6 +125,13 @@ export default {
             }
             return config
         },
+        btnDisabled(){
+            if((this.modifyReContent.length>40) || (this.modifyReContent.length ==0) ){
+                return true
+            }else{
+                return false
+            }
+        }
     }
 }
 </script>

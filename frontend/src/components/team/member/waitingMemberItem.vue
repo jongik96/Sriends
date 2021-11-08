@@ -13,15 +13,16 @@
                         <button><font-awesome-icon icon="comments"/></button>
                     </div>
                     <div class="col-start-7 col-span-1 text-xs sm:text-sm md:text-base flex justify-center">
-                        <button @click="open = true">신청서</button>
+                        <button @click="open=true"><font-awesome-icon icon="file-alt"/></button>
+                        <button class="hidden md:visible" @click="open = true">신청서</button>
                     </div>
                 </div>
                 <div v-if="open" class="grid grid-cols-7 mt-2 border-2">
-                    <div class="col-start-3 col-span-3">
-                        <button @click="open=false">숨기기</button>
+                    <div class="md:col-start-3 md:col-span-3 col-start-1 col-span-6">
+                        <button class="ml-2" @click="open=false">숨기기</button>
                         <button @click="okBtn" class="float-right">가입 승인</button>
                     </div>
-                    <div class="col-start-3 col-span-3 border-b mt-3">
+                    <div class="col-start-1 col-span-6 break-words  md:col-start-3 md:col-span-3 border-b mt-3">
                         <p>{{description}}</p>
                     </div>
                 </div>
@@ -30,6 +31,7 @@
 
 <script>
 import store from '@/store/index.js'
+// import {getDate} from '@/utils/date.js'
 import { permitTeam } from '@/api/team.js'
 export default {
     props:{
@@ -53,6 +55,9 @@ export default {
                 console.log(err)
             })
         }
+    },
+    computed:{
+
     }
 }
 </script>

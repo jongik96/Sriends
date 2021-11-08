@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-6">
             <!-- nav -->
-    <nav class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-5">
+    <nav class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-5">
     <div class="flex justify-between flex-wrap items-center  md:justify-around">
         <!-- logo -->
         <router-link to="/team">

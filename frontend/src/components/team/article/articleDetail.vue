@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-6">
-        <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div>
                 <div class="border-b">
                     <h2 class="text-2xl font-semibold">{{this.title}}</h2>
@@ -11,12 +11,15 @@
                         <button v-if="this.userId==this.writerId" @click="clickDelete" class="mr-3">삭제</button>
                     </div>
                 </div>
-                <p class="text-justify leading-tight text-gray-800 h-48 mt-10">
+                <p class="text-justify break-words leading-tight text-gray-800 w-full h-48 mt-10">
                     {{this.content}}    
                 <p>
-                <div class="mt-2">
-                    <span class="left">{{this.createDate}}</span>
-                    <span class="float-right flex">By: <p class="text-purple-500">{{this.name}}</p></span>
+                <div class="mt-2 float-right">
+                    <button @click="clickUser">
+                        <p class="">{{this.name}}</p>
+                    </button>
+                    <p class="">{{this.createDate}}</p>
+                    
                 </div>
             </div>
         </div>
@@ -75,6 +78,11 @@ export default {
                 console.log(err)
             })
         },
+
+        clickUser: function(){
+            this.$store.commit('setTempUserId', this.writerId)
+            this.$router.push('/user')
+        }
         
     }
 }

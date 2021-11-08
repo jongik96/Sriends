@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     accessToken: '',
     userId: '',
+    tempUserId:'',
     teamId: '',
     boardId: '',
     commentId:'',
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     },
     setUserId(state, userId){
         state.userId = userId
+    },
+    setTempUserId(state, tempUserId){
+        state.tempUserId = tempUserId
     },
     setTeamId(state, teamId){
       state.teamId = teamId

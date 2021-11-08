@@ -1,7 +1,7 @@
 <template>
   <div>
       <vc-date-picker is-expanded
-          :value="null" title-position="left" color="orange" 
+          :value="null" title-position="center" color="orange" 
           :min-date="new Date()" :attributes="attributes" 
           :columns="$screens({ default: 1, xl: 1 })" 
           :rows="$screens({ default: 1, xl: 1 })"

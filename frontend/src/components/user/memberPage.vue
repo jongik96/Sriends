@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import profile from '@/components/user/profile.vue'
+import profile from '@/components/user/tempProfile.vue'
 export default {
   components:{
     profile

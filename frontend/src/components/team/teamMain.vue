@@ -32,14 +32,14 @@
             <ul class=" md:inline-block  mb-4">
             <li>
                 대표자
-                <span class="font-semibold">{{leaderName}}</span>
+                <span class="font-semibold"><button @click="clickUser">{{this.leaderName}}</button></span>
                 종목
                 <span class="font-semibold">{{this.sportCategory}}</span>
             </li>
             <li>
                 총 인원
                 <span class="font-semibold">{{this.memberCount}}</span>
-                회비 유무
+                회비
                 <span class="font-semibold">{{this.membershipFee}}</span>
             </li>
             <li>
@@ -52,6 +52,7 @@
             <div class="hidden md:block">
             <!-- <h1 class="font-semibold">우리팀의 짱 박범진.</h1>
             <span>Travel, Nature and Music</span> -->
+            소개
             <p>{{this.description}}</p>
             </div>
 
@@ -119,7 +120,12 @@ export default {
             this.maxCount = res.data.maxCount
             this.description = res.data.description
             this.recruitmentState = res.data.recruitmentState
-            this.membershipFee = res.data.membershipFee
+            if(res.data.membershipFee==true){
+                this.membershipFee='有'
+            }else{
+                this.membershipFee='無'
+            }
+            // this.membershipFee = res.data.membershipFee
             this.city = res.data.city
             this.sportCategory = res.data.sportCategory
 
@@ -135,6 +141,12 @@ export default {
             console.log(err)
             console.log(this.teamId)
         })
+    },
+    methods:{
+        clickUser: function(){
+            this.$store.commit('setTempUserId', this.leaderId)
+            this.$router.push('/user')
+        }
     }
 
 }
