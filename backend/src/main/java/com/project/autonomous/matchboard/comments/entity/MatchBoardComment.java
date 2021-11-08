@@ -31,7 +31,7 @@ public class MatchBoardComment extends BaseEntity {
 
     private String content;
 
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     private int depth;
 
