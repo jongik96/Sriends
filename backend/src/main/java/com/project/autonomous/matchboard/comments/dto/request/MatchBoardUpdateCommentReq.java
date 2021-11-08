@@ -13,26 +13,11 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class MatchBoardCommentReq {
-
-    @Schema(description = "부모 아이디", example = "0 부모 댓글, 이외 대댓글")
-    @NotNull(message = EMPTY_MESSAGE)
-    private long parnetId;
+public class MatchBoardUpdateCommentReq {
 
     @Schema(description = "댓글 내용", example = "용병 신청합니다.")
     @NotBlank(message = EMPTY_MESSAGE)
     @Size(max = 500)
     private String content;
 
-    public MatchBoardComment toMatchBoardComment(MatchBoardPost matchBoardPost, User user) {
-        return MatchBoardComment.builder()
-            .matchBoardPost(matchBoardPost)
-            .user(user)
-            .content(content)
-            .createdAt(LocalDateTime.now())
-            .parentId(parnetId)
-            .replyCount(0)
-            .modified(false)
-            .build();
-    }
 }

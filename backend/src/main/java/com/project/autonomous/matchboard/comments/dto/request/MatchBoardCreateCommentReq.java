@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class MatchBoardCommentReq {
+public class MatchBoardCreateCommentReq {
 
     @Schema(description = "부모 아이디", example = "0 부모 댓글, 이외 대댓글")
     @NotNull(message = EMPTY_MESSAGE)
