@@ -7,7 +7,7 @@
                  <p v-if="content.length>40"> 40자 이하로 작성 가능합니다</p>
             </div>
             <div class="flex justify-end">
-                <button @click="postComment" :disabled="this.content" class="bg-yellow-500 px-2 py-1 
+                <button @click="postComment" :disabled="btnDisabled" class="bg-yellow-500 px-2 py-1 
                     text-white font-semibold text-sm rounded block text-center 
                     sm:inline-block mr-5">
                             댓글 작성하기
