@@ -24,6 +24,7 @@ public enum ErrorCode {
     ALREADY_APPLY(BAD_REQUEST, "이미 신청되어있습니다."),
     NOT_ALLOW_TYPE(BAD_REQUEST, "JPG와 PNG 형식만 지원합니다."),
     NO_INTERESTING_ITEMS(BAD_REQUEST, "흥미있는 종목 설정이 없습니다."),
+    STILL_YOU_HAVE_SREINEDS(BAD_REQUEST, "아직 대표인 스렌즈가 존재합니다."),
 
 
 //    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
@@ -44,6 +45,7 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
+    TEAM_NOT_FOUND(NOT_FOUND, "해당 팀 정보를 찾을 수 없습니다"),
     DELETED_USER(NOT_FOUND, "탈퇴한 유저입니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
     FILE_NOT_FOUND(NOT_FOUND, "해당 파일 정보를 찾을 수 없습니다"),
@@ -57,6 +59,8 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
     TOKEN_NOT_FOUND(NOT_FOUND, "해당 토큰을 찾을 수 없습니다"),
     LIST_NOT_FOUND(NOT_FOUND, "해당 리스트를 찾을 수 없습니다"),
+    SPORT_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 종목을 찾을 수 없습니다"),
+    BOARD_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 분류를 찾을 수 없습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),

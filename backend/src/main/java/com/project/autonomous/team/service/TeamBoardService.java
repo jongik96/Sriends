@@ -60,7 +60,7 @@ public class TeamBoardService {
         long userId = SecurityUtil.getCurrentMemberId();
 
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
-        if(teamBoard.getWriterId() == userId){//공지사항은 회원만 가능
+        if(teamBoard.getWriterId() != userId){//공지사항은 회원만 가능
             return false;
         }
 
@@ -75,7 +75,7 @@ public class TeamBoardService {
         long userId = SecurityUtil.getCurrentMemberId();
 
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
-        if(teamBoard.getWriterId() == userId){//공지사항은 회원만 가능
+        if(teamBoard.getWriterId() != userId){//공지사항은 회원만 가능
             return false;
         }
 
@@ -89,7 +89,8 @@ public class TeamBoardService {
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
 
         PostViewRes postViewRes = new PostViewRes();
-        postViewRes.setName(userRepository.findById(userId).get().getName());
+        postViewRes.setWriterId(teamBoard.getWriterId());
+        postViewRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
         postViewRes.setContent(teamBoard.getContent());
         postViewRes.setTitle(teamBoard.getTitle());
         postViewRes.setCreateDate(teamBoard.getCreateDate());
@@ -100,41 +101,33 @@ public class TeamBoardService {
     public ArrayList<PostViewListRes> postingViewList(long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
         ArrayList<PostViewListRes> ret = new ArrayList<>();
+        System.out.println("서비스");
+
 
         for(TeamBoard teamBoard : teamBoardRepository.findAllByTeamId(teamId)){
+            System.out.println("조회중");
             PostViewListRes postViewListRes = new PostViewListRes();
             postViewListRes.setId(teamBoard.getId());
-            postViewListRes.setName(userRepository.findById(userId).get().getName());
+            postViewListRes.setWriterId(teamBoard.getWriterId());
+            postViewListRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
             postViewListRes.setContent(teamBoard.getContent());
             postViewListRes.setTitle(teamBoard.getTitle());
             postViewListRes.setCreateDate(teamBoard.getCreateDate());
 
             ret.add(postViewListRes);
         }
+        System.out.println(ret.size());
         return ret;
     }
 
     public TeamBoardComment comment(CommentPostReq commentPostReq, long boardId) {
         long userId = SecurityUtil.getCurrentMemberId();
 
-        TeamBoardComment teamBoardComment = new TeamBoardComment();
 
-        if(commentPostReq.getParentId() == 0){
-            teamBoardComment.setTeamBoardId(boardId);
-            teamBoardComment.setWriterId(userId);
-            teamBoardComment.setParentId(0);
-            teamBoardComment.setDepth(1);
-            teamBoardComment.setCreateDate(LocalDateTime.now());
-            teamBoardComment.setModified(false);
-            teamBoardComment.setModifiyDate(LocalDateTime.now());//modified가 false면 이거 무시
-            teamBoardComment.setContent(commentPostReq.getContent());
-            teamBoardComment.setReplycount(0);
-
-            return teamBoardCommentRepository.save(teamBoardComment);
-
-        }else{
+        if (commentPostReq.getParentId() != 0) {
+            TeamBoardComment teamBoardComment = new TeamBoardComment();
             TeamBoardComment parentComment = teamBoardCommentRepository.findById(commentPostReq.getParentId()).get();
-            parentComment.setReplycount(parentComment.getReplycount()+1);
+            parentComment.setReplyCount(parentComment.getReplyCount()+1);
             teamBoardCommentRepository.save(parentComment);
 
             teamBoardComment.setTeamBoardId(boardId);
@@ -143,11 +136,26 @@ public class TeamBoardService {
             teamBoardComment.setDepth(2);
             teamBoardComment.setCreateDate(LocalDateTime.now());
             teamBoardComment.setModified(false);
-            teamBoardComment.setModifiyDate(LocalDateTime.now());
+            teamBoardComment.setModifyDate(LocalDateTime.now());
             teamBoardComment.setContent(commentPostReq.getContent());
-            teamBoardComment.setReplycount(0);
+            teamBoardComment.setReplyCount(0);
 
             return teamBoardCommentRepository.save(teamBoardComment);
+
+        } else {
+            TeamBoardComment teamBoardComment = new TeamBoardComment();
+            teamBoardComment.setTeamBoardId(boardId);
+            teamBoardComment.setWriterId(userId);
+            teamBoardComment.setParentId(0);
+            teamBoardComment.setDepth(1);
+            teamBoardComment.setCreateDate(LocalDateTime.now());
+            teamBoardComment.setModified(false);
+            teamBoardComment.setModifyDate(LocalDateTime.now());//modified가 false면 이거 무시
+            teamBoardComment.setContent(commentPostReq.getContent());
+            teamBoardComment.setReplyCount(0);
+
+            return teamBoardCommentRepository.save(teamBoardComment);
+
         }
 
     }
@@ -160,7 +168,7 @@ public class TeamBoardService {
         TeamBoardComment teamBoardComment = teamBoardCommentRepository.findById(commentId).get();
 
         teamBoardComment.setModified(true);
-        teamBoardComment.setModifiyDate(LocalDateTime.now());
+        teamBoardComment.setModifyDate(LocalDateTime.now());
         teamBoardComment.setContent(commentModifyPutReq.getContent());
 
         return teamBoardCommentRepository.save(teamBoardComment);
@@ -188,45 +196,47 @@ public class TeamBoardService {
         commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
         commentRes.setContent(teamBoardComment.getContent());
         commentRes.setCreateDate(teamBoardComment.getCreateDate());
-        commentRes.setModifyDate(teamBoardComment.getModifiyDate());
+        commentRes.setModifyDate(teamBoardComment.getModifyDate());
         commentRes.setModified(teamBoardComment.isModified());
         commentRes.setParentId(teamBoardComment.getParentId());
         commentRes.setDepth(teamBoardComment.getDepth());
-        commentRes.setReplyCount(teamBoardComment.getReplycount());
+        commentRes.setReplyCount(teamBoardComment.getReplyCount());
 
         return commentRes;
     }
 
-//    public CommentListRes getCommentList(long boardId, long parentId) {
-//        if(!teamBoardRepository.findById(boardId).isPresent()){
-//            throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
-//        }
-//        if(teamBoardCommentRepository.findAllByParentIdAAndTeamBoardId(parentId, boardId).isEmpty()){
-//            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
-//        }
-//        CommentListRes commentListRes = new CommentListRes();
-//
-//        List<TeamBoardComment> teamBoardCommentList = teamBoardCommentRepository.findAllByParentIdAAndTeamBoardId(parentId,boardId);
-//        commentListRes.setReplyCount(teamBoardCommentList.size());
-//
-//        ArrayList<CommentRes> commentResArrayList = new ArrayList<>();
-//        for (TeamBoardComment teamBoardComment : teamBoardCommentList){
-//            CommentRes commentRes = new CommentRes();
-//            commentRes.setId(teamBoardComment.getId());
-//            commentRes.setWriterId(teamBoardComment.getWriterId());
-//            commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
-//            commentRes.setContent(teamBoardComment.getContent());
-//            commentRes.setCreateDate(teamBoardComment.getCreateDate());
-//            commentRes.setModifyDate(teamBoardComment.getModifiyDate());
-//            commentRes.setModified(teamBoardComment.isModified());
-//            commentRes.setParentId(teamBoardComment.getParentId());
-//            commentRes.setDepth(teamBoardComment.getDepth());
-//            commentRes.setReplyCount(teamBoardComment.getReplycount());
-//
-//            commentResArrayList.add(commentRes);
-//        }
-//        commentListRes.setCommentsList(commentResArrayList);
-//
-//        return commentListRes;
-//    }
+    public CommentListRes getCommentList(long boardId, long parentId) {
+        System.out.println("댓글리스트 받기");
+        if(!teamBoardRepository.findById(boardId).isPresent()){
+            throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
+        }
+        if(teamBoardCommentRepository.findAllByParentIdAndTeamBoardId(parentId, boardId).isEmpty()){
+            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
+        }
+        System.out.println("댓글리스트 받기2");
+        CommentListRes commentListRes = new CommentListRes();
+
+        List<TeamBoardComment> teamBoardCommentList = teamBoardCommentRepository.findAllByParentIdAndTeamBoardId(parentId,boardId);
+        commentListRes.setReplyCount(teamBoardCommentList.size());
+
+        ArrayList<CommentRes> commentResArrayList = new ArrayList<>();
+        for (TeamBoardComment teamBoardComment : teamBoardCommentList){
+            CommentRes commentRes = new CommentRes();
+            commentRes.setId(teamBoardComment.getId());
+            commentRes.setWriterId(teamBoardComment.getWriterId());
+            commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
+            commentRes.setContent(teamBoardComment.getContent());
+            commentRes.setCreateDate(teamBoardComment.getCreateDate());
+            commentRes.setModifyDate(teamBoardComment.getModifyDate());
+            commentRes.setModified(teamBoardComment.isModified());
+            commentRes.setParentId(teamBoardComment.getParentId());
+            commentRes.setDepth(teamBoardComment.getDepth());
+            commentRes.setReplyCount(teamBoardComment.getReplyCount());
+
+            commentResArrayList.add(commentRes);
+        }
+        commentListRes.setCommentsList(commentResArrayList);
+
+        return commentListRes;
+    }
 }

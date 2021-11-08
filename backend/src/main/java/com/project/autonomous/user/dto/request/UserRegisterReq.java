@@ -75,7 +75,6 @@ public class UserRegisterReq {
             .city(City.from(city))
             .password(passwordEncoder.encode(password))
             .userAuthority(UserAuthority.ROLE_USER)
-            .deleted(false)
             .picture(picture)
             .build();
     }

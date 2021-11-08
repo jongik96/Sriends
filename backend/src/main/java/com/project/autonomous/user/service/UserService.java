@@ -5,9 +5,10 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
-import com.project.autonomous.user.dto.response.UserProfileRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
+import com.project.autonomous.user.dto.response.UserInterestRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
-import com.project.autonomous.user.entity.User;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -23,11 +24,11 @@ public interface UserService {
 
     MyInfoRes getMyInfo();
 
-    User deleteUser(Long userId);
+    List<UserInterestRes> getMyInterest();
 
-    UserProfileRes getUserProfile(Long userId);
+    void deleteUser();
 
-    User getUser(String userEmail);
+    UserInfoRes getUserInfo(long userId);
 
-    void updateInterest(InterestReq interestReq);
+    List<UserInterestRes> updateInterest(InterestReq interestReq);
 }

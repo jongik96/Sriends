@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class PostViewRes {
+    long id;
+    long writerId;
     String name;
     String title;
     String content;

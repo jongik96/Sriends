@@ -2,12 +2,14 @@ package com.project.autonomous.user.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.user.dto.request.UserModifyReq;
-import com.project.autonomous.user.dto.response.UserInfoRes;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -30,12 +32,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-    String email;
-    String password;
-    String name;
+    private String email;
+
+    private String password;
+
+    private String name;
+
     private LocalDate birth;
-    String gender;
-    String phone;
+
+    private String gender;
+
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     private City city;
@@ -45,23 +52,14 @@ public class User extends BaseEntity {
     private Picture picture;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private UserAuthority userAuthority;
 
-    @NotNull
-    private boolean deleted;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchBoardPost> matchBoardPosts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<UserTeam> userTeamList = new ArrayList<>();
-
-    // 유저 삭제
-    public void delete() {
-        this.deleted = true;
-    }
-
-    // 유저 복구
-    public void restore() {
-        this.deleted = false;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchBoardComment> comments = new ArrayList<>();
 
     // 비밀번호 변경
     public void changePassword(String password) {

@@ -6,19 +6,26 @@ import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.picture.service.DBFileStorageService;
+import com.project.autonomous.team.entity.SportCategory;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
-import com.project.autonomous.user.dto.response.UserProfileRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
+import com.project.autonomous.user.dto.response.UserInterestRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.entity.UserInterest;
+import com.project.autonomous.user.entity.UserInterestId;
+import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -75,8 +82,11 @@ public class UserServiceImpl implements UserService {
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
         Picture picture;
-        if (userModifyReq.getFile() == null) picture = null;
-        else picture = dbFileStorageService.storeFile(userModifyReq.getFile());
+        if (userModifyReq.getFile() == null) {
+            picture = null;
+        } else {
+            picture = dbFileStorageService.storeFile(userModifyReq.getFile());
+        }
 
         user.update(userModifyReq, picture);
         return MyInfoRes.from(user);
@@ -84,7 +94,8 @@ public class UserServiceImpl implements UserService {
 
     // 나의 팀 조회 (무한 스크롤)
     public Slice<UserTeamListRes> getMyTeams(Pageable pageable) {
-        Slice<Team> teams = userTeamRepository.findTeamByUser(findMember(SecurityUtil.getCurrentMemberId()), pageable);
+        Slice<Team> teams = userTeamRepository.findTeamByUser(
+            findMember(SecurityUtil.getCurrentMemberId()), pageable);
         return teams.map(p -> UserTeamListRes.from(p));
     }
 
@@ -93,54 +104,63 @@ public class UserServiceImpl implements UserService {
         return MyInfoRes.from(findMember(SecurityUtil.getCurrentMemberId()));
     }
 
-    @Override
-    public User deleteUser(Long userId) {
-        return null;
+    // 유저 관심 목록 조회
+    public List<UserInterestRes> getMyInterest() {
+        List<UserInterest> interests = userInterestRepository.findAllByUserInterestIdUser(
+            findMember(SecurityUtil.getCurrentMemberId()));
+        return interests.stream()
+            .map(UserInterestRes::from)
+            .collect(Collectors.toList());
     }
 
-    @Override
-    public UserProfileRes getUserProfile(Long userId) {
-        User user = userRepository.findById(userId).get();
+    // 유저 관심 목록 업데이트
+    @Transactional
+    public List<UserInterestRes> updateInterest(InterestReq interestReq) {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+        userInterestRepository.deleteAllByUserInterestIdUser(user);
 
-        UserProfileRes res = new UserProfileRes();
-        res.setEmail(user.getEmail());
-        res.setName(user.getName());
-        res.setBirth(user.getBirth());
-        res.setPhone(user.getPhone());
-        res.setCity(user.getCity().toString());
-
-        return res;
-    }
-
-    @Override
-    public User getUser(String userEmail) {
-        User user = userRepository.findByEmail(userEmail).get();
-
-        if (user == null) {
-            return null;
-        }
-        return user;
-    }
-
-    public void updateInterest(InterestReq interestReq) {
-        long userId = SecurityUtil.getCurrentMemberId();
-
-        for (String name : interestReq.getSportCategory()) {
-            long sportCategoryId = sportCategoryRepository.findByName(name).get().getId();
-//            UserInterest userInterest = new UserInterest();
-//            userInterest.setSportCategoryId(sportCategoryId);
-//            userInterest.setUserId(userId);
-
-//            userInterestRepository.save(userInterest);
+        if (interestReq.getInterests() == null) {
+            return getMyInterest();
         }
 
-        return;
+        for (String interest : interestReq.getInterests()) {
+            SportCategory sportCategory = findSportCategory(interest);
+            UserInterestId id = new UserInterestId(user, sportCategory);
+
+            userInterestRepository.save(new UserInterest(id));
+        }
+        return getMyInterest();
+    }
+
+    @Transactional
+    public void deleteUser() {
+        User user = findMember(SecurityUtil.getCurrentMemberId());
+
+        // 소유자인 동호회 확인, 동호회 탈퇴 로직
+        List<UserTeam> userTeams = userTeamRepository.findAllByUser(user);
+        for (UserTeam userTeam : userTeams) {
+            if (userTeam.getAuthority().equals("대표")) {
+                throw new CustomException(ErrorCode.STILL_YOU_HAVE_SREINEDS);
+            }
+            userTeamRepository.delete(userTeam);
+        }
+        // 본인이 작성한 게시글, 댓글 삭제 로직
+
+        userRepository.delete(user);
+    }
+
+    // 다른 유저 조회
+    public UserInfoRes getUserInfo(long userId) {
+        return UserInfoRes.from(findMember(userId));
     }
 
     public User findMember(long userId) {
-        User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
+        return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-//        if(user.isDeleted()) throw new CustomException(ErrorCode.DELETED_USER);
-        return user;
+    }
+
+    public SportCategory findSportCategory(String name) {
+        return sportCategoryRepository.findByName(name)
+            .orElseThrow(() -> new CustomException(ErrorCode.SPORT_CATEGORY_NOT_FOUND));
     }
 }

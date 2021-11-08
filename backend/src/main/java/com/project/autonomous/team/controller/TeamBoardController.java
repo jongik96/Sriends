@@ -93,11 +93,11 @@ public class TeamBoardController {
         return ResponseEntity.ok(teamBoardService.getComment(commentId));
     }
 
-//    @GetMapping("/{boardId}/comments/{parentId}")
-//    public ResponseEntity<CommentListRes> getCommentsList(@PathVariable("boardId") long boardId, @PathVariable("parentId") long parentId){
-//        System.out.println("댓글 리스트 조회");
-//
-//        return ResponseEntity.ok(teamBoardService.getCommentList(boardId, parentId));
-//    }
+    @GetMapping("/{boardId}/comments/{parentId}")
+    public ResponseEntity<CommentListRes> getCommentsList(@PathVariable("boardId") long boardId, @PathVariable("parentId") long parentId){
+        System.out.println("댓글 리스트 조회");
+
+        return ResponseEntity.ok(teamBoardService.getCommentList(boardId, parentId));
+    }
 
 }

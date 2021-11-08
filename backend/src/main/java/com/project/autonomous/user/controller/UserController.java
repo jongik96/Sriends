@@ -6,9 +6,9 @@ import com.project.autonomous.user.dto.request.CheckPasswordReq;
 import com.project.autonomous.user.dto.request.InterestReq;
 import com.project.autonomous.user.dto.request.UserModifyReq;
 import com.project.autonomous.user.dto.response.MyInfoRes;
-import com.project.autonomous.user.dto.response.UserProfileRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
+import com.project.autonomous.user.dto.response.UserInterestRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
-import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.service.EmailService;
 import com.project.autonomous.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
@@ -113,7 +114,7 @@ public class UserController {
     @GetMapping("/me")
     @Operation(summary = "나의 개인 정보 조회", description = "유저의 개인 정보를 조회한다.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "팀 정보 조회",
+        @ApiResponse(responseCode = "200", description = "개인 정보 조회",
             content = @Content(schema = @Schema(implementation = MyInfoRes.class))),
         @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nDELETED_USER",
@@ -123,36 +124,56 @@ public class UserController {
         return ResponseEntity.ok(userService.getMyInfo());
     }
 
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId) {
-        System.out.println("회원 탈퇴");
-
-        //userId가 토큰이랑 일치하면 회원탈퇴 진행
-        if (true) {
-            User user = userService.deleteUser(userId);
-        }
-
-        return;
-    }
-
     @GetMapping("/{userId}")
-    public ResponseEntity<UserProfileRes> getUserProfile(@PathVariable("userId") Long userId) {
-        //토큰으로 userid 찾는거 추가
-        System.out.println("다른 회원정보 조회");
-
-        UserProfileRes userRes = userService.getUserProfile(userId);
-
-        return ResponseEntity.status(200).body(userRes);
-
+    @Operation(summary = "다른 유저의 개인 정보 조회", description = "다른 유저의 개인 정보를 조회한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "다른 유저 개인 정보 조회",
+            content = @Content(schema = @Schema(implementation = UserInfoRes.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<UserInfoRes> getUserInfo(@PathVariable("userId") long userId) {
+        return ResponseEntity.ok(userService.getUserInfo(userId));
     }
 
-
-    @PostMapping("/interest")
-    public void interest(@RequestBody InterestReq interestReq) {
-        System.out.println("흥미있는 종목 선택");
-
-//        userService.interest(interestReq);
+    @GetMapping("/interest")
+    @Operation(summary = "나의 관심 정보 목록 조회", description = "관심 정보 목록을 조회한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "관심 정보 목록 조회",
+            content = @Content(schema = @Schema(implementation = UserInterestRes.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST"),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nDELETED_USER",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<List<UserInterestRes>> getMyInterest() {
+        return ResponseEntity.ok(userService.getMyInterest());
     }
 
+    @PutMapping("/interest")
+    @Operation(summary = "나의 관심 정보 목록 업데이트", description = "관심 정보 목록을 생성, 및 수정한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "변경된 관심 정보 목록 조회",
+            content = @Content(schema = @Schema(implementation = UserInterestRes.class))),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nSPORT_CATEGORY_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<List<UserInterestRes>> updateInterest(@RequestBody InterestReq interestReq) {
+        return ResponseEntity.ok(userService.updateInterest(interestReq));
+    }
+
+    @DeleteMapping
+    @Operation(summary = "회원 탈퇴", description = "비밀번호 확인이 끝난 회원이 탈퇴한다. (본인이 소유자인 스렌즈가 있다면 탈퇴 불가, 속한 동호회는 탈퇴)")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "탈퇴되었습니다.", content = @Content),
+        @ApiResponse(responseCode = "400", description = "STILL_YOU_HAVE_SREINEDS",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<String> deleteUser() {
+        userService.deleteUser();
+        return ResponseEntity.ok("탈퇴되었습니다.");
+    }
 
 }
