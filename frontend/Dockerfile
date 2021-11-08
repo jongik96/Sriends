@@ -19,6 +19,8 @@ FROM nginx:stable-alpine as production-stage
 RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx/homepage.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage ./homepage/dist /usr/share/nginx/html/homepage
+
+WORKDIR /ssl
 COPY ~/ssl ./ssl
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
