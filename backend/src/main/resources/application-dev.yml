@@ -5,10 +5,17 @@ cors:
   origin:
     url:
 
-images:
-  absolute:
-#    location: C://images/
-    location: C://Users/박범진/Downloads/
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAYTDTAZKBOTC7OA5X
+      secretKey: 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
+    s3:
+      bucket: matchhere
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 spring:
   datasource:
@@ -45,6 +52,10 @@ mail:
 
 logging:
   level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
     sriends: DEBUG
 
 springdoc:
