@@ -54,6 +54,8 @@ public class TeamCalendarService {
         calendar.setMonth(schedulePostReq.getSchedule().getMonthValue());
         calendar.setDay(schedulePostReq.getSchedule().getDayOfMonth());
 
+        calendarRepository.save(calendar);
+
         return true;
     }
 
