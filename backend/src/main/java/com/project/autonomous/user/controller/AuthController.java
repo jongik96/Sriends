@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -51,7 +52,8 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> signUp(@Valid @ModelAttribute UserRegisterReq userRegisterReq, BindingResult theBindingResult) {
+    public ResponseEntity<String> signUp(@Valid @ModelAttribute UserRegisterReq userRegisterReq, BindingResult theBindingResult)
+        throws IOException {
         authService.signup(userRegisterReq);
         return ResponseEntity.ok("정상 가입");
     }

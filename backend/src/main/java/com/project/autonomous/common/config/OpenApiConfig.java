@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OpenApiConfig {
+
     // http://localhost:8080/api/swagger-ui.html
     // http://k5d106.p.ssafy.io:8080/api/swagger-ui.html
     @Bean
@@ -27,7 +28,8 @@ public class OpenApiConfig {
             .description("API 명세")
             .termsOfService("https://www.notion.so/PJT-8c6d7f34574343fda50ceac6f9a0acdb")
             .contact(new Contact().name("D106").url("https://s-riends.me/").email(""))
-            .license(new License().name("Apache License Version 2.0").url("http://www.apache.org/licenses/LICENSE-2.0"));
+            .license(new License().name("Apache License Version 2.0")
+                .url("http://www.apache.org/licenses/LICENSE-2.0"));
 
 //        List<Server> servers = Arrays.asList(new Server().url(url).description("demo (" + active +")"));
 
@@ -55,10 +57,19 @@ public class OpenApiConfig {
 //            .pathsToMatch("/users/**")
 //            .build();
     }
+
     @Bean
     public GroupedOpenApi teamApi() {
         String packagesToscan[] = {"com.project.autonomous.team.controller"};
         return GroupedOpenApi.builder().group("Teams").packagesToScan(packagesToscan)
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi matchBoardApi() {
+        String packagesToscan[] = {"com.project.autonomous.matchboard.comments.controller",
+            "com.project.autonomous.matchboard.posts.controller"};
+        return GroupedOpenApi.builder().group("MatchBoard").packagesToScan(packagesToscan)
             .build();
     }
 

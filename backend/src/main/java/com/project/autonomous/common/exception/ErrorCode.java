@@ -45,6 +45,7 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
+    TEAM_NOT_FOUND(NOT_FOUND, "해당 팀 정보를 찾을 수 없습니다"),
     DELETED_USER(NOT_FOUND, "탈퇴한 유저입니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
     FILE_NOT_FOUND(NOT_FOUND, "해당 파일 정보를 찾을 수 없습니다"),
@@ -59,6 +60,7 @@ public enum ErrorCode {
     TOKEN_NOT_FOUND(NOT_FOUND, "해당 토큰을 찾을 수 없습니다"),
     LIST_NOT_FOUND(NOT_FOUND, "해당 리스트를 찾을 수 없습니다"),
     SPORT_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 종목을 찾을 수 없습니다"),
+    BOARD_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 분류를 찾을 수 없습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),
