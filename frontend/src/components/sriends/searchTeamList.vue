@@ -200,7 +200,7 @@
                                 <option value="화순시">화순</option>
                             </select>
                             <br/>
-                            <p v-if="this.form.city" class="mt-2 text-xl font-medium">선택지역 : {{ this.form.city }} </p>
+                            <p v-if="this.form.city" class="mt-2 text-base md:text-xl font-medium">선택 : {{ this.form.city }} </p>
                         </div>
                         <div class="col-start-4 col-span-3 ml-3">
                             <p class="text-2xl">종목을 선택해주세요</p>

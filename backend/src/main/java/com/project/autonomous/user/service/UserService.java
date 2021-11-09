@@ -1,26 +1,34 @@
 package com.project.autonomous.user.service;
 
 
-import com.project.autonomous.user.dto.request.UserModifyPutReq;
-import com.project.autonomous.user.dto.request.UserRegisterPostReq;
-import com.project.autonomous.user.dto.response.MyProfileRes;
-import com.project.autonomous.user.dto.response.UserProfileRes;
-import com.project.autonomous.user.entity.User;
+import com.project.autonomous.user.dto.request.CheckPasswordReq;
+import com.project.autonomous.user.dto.request.InterestReq;
+import com.project.autonomous.user.dto.request.UserModifyReq;
+import com.project.autonomous.user.dto.response.MyInfoRes;
+import com.project.autonomous.user.dto.response.UserInfoRes;
+import com.project.autonomous.user.dto.response.UserInterestRes;
+import com.project.autonomous.user.dto.response.UserTeamListRes;
+import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface UserService {
-    User createUser(UserRegisterPostReq registerInfo);
 
-    Boolean emailCheck(String email);
+    boolean checkPassword(CheckPasswordReq checkPasswordReq);
 
-    User modifyUser(Long userId, UserModifyPutReq modifyInfo);
+    void changePassword(CheckPasswordReq checkPasswordReq);
 
-    User deleteUser(Long userId);
+    MyInfoRes modifyUser(UserModifyReq modifyInfo);
 
-    MyProfileRes getMyProfile();
+    Slice<UserTeamListRes> getMyTeams(Pageable pageable);
 
-    UserProfileRes getUserProfile(Long userId);
+    MyInfoRes getMyInfo();
 
-    User getUser(String userEmail);
+    List<UserInterestRes> getMyInterest();
 
-//    void sendEmail(String email);
+    void deleteUser();
+
+    UserInfoRes getUserInfo(long userId);
+
+    List<UserInterestRes> updateInterest(InterestReq interestReq);
 }

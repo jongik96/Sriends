@@ -23,17 +23,20 @@ public enum ErrorCode {
     ALREADY_JOIN(BAD_REQUEST, "이미 가입되어있습니다."),
     ALREADY_APPLY(BAD_REQUEST, "이미 신청되어있습니다."),
     NOT_ALLOW_TYPE(BAD_REQUEST, "JPG와 PNG 형식만 지원합니다."),
+    NO_INTERESTING_ITEMS(BAD_REQUEST, "흥미있는 종목 설정이 없습니다."),
+    STILL_YOU_HAVE_SREINEDS(BAD_REQUEST, "아직 대표인 스렌즈가 존재합니다."),
 
-    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
-    EMAIL_MESSAGE(BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
-    MEMBER_PW_MESSAGE(BAD_REQUEST, "비밀번호는 영어와 숫자를 포함해서 8자 이상 20자 이내로 입력해주세요."),
-    RESERVATION_PW_MESSAGE(BAD_REQUEST, "비밀번호는 숫자 4자리만 입력 가능합니다."),
-    ORGANIZATION_MESSAGE(BAD_REQUEST, "조직명은 특수문자 없이 20자 이내로 작성 가능합니다."),
-    NAME_MESSAGE(BAD_REQUEST, "이름은 특수문자(-_!?.,)를 포함하여 20자 이내로 작성 가능합니다."),
-    PRESET_NAME_MESSAGE(BAD_REQUEST, "프리셋 이름은 공백과 특수문자(-_!?.,)를 포함하여 20자 이내로 작성 가능합니다."),
-    DESCRIPTION_MESSAGE(BAD_REQUEST, "예약 내용은 100자 이내로 작성 가능합니다."),
-    FORMAT_MESSAGE(BAD_REQUEST, "날짜 및 시간 데이터 형식이 올바르지 않습니다."),
-    DAY_OF_WEEK_MESSAGE(BAD_REQUEST, "올바른 요일 형식이 아닙니다."),
+
+//    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
+//    EMAIL_MESSAGE(BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
+//    MEMBER_PW_MESSAGE(BAD_REQUEST, "비밀번호는 영어와 숫자를 포함해서 8자 이상 20자 이내로 입력해주세요."),
+//    RESERVATION_PW_MESSAGE(BAD_REQUEST, "비밀번호는 숫자 4자리만 입력 가능합니다."),
+//    ORGANIZATION_MESSAGE(BAD_REQUEST, "조직명은 특수문자 없이 20자 이내로 작성 가능합니다."),
+//    NAME_MESSAGE(BAD_REQUEST, "이름은 특수문자(-_!?.,)를 포함하여 20자 이내로 작성 가능합니다."),
+//    PRESET_NAME_MESSAGE(BAD_REQUEST, "프리셋 이름은 공백과 특수문자(-_!?.,)를 포함하여 20자 이내로 작성 가능합니다."),
+//    DESCRIPTION_MESSAGE(BAD_REQUEST, "예약 내용은 100자 이내로 작성 가능합니다."),
+//    FORMAT_MESSAGE(BAD_REQUEST, "날짜 및 시간 데이터 형식이 올바르지 않습니다."),
+//    DAY_OF_WEEK_MESSAGE(BAD_REQUEST, "올바른 요일 형식이 아닙니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
@@ -42,6 +45,8 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
+    TEAM_NOT_FOUND(NOT_FOUND, "해당 팀 정보를 찾을 수 없습니다"),
+    DELETED_USER(NOT_FOUND, "탈퇴한 유저입니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
     FILE_NOT_FOUND(NOT_FOUND, "해당 파일 정보를 찾을 수 없습니다"),
     CITY_NOT_FOUND(NOT_FOUND, "해당 지역 정보를 찾을 수 없습니다."),
@@ -53,6 +58,9 @@ public enum ErrorCode {
     ARTICLE_NOT_FOUND(NOT_FOUND, "게시글을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
     TOKEN_NOT_FOUND(NOT_FOUND, "해당 토큰을 찾을 수 없습니다"),
+    LIST_NOT_FOUND(NOT_FOUND, "해당 리스트를 찾을 수 없습니다"),
+    SPORT_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 종목을 찾을 수 없습니다"),
+    BOARD_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 분류를 찾을 수 없습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),

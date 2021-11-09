@@ -143,10 +143,16 @@ export default new VueRouter({
             component: () => import('@/views/matching/matchingListPage.vue')
         },
 
-        // 매칭목록
+        // 매칭생성
         {
             path: '/createMatching',
             component: () => import('@/views/matching/createMatchingPage.vue')
+        },
+
+        // 매칭수정
+        {
+            path: '/modifyMatching',
+            component: () => import('@/views/matching/modifyMatchingPage.vue')
         },
 
         // 팀게시글 상세페이지

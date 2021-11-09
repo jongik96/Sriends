@@ -9,20 +9,32 @@ export default new Vuex.Store({
   state: {
     accessToken: '',
     userId: '',
+    tempUserId:'',
     teamId: '',
     boardId: '',
     commentId:'',
+    matchCommentId:'',
+    postId:'',
     calendarId:'',
     teamName:'',
     selectCity: '',
     selectSportCategory: '',
   },
   mutations: {
+    setMatchingId(state,postId){
+        state.postId = postId
+    },
+    setMatchCommentId(state,matchCommentId){
+        state.matchCommentId = matchCommentId
+    },
     setAccessToken(state,accessToken){
         state.accessToken = accessToken
     },
     setUserId(state, userId){
         state.userId = userId
+    },
+    setTempUserId(state, tempUserId){
+        state.tempUserId = tempUserId
     },
     setTeamId(state, teamId){
       state.teamId = teamId

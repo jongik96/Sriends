@@ -62,14 +62,14 @@
         <div class=" text-xl">
           <div>
             이름
-            <input type="text" v-model="form.name" class="ml-8 text-xl w-3/4 rounded-md border-2 border-yellow-400">
+            <input type="text" v-model="form.name" class="md:ml-8 text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                               <span v-if="!form.name" class="text-base text-yellow-600">이름은 2자 이상 6자 이하로 입력해주세요.</span>
                           </p>
           </div>
           <div class="mt-3">
             지역
-            <select class="ml-8 border-2 border-solid border-yellow-500 rounded-md" v-model="selectDo">
+            <select class="md:ml-8 border-2 border-solid border-yellow-500 rounded-md" v-model="selectDo">
                             <option disabled value="">지역</option>
                             <option value="1">서울/인천/경기</option>
                             <option value="2">대전/충청</option>
@@ -279,13 +279,13 @@
               <button class="border-2 rounded-xl border-yellow-500  font-medium w-36 h-8 mt-3">관심종목 선택하기</button>
             </router-link>
             <router-link to="/modifyPassword">
-              <button class="border-2 rounded-xl border-yellow-500  font-medium w-36 h-8 mt-3 ml-3">비밀번호 변경하기</button>
+              <button class="border-2 rounded-xl border-yellow-500  font-medium w-36 h-8 mt-3 md:ml-3">비밀번호 변경하기</button>
             </router-link>
           </div>
           
         </div>
           <div class="flex justify-end p-2 mt-1">
-          <button @click="clickCancel"><p class="rounded-md hover:bg-gray-200">취소</p></button>
+          <button @click="clickCancel"><p class="rounded-md hover:bg-gray-200 w-7">취소</p></button>
           <button :disabled="!btnDisabled" @click="ModifyUser" class="border-solid border-2 border-yellow-500 rounded-md ml-3 hover:bg-yellow-400 w-16 h-7">수정</button>
           <button @click.self.prevent="clickDelete"  class="border-solid border-2 border-yellow-500 ml-3 rounded-md hover:bg-yellow-400 w-16 h-7">삭제</button>
           </div>

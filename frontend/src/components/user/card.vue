@@ -18,26 +18,12 @@
                             새 스렌즈 만들기
                         </a>
                 </div>
-            </article>
+            </article> 
 
-            <cardItem v-for="item, index in teams" :key="index"
+            <cardItem v-for="item,index in teams" :key="index"
                 :id="item.id"
             
             >
-            
-                <!-- <div class="relative w-full h-80 md:h-64 lg:h-44">
-                   
-                    <router-link :to="{'name': 'team', params:{'teamId':item.id}}">
-                    <img :src=teams.pictureUrl alt="teamImg"
-                        class="w-full h-full object-center object-cover">
-                    </router-link>
-                   
-                </div>
-                <div class="px-3 py-4 flex items-center justify-center">
-                        <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="#">
-                            {{item.name}}
-                        </a>
-                </div> -->
             </cardItem>
             <infinite-loading @infinite="infiniteHandler" spinner="sprial">
                 <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
@@ -74,21 +60,6 @@ export default {
             ],
         }
     },
-    // created: function(){
-    //     getProfileInfo()
-    //     .then((res)=>{
-    //     console.log(res.data)
-    //     this.id = res.data.id
-    //     this.name = res.data.name
-    //     this.birth = res.data.birth
-    //     this.phone = res.data.phone
-    //     this.gender = res.data.gender
-    //     this.pictureDownloadUri = res.data.pictureDownloadUri
-    //     this.city = res.data.city
-    //     }).catch((err)=>{
-    //     console.log(err)
-    //     })
-    // },
     methods:{
         infiniteHandler($state) {
             const token = store.state.accessToken
@@ -99,6 +70,7 @@ export default {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(res => {
+                console.log(res.data)
                 setTimeout(() => {
                     if(res.data.content.length) {
                     this.teams = this.teams.concat(res.data.content)
@@ -117,15 +89,7 @@ export default {
                 console.error(err);
             })
         },
-        // clickTeam(){
-        //     this.$router.push({'name': 'team', params:{'teamId':item.id}})
-        // }
-
-
     },
-    
-
-    
     computed:{
         getToken(){
             const token = this.$store.state.accessToken

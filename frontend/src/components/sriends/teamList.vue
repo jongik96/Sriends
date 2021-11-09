@@ -1,9 +1,9 @@
 <template>
   <div class="grid grid-cols-6">
         <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
-            <div class="flex justify-end">
+            <div class="md:flex md:justify-end ml-5 md:ml-0">
                 <router-link to="/searchTeam">
-                <button class="bg-yellow-500 px-2 py-1 
+                <button class="bg-yellow-500 px-2 mb-2 md:mb-0 py-1 
                     text-white font-semibold text-sm rounded block text-center 
                     sm:inline-block mr-5">
                             다른 지역, 종목 찾아보기

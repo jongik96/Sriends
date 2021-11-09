@@ -17,6 +17,11 @@ function getProfileInfo(){
     return instance.get('users/me')
 }
 
+// 다른사람 프로필 조회
+function getTempProfileInfo(userId){
+    return instance.get(`users/${userId}`)
+}
+
 // 로그인 api
 function loginUser(loginData){
     return instance.post('auth/login',loginData)
@@ -72,5 +77,6 @@ export {
         confirmPassword,
         deleteUser,
         selectSports,
-        getInterest
+        getInterest,
+        getTempProfileInfo
 }

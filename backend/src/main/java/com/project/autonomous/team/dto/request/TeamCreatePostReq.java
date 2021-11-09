@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 @Setter
 public class TeamCreatePostReq {
     String name;
-    LocalDateTime createDate;
+//    LocalDateTime createDate;
 //    long leaderId;
-    String pictureId;
-    int memberCount;
+//    String pictureId;
+//    int memberCount;
     int maxCount;
     String description;
     Boolean recruitmentState;

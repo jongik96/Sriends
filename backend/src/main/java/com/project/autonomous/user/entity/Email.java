@@ -16,6 +16,6 @@ public class Email extends BaseEntity {
     boolean expired;
     LocalDateTime createDate;
     LocalDateTime lastModifiedDate;
-    long userId;
+    String email;
     int code;
 }

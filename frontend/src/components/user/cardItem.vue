@@ -31,7 +31,6 @@ export default {
         }
     },
     mounted(){
-        
         getTeamInfo(this.id)
         .then((res)=>{
             console.log(res)

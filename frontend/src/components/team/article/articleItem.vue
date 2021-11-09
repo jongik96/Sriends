@@ -3,7 +3,7 @@
         <!-- <router-link :to="{'name': 'articleDetail', params:{'boardId':this.boardId}}"> -->
         <div @click="clickArticle">
             <h2 class="text-2xl font-semibold">{{ this.title }}</h2>
-            <p class="text-justify leading-tight text-gray-800">{{ this.content }}<p>
+            <p class="text-justify truncate leading-tight text-gray-800">{{ this.content }}<p>
             <div class="mt-2">
             <span class="left">{{ this.createDate }}</span>
             <span class="float-right">By: <a class="text-purple-500" href="#">{{ this.name }}</a></span>

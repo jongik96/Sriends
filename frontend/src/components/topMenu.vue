@@ -25,7 +25,7 @@
                 <router-link to="/modify"><p class="hover:bg-yellow-500">정보 수정</p></router-link>
               </li> -->
               <li>
-               <button class="hover:bg-yellow-500">로그아웃</button>
+               <button @click="logout" class="hover:bg-yellow-500">로그아웃</button>
               </li>
             </ul>
           

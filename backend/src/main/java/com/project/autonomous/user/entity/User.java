@@ -2,13 +2,21 @@ package com.project.autonomous.user.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.common.entity.City;
+import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
+import com.project.autonomous.picture.entity.Picture;
+import com.project.autonomous.user.dto.request.UserModifyReq;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,49 +32,46 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-    String email;
-    String password;
-    String name;
+    private String email;
+
+    private String password;
+
+    private String name;
+
     private LocalDate birth;
-    String gender;
-    String phone;
+
+    private String gender;
+
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     private City city;
 
-    String picture_id;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private UserAuthority userAuthority;
 
-    @NotNull
-    private boolean deleted;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchBoardPost> matchBoardPosts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<UserTeam> userTeamList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchBoardComment> comments = new ArrayList<>();
 
-    // 유저 삭제
-    public void delete() {
-        this.deleted = true;
+    // 비밀번호 변경
+    public void changePassword(String password) {
+        this.password = password;
     }
 
-    // 유저 복구
-    public void restore() {
-        this.deleted = false;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-            "email='" + email + '\'' +
-            ", name='" + name + '\'' +
-            ", birth=" + birth +
-            ", gender='" + gender + '\'' +
-            ", phone='" + phone + '\'' +
-            ", city='" + city + '\'' +
-            ", picture_id='" + picture_id + '\'' +
-            ", password='" + password + '\'' +
-            '}';
+    // 회원 정보 수정
+    public void update(UserModifyReq userModifyReq, Picture picture) {
+        this.name = userModifyReq.getName();
+        this.phone = userModifyReq.getPhone();
+        this.city = City.from(userModifyReq.getCity());
+        this.picture = picture;
     }
 
 }

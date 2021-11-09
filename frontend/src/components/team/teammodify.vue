@@ -255,7 +255,7 @@
                         </div>
                         <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">특이사항</p>
-                          <input type="text" v-model="form.description" class=" text-xl w-3/4 h-20 rounded-md border-2 border-yellow-400">
+                          <textarea v-model="form.description" class=" text-xl w-3/4 h-20 rounded-md border-2 border-yellow-400"/>
                           <p>
                             <span class="text-yellow-600">S-riends 소개</span>
                         </p>
