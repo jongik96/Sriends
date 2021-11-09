@@ -5,16 +5,18 @@ import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
 import com.project.autonomous.team.dto.response.*;
 import com.project.autonomous.team.entity.Team;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public interface TeamService {
-    Team create(TeamCreatePostReq teamInfo);
+    Team create(TeamCreatePostReq teamInfo) throws IOException;
 
     ArrayList<TeamListRes> getList();
 
     ArrayList<TeamListRes> getChooseList(String cityName, String sportCategory);
 
-    boolean modify(TeamModifyPostReq teamInfo, long teamId);
+    boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException;
 
     boolean delete(long teamId);
 

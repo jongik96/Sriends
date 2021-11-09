@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,7 @@ public class TeamController {
 
 
     @PostMapping("/")
-    public ResponseEntity<Boolean> createTeam(@RequestBody TeamCreatePostReq teamInfo){
+    public ResponseEntity<Boolean> createTeam(@RequestBody TeamCreatePostReq teamInfo) throws IOException {
         System.out.println("팀 생성");
 
         Team team = teamService.create(teamInfo);
@@ -61,7 +63,7 @@ public class TeamController {
     }
 
     @PutMapping("/{teamId}")
-    public ResponseEntity<Boolean> createTeam(@PathVariable("teamId") long teamId, @RequestBody TeamModifyPostReq teamInfo){
+    public ResponseEntity<Boolean> createTeam(@PathVariable("teamId") long teamId, @RequestBody TeamModifyPostReq teamInfo) throws IOException {
         System.out.println("팀 수정");
 
         if(teamService.modify(teamInfo, teamId)){

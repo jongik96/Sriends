@@ -6,7 +6,6 @@ import com.project.autonomous.team.dto.request.PostingReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.response.CommentListRes;
 import com.project.autonomous.team.dto.response.CommentRes;
-import com.project.autonomous.team.dto.response.PostViewListRes;
 import com.project.autonomous.team.dto.response.PostViewRes;
 import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.entity.TeamBoardComment;
@@ -58,7 +57,7 @@ public class TeamBoardController {
     }
 
     @GetMapping("/{teamId}")
-    public ResponseEntity<ArrayList<PostViewListRes>> getPostList(@PathVariable("teamId") long teamId){
+    public ResponseEntity<ArrayList<PostViewRes>> getPostList(@PathVariable("teamId") long teamId){
         System.out.println("공지사항 리스트 조회");
 
         return ResponseEntity.ok(teamBoardService.postingViewList(teamId));
