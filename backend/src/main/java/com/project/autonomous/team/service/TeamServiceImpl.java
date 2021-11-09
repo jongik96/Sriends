@@ -249,6 +249,9 @@ public class TeamServiceImpl implements TeamService{
         long userid = SecurityUtil.getCurrentMemberId();
 
         if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){
+            throw new CustomException(ErrorCode.ALREADY_JOIN);
+        }
+        if(requestJoinRepository.findByUserIdAndTeamId(userid, teamId).isPresent()){
             throw new CustomException(ErrorCode.ALREADY_APPLY);
         }
         RequestJoin requestJoin = new RequestJoin();
