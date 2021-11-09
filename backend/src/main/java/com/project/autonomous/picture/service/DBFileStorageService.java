@@ -39,7 +39,7 @@ public class DBFileStorageService {
         }
 
         String filePath = s3Uploader.upload(file, uuid + fileExtension);
-        return pictureRepository.save(Picture.of(uuid, fileName, fileType, filePath));
+        return pictureRepository.save(Picture.of(uuid + fileExtension, fileName, fileType, filePath));
 
     }
 
