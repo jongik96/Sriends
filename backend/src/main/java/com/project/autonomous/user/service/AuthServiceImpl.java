@@ -12,6 +12,7 @@ import com.project.autonomous.picture.service.DBFileStorageService;
 import com.project.autonomous.user.dto.request.LoginReq;
 import com.project.autonomous.user.dto.request.UserRegisterReq;
 import com.project.autonomous.user.repository.UserRepository;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,7 +34,7 @@ public class AuthServiceImpl implements AuthService{
     private final DBFileStorageService dbFileStorageService;
 
     @Transactional
-    public void signup(UserRegisterReq userRegisterReq) {
+    public void signup(UserRegisterReq userRegisterReq) throws IOException {
         // 가입되어있는지 확인 (회원을 삭제해도 DB에 회원 정보가 남아있어서 가입 안됨 고민해야할 일)
         if (userRepository.existsByEmail(userRegisterReq.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_JOIN);

@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -93,7 +94,8 @@ public class UserController {
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public ResponseEntity<MyInfoRes> modifyUserInfo(
-        @Valid @ModelAttribute UserModifyReq modifyInfo, BindingResult theBindingResult) {
+        @Valid @ModelAttribute UserModifyReq modifyInfo, BindingResult theBindingResult)
+        throws IOException {
         return ResponseEntity.ok(userService.modifyUser(modifyInfo));
     }
 

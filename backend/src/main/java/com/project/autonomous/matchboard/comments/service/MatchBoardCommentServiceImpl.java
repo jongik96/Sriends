@@ -85,6 +85,7 @@ public class MatchBoardCommentServiceImpl {
                 parentComment.get().removeReplyCount();
             }
         }
+        // 자식 댓글을 가지고 있는 부모 댓글의 삭제는?
         // 유저의 탈퇴로 인한 댓글의 삭제시 부모 댓글의 replyCount는 어떻게 변경할 수 있을까?
 
         matchBoardCommentRepository.delete(matchBoardComment);
