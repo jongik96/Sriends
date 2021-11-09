@@ -56,11 +56,8 @@ pipeline {
                 // sh 'docker images -f "dangling=true" -q \
                 // | xargs -r docker rmi'
                 sh 'docker images -f dangling=true && docker rmi $(docker images -f dangling=true -q)'
-                
-                //ssl copy
-                sh 'docker cp ~/ssl frontend:~/ssl'
                 // docker container 실행
-                sh 'docker run -d --name frontend -p 80:80 frontend:latest'
+                sh 'docker run -d --name frontend -v ~/ssl:~/ssl -p 80:80 frontend:latest'
                 sh 'docker run -d --name backend -p 8080:8080 backend:latest'
             }
         }
