@@ -26,7 +26,7 @@ public class TeamCalendarController {
     }
 
     @PutMapping("/{calendarId}")
-    public ResponseEntity<Boolean> modifyCalendar(@PathVariable("calendarId") long calendarId, @RequestBody SchedulePostReq schedulePostReq){
+    public ResponseEntity<Calendar> modifyCalendar(@PathVariable("calendarId") long calendarId, @RequestBody SchedulePostReq schedulePostReq){
         System.out.println("일정 수정");
 
         return ResponseEntity.ok(teamCalendarService.modify(schedulePostReq, calendarId));
