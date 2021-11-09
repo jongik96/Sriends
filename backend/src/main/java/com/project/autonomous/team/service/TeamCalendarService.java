@@ -39,7 +39,7 @@ public class TeamCalendarService {
         return calendarRepository.save(calendar);
     }
 
-    public boolean modify(SchedulePostReq schedulePostReq, long calendarId) {
+    public Calendar modify(SchedulePostReq schedulePostReq, long calendarId) {
         long userId = SecurityUtil.getCurrentMemberId();
 
         Calendar calendar = calendarRepository.findById(calendarId).get();
@@ -54,9 +54,7 @@ public class TeamCalendarService {
         calendar.setMonth(schedulePostReq.getSchedule().getMonthValue());
         calendar.setDay(schedulePostReq.getSchedule().getDayOfMonth());
 
-        calendarRepository.save(calendar);
-
-        return true;
+        return calendarRepository.save(calendar);
     }
 
     public boolean delete(long calendarId) {
