@@ -5,7 +5,7 @@ import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardCreateReq;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardUpdateReq;
-import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfo;
+import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.matchboard.posts.repository.MatchBoardPostRepository;
 import com.project.autonomous.team.entity.SportCategory;
@@ -41,7 +41,7 @@ public class MatchBoardPostServiceImpl {
 
     // 게시글 생성
     @Transactional
-    public MatchBoardPostInfo createPost(MatchBoardCreateReq matchBoardCreateReq) {
+    public MatchBoardPostInfoRes createPost(MatchBoardCreateReq matchBoardCreateReq) {
         User user = findMember(SecurityUtil.getCurrentMemberId());
         SportCategory sportCategory = findSportCategory(matchBoardCreateReq.getSportCategory());
         Team team = findTeam(matchBoardCreateReq.getTeamId());
@@ -49,24 +49,24 @@ public class MatchBoardPostServiceImpl {
         MatchBoardPost matchBoardPost = matchBoardCreateReq.toMatchBoardPost(user, sportCategory, team);
         user.getMatchBoardPosts().add(matchBoardPost);
 
-        return MatchBoardPostInfo.from(matchBoardPostRepository.save(matchBoardPost));
+        return MatchBoardPostInfoRes.from(matchBoardPostRepository.save(matchBoardPost));
     }
 
     // 매치 게시글 상세 조회
-    public MatchBoardPostInfo getPostInfo(Long postId) {
-        return MatchBoardPostInfo.from(findMatchBoardPost(postId));
+    public MatchBoardPostInfoRes getPostInfo(Long postId) {
+        return MatchBoardPostInfoRes.from(findMatchBoardPost(postId));
     }
 
     // 게시글 수정
     @Transactional
-    public MatchBoardPostInfo updatePost(Long postId, MatchBoardUpdateReq matchBoardUpdateReq) {
+    public MatchBoardPostInfoRes updatePost(Long postId, MatchBoardUpdateReq matchBoardUpdateReq) {
         SportCategory sportCategory = findSportCategory(matchBoardUpdateReq.getSportCategory());
         Team team = findTeam(matchBoardUpdateReq.getTeamId());
 
         MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
         checkAuthority(SecurityUtil.getCurrentMemberId(), matchBoardPost.getUser().getId());
         matchBoardPost.update(matchBoardUpdateReq, sportCategory, team);
-        return MatchBoardPostInfo.from(matchBoardPost);
+        return MatchBoardPostInfoRes.from(matchBoardPost);
     }
 
     // 게시글 삭제

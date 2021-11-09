@@ -16,7 +16,7 @@ public class MatchBoardCommentRes {
     @Schema(description = "댓글 id", example = "5")
     private Long id;
 
-    @Schema(description = "작성자 정보", example = "[\"id\" : 4, \"name\" : \"박범진\", \"city\" : \"대구광역시\", \"pictureUrl\" : \"경로미정\"]")
+    @Schema(description = "작성자 정보", example = "[\"id\" : 4, \"name\" : \"박범진\", \"city\" : \"대구광역시\", \"pictureUrl\" : \"https://matchhere.s3.ap-northeast-2.amazonaws.com/%EA%%B8_EC%A7%84.JPG\"]")
     private UserSimpleInfoRes writer;
 
     @Schema(description = "댓글 내용", example = "농구 같이 해요")

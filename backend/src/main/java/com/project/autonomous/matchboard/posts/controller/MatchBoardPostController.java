@@ -3,7 +3,7 @@ package com.project.autonomous.matchboard.posts.controller;
 import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardCreateReq;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardUpdateReq;
-import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfo;
+import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
 import com.project.autonomous.matchboard.posts.service.MatchBoardPostServiceImpl;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "MatchBoardPost", description = "매치 게시글 API")
@@ -51,12 +50,12 @@ public class MatchBoardPostController {
     @Operation(summary = "게시글 생성", description = "<strong>입력 받은 정보</strong>를 사용해 게시글을 생성한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "게시글 상세 정보",
-            content = @Content(schema = @Schema(implementation = MatchBoardPostInfo.class))),
+            content = @Content(schema = @Schema(implementation = MatchBoardPostInfoRes.class))),
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nTEAM_NOT_FOUND\n\n"
             + "SPORT_CATEGORY_NOT_FOUND\n\nBOARD_NOT_FOUND\n\nBOARD_CATEGORY_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MatchBoardPostInfo> createPost(@RequestBody MatchBoardCreateReq matchBoardCreateReq) {
+    public ResponseEntity<MatchBoardPostInfoRes> createPost(@RequestBody MatchBoardCreateReq matchBoardCreateReq) {
         return ResponseEntity.ok(matchBoardPostService.createPost(matchBoardCreateReq));
     }
 
@@ -64,11 +63,11 @@ public class MatchBoardPostController {
     @Operation(summary = "게시글 상세 정보 조회", description = "<strong>게시글 id</strong>를 사용해 게시글 정보를 조회한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "게시글 정보 조회",
-            content = @Content(schema = @Schema(implementation = MatchBoardPostInfo.class))),
+            content = @Content(schema = @Schema(implementation = MatchBoardPostInfoRes.class))),
         @ApiResponse(responseCode = "404", description = "BOARD_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MatchBoardPostInfo> getPostInfo(@PathVariable("postId") long postId) {
+    public ResponseEntity<MatchBoardPostInfoRes> getPostInfo(@PathVariable("postId") long postId) {
         return ResponseEntity.ok(matchBoardPostService.getPostInfo(postId));
     }
 
@@ -76,12 +75,12 @@ public class MatchBoardPostController {
     @Operation(summary = "게시글 수정", description = "<strong>입력 받은 정보</strong>를 사용해 게시글을 수정한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "변경된 게시글 상세 정보",
-            content = @Content(schema = @Schema(implementation = MatchBoardPostInfo.class))),
+            content = @Content(schema = @Schema(implementation = MatchBoardPostInfoRes.class))),
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nTEAM_NOT_FOUND\n\n"
             + "SPORT_CATEGORY_NOT_FOUND\n\nBOARD_NOT_FOUND\n\nBOARD_CATEGORY_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MatchBoardPostInfo> updatePost(@PathVariable("postId") long postId, @RequestBody MatchBoardUpdateReq matchBoardUpdateReq) {
+    public ResponseEntity<MatchBoardPostInfoRes> updatePost(@PathVariable("postId") long postId, @RequestBody MatchBoardUpdateReq matchBoardUpdateReq) {
         return ResponseEntity.ok(matchBoardPostService.updatePost(postId, matchBoardUpdateReq));
     }
 

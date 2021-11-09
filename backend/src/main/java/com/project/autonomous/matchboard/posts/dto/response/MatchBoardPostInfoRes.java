@@ -19,12 +19,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 @Builder
 @AllArgsConstructor
-public class MatchBoardPostInfo {
+public class MatchBoardPostInfoRes {
 
     @Schema(description = "게시글 id", example = "3")
     private long postId;
 
-    @Schema(description = "작성자 정보", example = "[\"id\" : 4, \"name\" : \"박범진\", \"city\" : \"대구광역시\", \"pictureUrl\" : \"경로미정\"]")
+    @Schema(description = "작성자 정보", example = "[\"id\" : 4, \"name\" : \"박범진\", \"city\" : \"대구광역시\", \"pictureUrl\" : \"https://matchhere.s3.ap-northeast-2.amazonaws.com/%EA%%B8_EC%A7%84.JPG\"]")
     private UserSimpleInfoRes writer;
 
     @Schema(description = "작성일자", example = "2021-09-06 06:57:37.667537")
@@ -53,14 +53,14 @@ public class MatchBoardPostInfo {
     @Schema(description = "모집 인원", example = "4 ~ 10명")
     private String recruitmentCount;
 
-    @Schema(description = "팀 정보", example = "{\"id\": 4, \"name\":\"대명농구회\", \"pictureUrl\":\"경로 미정\"}")
+    @Schema(description = "팀 정보", example = "{\"id\": 4, \"name\":\"대명농구회\", \"pictureUrl\":\"https://matchhere.s3.ap-northeast-2.amazonaws.com/%EA%%B8_EC%A7%84.JPG\"}")
     private UserTeamListRes team;
 
     @Schema(description = "내용", example = "5 : 5 농구 인원구합니다.")
     private String content;
 
-    public static MatchBoardPostInfo from(MatchBoardPost matchBoardPost) {
-        return MatchBoardPostInfo.builder()
+    public static MatchBoardPostInfoRes from(MatchBoardPost matchBoardPost) {
+        return MatchBoardPostInfoRes.builder()
             .postId(matchBoardPost.getId())
             .writer(UserSimpleInfoRes.from(matchBoardPost.getUser()))
             .createAt(matchBoardPost.getCreatedAt())
