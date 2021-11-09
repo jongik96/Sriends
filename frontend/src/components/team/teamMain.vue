@@ -133,8 +133,8 @@ export default {
             then((res)=>{
                 console.log(res)
                 this.authority = res.data.authority
-            }).catch((err)=>{
-                console.log(err)
+            }).catch(()=>{
+
             })
 
         }).catch((err)=>{

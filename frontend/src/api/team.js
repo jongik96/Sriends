@@ -69,7 +69,7 @@ function permitTeam(teamId,userId){
 
 
 
-    return instance.get(`teams/permit/${teamId}/${userId}`)
+    return instance.post(`teams/permit/${teamId}/${userId}`)
 }
 
 // 가입신청 리스트 조회 api

@@ -101,11 +101,12 @@ export default {
             //         name:this.name
             //     }
             // })
-            putSchedule(calendarId,teamId,this.writerId,this.name,this.content,this.schedule)
+            putSchedule(calendarId,teamId,this.writerId,this.modifyName,this.modifyContent,this.modifyDate)
             .then((res)=>{
                 console.log(res.data)
                 Swal.fire('일정이 수정되었습니다.')
                 this.modifyState = false
+                this.$router.go()
                 // this.$router.go()
             }).catch((err)=>{
                 console.log(err)

@@ -48,6 +48,7 @@ export default {
                 this.authority = res.data.authority
             }).catch((err)=>{
                 console.log(err)
+                console.log('미가입 상태')
             })
     }
 }
