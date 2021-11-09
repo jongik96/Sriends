@@ -83,6 +83,10 @@ public class UserServiceImpl implements UserService {
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
         Picture picture;
+        if(user.getPicture() != null) {
+            dbFileStorageService.deleteFile(user.getPicture().getId());
+            pictureRepository.delete(user.getPicture());
+        }
         if (userModifyReq.getFile() == null) {
             picture = null;
         } else {

@@ -64,9 +64,9 @@ public class PictureController {
 //    }
 //
 
-    @DeleteMapping("{fileName}")
+    @DeleteMapping("/{fileName}")
     @Operation(summary = "파일 삭제", description = "<strong>받은 파일명</strong>을 사용해 삭제한다.")
-    public ResponseEntity<String> deleteFile(@PathVariable("filePath") String fileName) {
+    public ResponseEntity<String> deleteFile(@PathVariable("fileName") String fileName) {
         dbFileStorageService.deleteFile(fileName);
         return ResponseEntity.ok("삭제되었습니다.");
     }
