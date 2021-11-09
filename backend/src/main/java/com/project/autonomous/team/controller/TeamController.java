@@ -119,7 +119,7 @@ public class TeamController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/permit/{teamId}/{userId}")
+    @PostMapping("/permit/{teamId}/{userId}")
     public ResponseEntity<Boolean> permit(@PathVariable("teamId") long teamId, @PathVariable("userId") long userId){
         System.out.println("팀 가입 승인");
 
