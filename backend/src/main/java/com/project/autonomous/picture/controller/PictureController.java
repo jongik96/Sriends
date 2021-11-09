@@ -1,6 +1,5 @@
 package com.project.autonomous.picture.controller;
 
-import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.picture.dto.PictureInfoDto;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.service.DBFileStorageService;
@@ -11,15 +10,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,21 +37,22 @@ public class PictureController {
         @ApiResponse(responseCode = "200", description = "파일 정보", content = @Content(schema = @Schema(implementation = PictureInfoDto.class))),
         @ApiResponse(responseCode = "400", description = "NOT_ALLOW_TYPE\n\nFileStorageException", content = @Content),
     })
-    public ResponseEntity<Picture> uploadFile(@RequestPart("file") MultipartFile file) {
+    public ResponseEntity<Picture> uploadFile(@RequestPart("file") MultipartFile file)
+        throws IOException {
         return ResponseEntity.ok(dbFileStorageService.storeFile(file));
     }
 
-    @PostMapping("/upload/multi")
-    @Operation(summary = "다중 사진 업로드", description = "<strong>받은 multipart file들</strong>을 저장한다.")
-    public ResponseEntity<List<Picture>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return ResponseEntity.ok(Arrays.asList(files)
-            .stream()
-            .map(file -> dbFileStorageService.storeFile(file))
-            .collect(Collectors.toList()));
-    }
+//    @PostMapping("/upload/multi")
+//    @Operation(summary = "다중 사진 업로드", description = "<strong>받은 multipart file들</strong>을 저장한다.")
+//    public ResponseEntity<List<Picture>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+//        return ResponseEntity.ok(Arrays.asList(files)
+//            .stream()
+//            .map(file -> dbFileStorageService.storeFile(file))
+//            .collect(Collectors.toList()));
+//    }
 
-//    @GetMapping("/download/{pictureId}")
-//    @Operation(summary = "파일 다운로드", description = "<strong>pictureId로</strong>로 파일 정보를 다운로드 받는다.")
+//    @GetMapping("/download/{uuid}")
+//    @Operation(summary = "파일 다운로드", description = "<strong>uuid로</strong>로 파일 정보를 다운로드 받는다.")
 //    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
 //        // Load file from database
 //        DBFile dbFile = dbFileStorageService.getFile(fileId);
@@ -62,5 +62,13 @@ public class PictureController {
 //            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFile_name() + "\"")
 //            .body(new ByteArrayResource(dbFile.getData()));
 //    }
+//
+
+    @DeleteMapping("{fileName}")
+    @Operation(summary = "파일 삭제", description = "<strong>받은 파일명</strong>을 사용해 삭제한다.")
+    public ResponseEntity<String> deleteFile(@PathVariable("filePath") String fileName) {
+        dbFileStorageService.deleteFile(fileName);
+        return ResponseEntity.ok("삭제되었습니다.");
+    }
 
 }
