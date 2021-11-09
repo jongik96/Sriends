@@ -6,6 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
@@ -70,7 +71,7 @@ public class S3Uploader {
     }
 
     public void delete(String fileName) {
-        amazonS3.deleteObject(bucket, fileName);
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
 }
