@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface MatchBoardCommentRepository extends JpaRepository<MatchBoardComment, Long> {
 
-    // 댓글 조회 (부모 id 오름차순, 생성일자 오름차순)
-    @Query("select mbc from MatchBoardComment mbc where mbc.matchBoardPost = :matchBoardPost order by mbc.parentId, mbc.createdAt")
-    List<MatchBoardComment> findAllComment(@Param("matchBoardPost") MatchBoardPost matchBoardPost);
+    // 댓글 조회 (생성일자 오름차순)
+    @Query("select mbc from MatchBoardComment mbc where mbc.matchBoardPost = :matchBoardPost and mbc.parentId = :parentId order by mbc.createdAt")
+    List<MatchBoardComment> findAllComment(@Param("matchBoardPost") MatchBoardPost matchBoardPost, @Param("parentId") Long parentId);
 }
