@@ -1,12 +1,9 @@
 <template>
-    <div class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300 border-2 border-yellow-400 rounded-lg">
+    <div class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300">
         <div v-if="!modifyState" class="grid grid-cols-6 h-10">
             <p class="col-start-1 col-span-5 break-words text-justify leading-tight text-gray-800">{{ this.comments.content }}</p>
-            <div class="col-start-6 col-span-1 ml-3 lg:ml-10 xl:ml-20">
-                <p class=" text-yellow-600">
-                    <button @click="clickUser">{{ this.writer.name }}</button>
-                    <img :src="writer.pictureUrl" class="h-10 w-10 rounded-xl" alt="">
-                </p>
+            <div class="col-start-6 col-span-1 ml-3">
+                <p class=" text-yellow-600"><button @click="clickUser">{{ this.comments.name }}</button></p>
                 <p class="text-xs">{{ this.comments.createDate }}</p>
             </div>
         </div>
@@ -14,15 +11,14 @@
             
             <textarea v-model="modifyContent" id="comment" rows=2 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
             <button @click="modifyComment" :disabled="!modifyContent" class="">수정하기</button>
-            <button @click="deleteComment" class="ml-3">삭제</button>
-            <p v-if="modifyContent.length>100"> 100자 이하로 작성 가능합니다</p>
+            <p v-if="modifyContent.length>40"> 40자 이하로 작성 가능합니다</p>
             <button @click="modifyState=false" class="ml-5">취소</button>
         </div>
         <div v-if="!modifyState" class="flex">
             <!-- <span class="float-right">By: <a class="text-purple-500" href="#">{{ comments.postedBy }}</a></span> -->
-            <div v-if=" this.comments.userId==this.writer.writerId && !reCommentState" class="">
+            <div v-if=" this.comments.userId==this.comments.writerId" class="">
                 <button @click="modifyState=true" class="mr-3">수정</button>
-                
+                <button @click="deleteComment" class="mr-3">삭제</button>
             </div>
             <div class="" v-if="!reCommentState">
                 <button @click="reCommentState=true"  class="mr-3">답글 작성하기</button>
@@ -34,17 +30,17 @@
             </div>
         </div>
 
-        <div v-if="rereplyCount>0" class="w-6/7 ml-5">
-            <!-- <p>답글  개 </p> -->
+        <div v-if="rereplyCount>0" class="w-4/5 ml-5">
+            <p>답글 {{rereplyCount}} 개 </p>
             <div v-if="!hideComment">
-                <button @click="hideComment=true">{{rereplyCount}}개의 답글 확인하기</button>
+                <button @click="hideComment=true">답글 확인하기</button>
             </div>
             <div v-if="hideComment">
                 <button @click="hideComment=false">답글 숨기기</button>
             <reCommentItem v-for="item in reply" :key="item.id" 
              :commentId=item.id
              :parentId=item.parentId
-             :writerId=item.writer.id
+             :writerId=item.writerId
             >
                 <!-- <div class="grid grid-cols-6 h-10">
                     <p class="col-start-1 col-span-3 text-justify leading-tight text-gray-800">{{ item.content }}</p>
@@ -70,7 +66,7 @@ import axios from 'axios'
 const baseURL = process.env.VUE_APP_SERVER_URL
 
 import { postArticleComments } from '@/api/comment.js'
-import reCommentItem from '@/components/team/article/articleReCommentItem.vue'
+import reCommentItem from '@/components/matching/matchingComment/reCommentItem.vue'
 import store from '@/store/index.js'
 import Swal from 'sweetalert2'
 export default {
@@ -89,14 +85,10 @@ export default {
             modifyState: false,
             comments:{
                 content:'',
+                name:'',
                 createDate:'',
-                
+                writerId: '',
                 userId: store.state.userId
-            },
-            writer:{
-                    writerId:'',
-                    name:'',
-                    pictureUrl:''
             },
             replyCount:0,
             reply:[],
@@ -108,10 +100,9 @@ export default {
         .then((res)=>{
             console.log(res)
             this.comments.content = res.data.content
-            this.writer.name = res.data.writer.name
+            this.comments.name = res.data.name
             this.comments.createDate = getDate(res.data.createDate)
-            this.writer.writerId = res.data.writer.id
-            this.writer.pictureUrl = res.data.writer.pictureUrl
+            this.comments.writerId = res.data.writerId
             this.replyCount = res.data.replyCount
             if(res.data.replyCount>0){
                 const boardId = store.state.boardId
@@ -130,28 +121,14 @@ export default {
     },
     methods:{
         deleteComment:function(){
-            Swal.fire({
-             title: '댓글을 삭제하시겠습니까?',
-              text: "삭제한 댓글은 복구할 수 없습니다.",
-               icon: 'warning',
-                showCancelButton: true,
-                 confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                   confirmButtonText: '네',
-                    cancelButtonText: '아니오'
-             })
-            .then((result) => {
-                if(result.isConfirmed){
-                deleteArticleComments(this.commentId)
-                .then((res)=>{
-                    console.log(res.data)
-                    Swal.fire('댓글이 삭제되었습니다.')
-                    this.$router.go();
-                }).catch((err)=>{
-                    console.log(err)
-                })
-
-            }})
+            deleteArticleComments(this.commentId)
+            .then((res)=>{
+                console.log(res.data)
+                Swal.fire('댓글이 삭제되었습니다.')
+                this.$router.go();
+            }).catch((err)=>{
+                console.log(err)
+            })
         },
         modifyComment:function(){
             axios({
@@ -182,7 +159,7 @@ export default {
             })
         },
         clickUser: function(){
-            this.$store.commit('setTempUserId', this.writer.writerId)
+            this.$store.commit('setTempUserId', this.comments.writerId)
             this.$router.push('/user')
         }
 
@@ -196,7 +173,7 @@ export default {
             return config
         },
         btnDisabled(){
-            if((this.modifyContent.length>100) || (this.modifyContent.length ==0) ){
+            if((this.modifyContent.length>40) || (this.modifyContent.length ==0) ){
                 return true
             }else{
                 return false

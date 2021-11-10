@@ -37,7 +37,7 @@
             <span class="">{{this.phone}}</span>
           </li>
         </ul>
-        <ul class="md:flex text-xl">
+        <ul v-if="sports.length!=0" class="md:flex text-xl">
           <li class="">
             관심종목 :
             <span v-for="item in sports" :key="item.id" class=""> {{item.interest}}</span>
@@ -86,7 +86,7 @@ export default {
       city : '',
       age :'',
       pictureUrl : '',
-      sports:[]
+      sports:[],
     }
   },
   created: function(){
@@ -107,7 +107,7 @@ export default {
       this.age = today.getFullYear() - new Date(res.data.birth).getFullYear()+1;
       console.log(new Date(res.data.birth))
       // localStorage.setItem('userid',res.data.id)
-      this.$store.commit("setUserId", res.data.id)
+      this.$store.commit("setTempUserId", res.data.id)
     }).catch((err)=>{
       console.log(err)
     }),
