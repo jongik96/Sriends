@@ -4,7 +4,7 @@ import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.matchboard.comments.dto.request.MatchBoardCreateCommentReq;
 import com.project.autonomous.matchboard.comments.dto.request.MatchBoardUpdateCommentReq;
 import com.project.autonomous.matchboard.comments.dto.response.MatchBoardCommentRes;
-import com.project.autonomous.matchboard.comments.service.MatchBoardCommentServiceImpl;
+import com.project.autonomous.matchboard.comments.service.MatchBoardCommentService;
 import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MatchBoardCommentController {
 
-    private final MatchBoardCommentServiceImpl matchBoardCommentService;
+    private final MatchBoardCommentService matchBoardCommentService;
 
     @PostMapping("/{postId}")
     @Operation(summary = "댓글 생성", description = "<strong>입력 받은 댓글 id와 댓글 정보</strong>를 사용해 댓글을 생성한다.")

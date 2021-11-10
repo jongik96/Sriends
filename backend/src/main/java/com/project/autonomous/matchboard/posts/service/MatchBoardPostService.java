@@ -1,11 +1,15 @@
 package com.project.autonomous.matchboard.posts.service;
 
+import com.project.autonomous.common.entity.City;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardCreateReq;
+import com.project.autonomous.matchboard.posts.dto.request.MatchBoardReadConditionReq;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardUpdateReq;
 import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
+import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostSimpleInfoRes;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardCategory;
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.matchboard.posts.repository.MatchBoardPostRepository;
 import com.project.autonomous.team.entity.SportCategory;
@@ -16,16 +20,20 @@ import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MatchBoardPostServiceImpl {
+public class MatchBoardPostService {
 
     private final UserRepository userRepository;
     private final SportCategoryRepository sportCategoryRepository;
@@ -46,7 +54,8 @@ public class MatchBoardPostServiceImpl {
         SportCategory sportCategory = findSportCategory(matchBoardCreateReq.getSportCategory());
         Team team = findTeam(matchBoardCreateReq.getTeamId());
 
-        MatchBoardPost matchBoardPost = matchBoardCreateReq.toMatchBoardPost(user, sportCategory, team);
+        MatchBoardPost matchBoardPost = matchBoardCreateReq.toMatchBoardPost(user, sportCategory,
+            team);
         user.getMatchBoardPosts().add(matchBoardPost);
 
         return MatchBoardPostInfoRes.from(matchBoardPostRepository.save(matchBoardPost));
@@ -77,6 +86,18 @@ public class MatchBoardPostServiceImpl {
         matchBoardPostRepository.delete(matchBoardPost);
     }
 
+    public Page<MatchBoardPostSimpleInfoRes> getAllCondition(List<String> cityList,
+        List<String> sportCategoryList,
+        List<String> matchBoardCategoryList, Pageable pageable) {
+
+        List<City> cities = cityList.stream().map(City::from).collect(Collectors.toList());
+        List<MatchBoardCategory> matchBoardCategories = matchBoardCategoryList.stream()
+            .map(MatchBoardCategory::from).collect(Collectors.toList());
+
+        return matchBoardPostRepository.searchPage(cities, sportCategoryList,
+            matchBoardCategories, pageable);
+    }
+
     public User findMember(long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -101,7 +122,7 @@ public class MatchBoardPostServiceImpl {
     }
 
     public void checkAuthority(long userId, long writerId) {
-        if(userId != writerId) {
+        if (userId != writerId) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_CHANGE);
         }
     }
