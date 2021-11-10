@@ -1,8 +1,8 @@
 <template>
   <div class="grid grid-cols-6">
-        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4  px-4 py-2 bg-white mt-10">
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
             <p v-if="replyCount>0"> 댓글 {{this.replyCount}} 개</p>
-            <articleCommentItem v-for="item in comments" :key="item.id"
+            <commentItem v-for="item in comments" :key="item.id"
                 :commentId="item.id"
             >
                 <!-- <p class="text-justify leading-tight text-gray-800">{{ item.content }}<p>
@@ -15,18 +15,18 @@
                     </div>
                 </div> -->
                 
-            </articleCommentItem>
+            </commentItem>
         </div>
   </div>
 </template>
 
 <script>
 import { getArticleCommentsList } from '@/api/comment.js'
-import articleCommentItem from '@/components/team/article/articleCommentItem.vue'
+import commentItem from '@/components/matching/matchingCommnet/commentItem.vue'
 import store from '@/store/index.js'
 export default {
     components:{
-        articleCommentItem
+        commentItem
     },
     data() {
         return{

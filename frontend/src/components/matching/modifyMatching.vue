@@ -2,7 +2,7 @@
     <div class="grid grid-cols-6">
         <div class="col-start-2 col-span-4 ">
           <div class="flex justify-center mt-10">
-              <p class="text-3xl text-yellow-500 font-bold">매칭글 작성</p>
+              <p class="text-3xl text-yellow-500 font-bold">매칭글 수정</p>
           </div>
         </div>
         <div class="col-start-1 col-span-6  md:col-start-2 md:col-span-4">
@@ -14,22 +14,30 @@
                         </div> -->
                         
                         <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">일시</p>
+                            <p class="text-xl font-bold">일시 *</p>
                             <input v-model="form.playingTime" id="joinIntro" type="date" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                         </div>
                         
                         <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">장소</p>
+                            <p class="text-xl font-bold">장소 *</p>
                             <input v-model="form.place" id="joinIntro" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                         </div>
                         <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">모집인원</p>
+                            <p class="text-xl font-bold">모집인원 *</p>
                             <input v-model="form.recruitmentCount" id="joinIntro" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
                         </div>
+                        <div class="md:pt-3 md:pl-10  pt-3 pl-2">
+                            <p class="text-xl font-bold">매칭 상태 *</p>
+                            <input class="mt-3 " type="radio" id="matchingState" value='true' v-model="form.recruited">
+                            <label class="mr-3 font-semibold" for="matchingState">완료</label>
+                            <input type="radio" id="matchingState" value="false" v-model="form.recruited">
+                            <label class="font-semibold" for="matchingState">진행</label>
+                        </div>
+                        
                 </div>
                 <div class="col-start-4 col-span-3">
                     <div class="md:pt-5 md:pl-10  pt-5 pl-2">
-                        <p class="text-xl font-bold">글 분류</p>
+                        <p class="text-xl font-bold">글 분류 *</p>
                         <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="form.matchBoardCategory">
                             <option disabled value="">분류</option>
                             <option value="매칭">경기 매칭</option>
@@ -37,13 +45,13 @@
                         </select>
                     </div>
                     <div class="md:pt-5 md:pl-10  pt-5 pl-2">
-                        <p class="text-xl font-bold">팀 선택</p>
+                        <p class="text-xl font-bold">팀 선택 *</p>
                         <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="form.teamId">
                             <option disabled value="">분류</option>
                             <option v-for="item in myTeam" :key="item.id" :value="item.id">{{item.name}}</option>
                             <!-- <option value="2">대구한국가스공사</option> -->
                         </select>
-                        <p class="text-2xl">종목</p>
+                        <p class="text-2xl">종목 *</p>
                         <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
                             <option disabled value="">종목</option>
                             <option value="축구/풋살">축구/풋살</option>
@@ -257,14 +265,14 @@
                 </div>
                 <div class="col-start-1 col-span-6">
                     <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">내용을 입력해주세요.</p>
+                            <p class="text-xl font-bold">내용을 입력해주세요. *</p>
                             <textarea v-model="form.content" id="joinIntro" rows=5 type="text" class="text-xl w-4/5 rounded-md border-2 border-yellow-400 mt-2"/>
                     </div>
                 </div>
                 <div class="col-start-1 col-span-6 mt-10 flex justify-center">
                     <!-- <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">Log In</button> -->
                     <button @click="clickPost" class="border-solid border-2 mr-3 mb-3 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ml-3">
-                        작성
+                        수정
                     </button>
                     <router-link to="/matchingList">
                         <button class="border-solid border-2 mb-3 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">
@@ -280,7 +288,8 @@
 
 <script>
 import { getMyTeam } from '@/api/matching.js'
-import { postMatching } from '@/api/matching.js'
+import { putMatching } from '@/api/matching.js'
+import store from '@/store/index.js'
 import Swal from 'sweetalert2'
 export default {
     data(){
@@ -296,6 +305,7 @@ export default {
                 playingTime: '',
                 recruitmentCount:'',
                 content:'',
+                recruited:'',
             },
         }
     },
@@ -310,11 +320,12 @@ export default {
     },
     methods:{
         clickPost: function(){
-            postMatching(this.form)
+            const postId = store.state.postId
+            putMatching(postId,this.form)
             .then((res)=>{
                 console.log(res)
-                Swal.fire('매칭이 등록되었습니다!')
-                this.$router.push('matchingList')
+                Swal.fire('매칭이 수정되었습니다!')
+                this.$router.push('/matchingDetail')
             }).catch((err)=>{
                 console.log(err)
             })

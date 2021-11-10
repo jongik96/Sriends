@@ -1,12 +1,22 @@
 <template>
-    <div class="shadow-md p-4 mt-5 mx-6 mb-4 min-w-300">
+    <div class="shadow-md p-4 mt-5 mx-6 mb-4 h-30 min-w-300">
         <!-- <router-link :to="{'name': 'articleDetail', params:{'boardId':this.boardId}}"> -->
-        <div @click="clickArticle">
-            <h2 class="text-2xl font-semibold">{{ this.title }}</h2>
-            <p class="text-justify truncate leading-tight text-gray-800">{{ this.content }}<p>
-            <div class="mt-2">
-            <span class="left">{{ this.createDate }}</span>
-            <span class="float-right">By: <a class="text-purple-500" href="#">{{ this.name }}</a></span>
+        <div @click="clickArticle" class="grid grid-cols-6">
+            <div class="col-start-1 col-span-5">
+                <h2 class="text-2xl font-semibold">{{ this.title }}</h2>
+                <p class="text-justify truncate leading-tight text-gray-800 mt-5 mr-4">{{ this.content }}</p>
+            </div>
+            <div class="col-start-6 col-span-1">
+                <div class="">
+                    <img :src="writer.pictureUrl" class="rounded-full object-contain w-12 h-12" alt="">
+                </div>
+                <p class="text-xl">{{ this.writer.name }}</p>
+                <p class="left">{{ this.createDate }}</p>
+            </div>
+            
+            <div class="mt-2 col-start-1 col-span-6">
+                
+            
             </div>
         </div>
         <!-- </router-link> -->
@@ -25,7 +35,11 @@ export default {
         return{
             content:'',
             createDate:'',
-            name:'',
+            writer:{
+                id:'',
+                name:'',
+                pictureUrl:'',
+            },
             title:'',
         }
     },
@@ -34,7 +48,8 @@ export default {
         getArticleInfo(teamId,this.boardId).
         then((res)=>{
             console.log(res)
-            this.name = res.data.name
+            this.writer.name = res.data.writer.name
+            this.writer.pictureUrl = res.data.writer.pictureUrl
             this.title = res.data.title
             this.content = res.data.content
             this.createDate = getDate(res.data.createDate)

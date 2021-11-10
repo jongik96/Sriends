@@ -13,12 +13,24 @@ export default new Vuex.Store({
     teamId: '',
     boardId: '',
     commentId:'',
+    matchCommentId:'',
+    postId:'',
     calendarId:'',
     teamName:'',
     selectCity: '',
     selectSportCategory: '',
+    auth:'',
   },
   mutations: {
+    setAuth(state,auth){
+        state.auth = auth
+    },
+    setMatchingId(state,postId){
+        state.postId = postId
+    },
+    setMatchCommentId(state,matchCommentId){
+        state.matchCommentId = matchCommentId
+    },
     setAccessToken(state,accessToken){
         state.accessToken = accessToken
     },

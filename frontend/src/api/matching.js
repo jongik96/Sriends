@@ -27,9 +27,31 @@ function postMatching(form){
     return instance.post(`match/board/posts`,form)
 }
 
+//매칭글 수정 api
+function putMatching(postId,form){
+    return instance.put(`match/board/posts/${postId}`,form)
+}
+
+// 매칭글 삭제 api
+function deleteMatching(postId){
+    return instance.delete(`match/board/posts/${postId}`)
+}
+
+// 매칭글 리스트 api
+
+
+
+
+
+
+
 export {
     getMatchDetail,
     postMatching,
-    getMyTeam
+    getMyTeam,
+    putMatching,
+    deleteMatching,
+
+
 
 }

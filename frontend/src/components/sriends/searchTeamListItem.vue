@@ -1,8 +1,8 @@
 <template>
-  <div class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
+  <div class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-48 md:w-96 lg:w-full h-48 grid grid-cols-6">
                 <div class="grid col-start-1 col-span-2">
                     <button @click="clickTeam">
-                        <img src='@/assets/logo.png' class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
+                        <img src='@/assets/logo.png' class="object-contain rounded-md h-36 w-36 " alt="">
                     </button>
                     <p class="visible md:invisible ml-14 w-36">{{this.name}}</p>
                     <!-- <button class="bg-yellow-500 px-2 py-1 w-24
