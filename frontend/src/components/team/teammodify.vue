@@ -9,7 +9,7 @@
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">TeamImg</p>
-                          <input type="file"  id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">S-riends 이름</p>
@@ -263,6 +263,7 @@
                         <router-link to="/team">
                         <button  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10" >취소</button>
                         </router-link>
+                        <button v-if="auth=='대표'" @click.self.prevent="clickDelete"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">삭제하기</button>
                     </div>       
               </div>
           </div>
@@ -275,6 +276,7 @@
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import store from '@/store/index.js'
+import { deleteTeam } from '@/api/team.js'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
@@ -282,14 +284,15 @@ export default {
             selectDo : '',
             form:{
                 name: '',
-                pictureId: '',
+                file: '',
                 maxCount: '',
                 membershipFee: '',
                 city : '',
                 description: '',
                 sportCategory:'',
-                recruitmentState: ''
-            }
+                recruitmentState: '',
+            },
+            auth:store.state.auth
             
         }
     },
@@ -303,6 +306,10 @@ export default {
         },
     },
     methods:{
+        fileSelect(){
+            console.log(this.$refs.image.files[0])
+            // this.form.uuid = this.$refs.image.files[0]
+        },
         submitForm: function(){
             const teamId = store.state.teamId
             if(!this.form.name || !this.form.membershipFee || !this.form.city
@@ -312,13 +319,25 @@ export default {
             ){
                 Swal.fire('입력되지 않은 칸이 있습니다.')
             }else{
+                const token = store.state.accessToken
+            const formData = new FormData();
+            formData.append('file', this.$refs.image.files[0])
+            formData.append('name', this.form.name)
+            formData.append('maxCount', this.form.maxCount)
+            formData.append('city', this.form.city)
+            formData.append('membershipFee', this.form.membershipFee)
+            formData.append('description', this.form.description)
+            formData.append('sportCategory', this.form.sportCategory)
+            formData.append('recruitmentState', this.form.recruitmentState)
             axios({
                 method: 'put',
                 url: `${SERVER_URL}/teams/${teamId}`,
-                headers: this.getToken,
-                    // 'Content-Type' : 'multipart/form-data',
+                headers: {
+                    'Content-Type' : 'multipart/form-data',
+                    Authorization : `Bearer ${token}`,
                     // // 'Content-Type' : 'application/json',
-                data: this.form
+                },
+                data: formData
 
             }).then((res)=>{
                 console.log(res.data)
@@ -328,7 +347,29 @@ export default {
                 console.log(err)
             }) 
             }
-        }        
+        },
+        clickDelete:function(){
+            Swal.fire({
+            title: '팀을 삭제하시겠습니까?',
+            text: "다시 복구할 수 없습니다.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '네',
+            cancelButtonText: '아니오'
+          })
+          .then((result) => {
+            if(result.isConfirmed){    
+                deleteTeam()
+                .then((res)=>{
+                    console.log(res)
+                    Swal.fire('팀이 삭제되었습니다')
+                }).catch((err)=>{
+                    console.log(err)
+                })
+            }})
+        }       
     }
 
 }

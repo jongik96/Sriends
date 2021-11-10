@@ -5,11 +5,11 @@
                         {{this.name}}
                     </p>
                 </div>
-                <div class="grid col-start-2 col-span-2 place-items-center ">
+                <div class="grid col-start-2 truncate col-span-2 place-items-center ">
                         {{this.content}}
                 </div>
                 <div class="grid col-start-4 col-span-1 place-items-center ">
-                        {{this.writerName}}
+                        {{this.writer.name}}
                 </div>
                 <div class="grid col-start-5 col-span-2 place-items-center">
                         {{this.schedule}}
@@ -19,6 +19,7 @@
 
 <script>
 import { getSchedule } from '@/api/schedule.js'
+import {timestamp} from '@/utils/time.js'
 export default {
     props:{
         calendarId: [String, Number],
@@ -29,8 +30,11 @@ export default {
             id:'',
             name:'',
             schedule:'',
-            writerId:'',
-            writerName:'',
+            writer:{
+                id:'',
+                name:'',
+
+            }
             
         }
     },
@@ -41,9 +45,9 @@ export default {
             this.content = res.data.content
             this.id = res.data.id
             this.name = res.data.name
-            this.schedule = res.data.schedule
-            this.writerId = res.data.writerId
-            this.writerName = res.data.writerName
+            this.schedule = timestamp(res.data.schedule)
+            this.writer.id = res.data.writer.id
+            this.writer.name = res.data.writer.name
         }).catch((err)=>{
             console.log(err)
         })

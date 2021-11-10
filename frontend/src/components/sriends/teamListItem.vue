@@ -1,5 +1,5 @@
 <template>
-    <div  class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
+    <div v-if="state" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
         <div class="grid md:col-start-1 md:col-span-2 col-start-1 col-span-6">
             <button @click="clickTeam">
                 <img src='@/assets/logo.png' class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
@@ -43,6 +43,7 @@ export default {
             city:'',
             sportCategory:'',
             description:'',
+            state:true
         }
     }
     ,
@@ -64,6 +65,7 @@ export default {
             this.sportCategory = res.data.sportCategory
         }).catch((err)=>{
             console.log(err)
+            this.state=false
         })
     },
     methods:{

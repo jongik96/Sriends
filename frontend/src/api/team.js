@@ -143,6 +143,9 @@ function kickMember(teamId,userId){
     return instance.delete(`teams/kick-out/${teamId}/${userId}`)
 }
 
+function deleteTeam(teamId){
+    return instance.delete(`teams/${teamId}`)
+}
 export{
     //팀정보관련 api
     getInterestTeam,
@@ -157,4 +160,5 @@ export{
     outTeam,
     kickMember,
     modifyTeamInfo,
+    deleteTeam
 }

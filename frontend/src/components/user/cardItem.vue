@@ -1,10 +1,10 @@
 <template>
-    <div class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
+    <div v-if="state" class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
         <div class="relative w-full h-80 md:h-64 lg:h-44">
             <!-- <router-link to="/team"> -->
             <button @click="clickTeam">
             <!-- <router-link :to="{'name': 'team', params:{'teamId':this.id}}"> -->
-            <img :src=this.pictureId alt="@/assets/sideImg.png"
+            <img :src=this.pictureDownloadUrl @error="imgError"
                 class="w-full h-full object-center object-cover">
             <!-- </router-link> -->
             </button>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import img from '@/assets/sideImg.png'
 // import store from '@/store/index.js'
 import {getTeamInfo} from '@/api/team.js'
 export default {
@@ -27,7 +28,8 @@ export default {
     data(){
         return{
             name : '',
-            pictureId : '',
+            pictureDownloadUrl : '',
+            state:true
         }
     },
     mounted(){
@@ -35,10 +37,10 @@ export default {
         .then((res)=>{
             console.log(res)
             this.name = res.data.name
-            this.pictureId = res.data.pictureId
-
+            this.pictureDownloadUrl = res.data.pictureDownloadUrl
         }).catch((err)=>{
             console.log(err)
+            this.state=false
         })
     },
     methods:{
@@ -46,6 +48,9 @@ export default {
             this.$store.commit('setTeamId',this.id)
             this.$store.commit('setTeamName',this.name)
             this.$router.push('/team')
+        },
+        imgError:function(e){
+            e.target.src = img
         }
 
     }

@@ -4,7 +4,7 @@
 
       <div class="md:w-3/12 md:ml-16">
         <!-- profile image -->
-        <img v-if="!this.modifyState" class="w-30 h-30 md:w-50 md:h-72  object-cover rounded-xl
+        <img v-if="!this.modifyState" class="w-30 h-30 md:w-60 md:h-60  object-contain rounded-xl
                      border-2 border-yellow-500 p-1" :src=pictureUrl alt="profile">
         <div v-if="this.modifyState">
           <p class="text-xl font-bold">profileImg</p>
@@ -49,7 +49,7 @@
             <span class="">{{this.phone}}</span>
           </li>
         </ul>
-        <ul class="md:flex text-xl">
+        <ul v-if="sports.length!=0" class="md:flex text-xl">
           <li class="">
             관심종목 :
             <span v-for="item in sports" :key="item.id" class=""> {{item.interest}}</span>
@@ -314,6 +314,7 @@
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 import {getProfileInfo} from '@/api/auth.js'
 import { getInterest } from '@/api/auth.js'
+import { modifyNumber } from '@/utils/phoneNumber.js'
 import store from '@/store/index.js'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -349,7 +350,7 @@ export default {
       console.log(res.data)
       this.id = res.data.id
       this.name = res.data.name
-      this.phone = res.data.phone
+      this.phone = modifyNumber(res.data.phone)
       this.gender = res.data.gender
       this.pictureUrl = res.data.pictureUrl
       this.city = res.data.city
