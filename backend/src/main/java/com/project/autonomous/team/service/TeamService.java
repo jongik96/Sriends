@@ -1,6 +1,7 @@
 package com.project.autonomous.team.service;
 
 import com.project.autonomous.team.dto.request.ApplyPostReq;
+import com.project.autonomous.team.dto.request.AuthorityPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
 import com.project.autonomous.team.dto.response.*;
@@ -36,6 +37,6 @@ public interface TeamService {
 
     AuthorityRes checkAuthority(long teamId);
 
-    boolean giveAuthority(long teamId, long userId);
+    boolean giveAuthority(long teamId, long userId, AuthorityPostReq authorityPostReq);
 
 }
