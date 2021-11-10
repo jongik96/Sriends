@@ -12,6 +12,7 @@ const instance = createInstance();
 
 /////////////////// 매칭 관련 api
 
+
 // 매칭글 상세보기 api
 function getMatchDetail(postId){
    return instance.get(`match/board/posts/info/${postId}`)
@@ -36,12 +37,6 @@ function putMatching(postId,form){
 function deleteMatching(postId){
     return instance.delete(`match/board/posts/${postId}`)
 }
-
-// 매칭글 리스트 api
-
-
-
-
 
 
 

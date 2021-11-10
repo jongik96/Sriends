@@ -1,9 +1,15 @@
 <template>
   <div class="grid grid-cols-6">
-        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4  px-4 py-2 bg-white mt-10">
             <p v-if="replyCount>0"> 댓글 {{this.replyCount}} 개</p>
-            <commentItem v-for="item in comments" :key="item.id"
+            <articleCommentItem v-for="item in comments" :key="item.id"
                 :commentId="item.id"
+                :createAt="item.createdAt"
+                :content="item.content"
+                :modified="item.modified"
+                :writerId="item.writer.id"
+                :writerName="item.writer.name"
+                :writerImg="item.writer.pictureUrl"
             >
                 <!-- <p class="text-justify leading-tight text-gray-800">{{ item.content }}<p>
                 <div class="mt-3">
@@ -15,18 +21,18 @@
                     </div>
                 </div> -->
                 
-            </commentItem>
+            </articleCommentItem>
         </div>
   </div>
 </template>
 
 <script>
-import { getArticleCommentsList } from '@/api/comment.js'
-import commentItem from '@/components/matching/matchingCommnet/commentItem.vue'
+import { getArticleCommentsList } from '@/api/matchComment.js'
+import articleCommentItem from '@/components/matching/matchingComment/commentItem.vue'
 import store from '@/store/index.js'
 export default {
     components:{
-        commentItem
+        articleCommentItem
     },
     data() {
         return{
@@ -36,11 +42,11 @@ export default {
         }
   },
   created(){
-    const boardId = store.state.boardId
+    const boardId = store.state.postId
     getArticleCommentsList(boardId, this.parentId)
     .then((res)=>{
         console.log(res)
-        this.comments = res.data.commentsList
+        this.comments = res.data
         this.replyCount = res.data.replyCount
     }).catch((err)=>{
         console.log(err)

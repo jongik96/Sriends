@@ -16,7 +16,7 @@
                 <router-link to="/teamList"><p class="hover:bg-yellow-500">스렌즈 찾기</p></router-link>
               </li>
               <li>
-                <router-link to="/matchingList"><p class="hover:bg-yellow-500">경기/스렌드 찾기</p></router-link>
+                <router-link to="/matchingCategory"><p class="hover:bg-yellow-500">경기/스렌드 찾기</p></router-link>
               </li>
               <li>
                 <router-link to="/main"><p class="hover:bg-yellow-500">My S-riends</p></router-link>
@@ -39,7 +39,7 @@
             스렌즈 찾기
             </p>
           </router-link>
-          <router-link to="/matchingList">
+          <router-link to="/matchingCategory">
             <p class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200  w-32 mr-4">
               경기/스렌드 찾기
             </p>

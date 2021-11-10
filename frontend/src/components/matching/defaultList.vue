@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-6">
-        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
+  <div class="">
+        <div class=" border-b px-4 py-2 bg-white mt-10">
             <div class="flex justify-end">
                 <router-link to="/createMatching">
                 <button class="bg-yellow-500 px-2 py-1 
@@ -18,7 +18,7 @@
                 <span class="float-right">By: <a class="text-purple-500" href="#">{{ item.postedBy }}</a></span>
                 </div>
             </div> -->
-            <div class="grid mt-10">
+            <div class="grid grid-cols-6 mt-10">
                 <div class="grid col-start-1 col-span-1">
                     글 분류
                 </div>
@@ -75,9 +75,14 @@ export default {
     data() {
         return{
             page:0,
-            cities: store.state.selectCity,
-            sportCategories: store.state.selectSportCategory,
-            matchBoardCategories: store.state.category,
+            cities: store.state.myCity,
+            // sportCategories: store.state.selectSportCategory,
+            sportCategories: [
+                '축구와풋살','농구','야구','배구','탁구','배드민턴','테니스','기타'
+            ],
+            matchBoardCategories: [
+                '매칭','용병'
+            ],
             teams:[]
         }
   },

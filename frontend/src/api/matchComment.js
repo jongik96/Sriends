@@ -24,7 +24,7 @@ function getArticleCommentsList(postId){
 
 // 댓글 작성하기
 function postArticleComments(postId,parentId,content){
-    return instance.post(`match/board/comments${postId}`,{
+    return instance.post(`match/board/comments/${postId}`,{
          'parentId': parentId,'content': content
     })
 }

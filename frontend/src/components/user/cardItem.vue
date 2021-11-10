@@ -9,7 +9,7 @@
             <!-- </router-link> -->
             </button>
         </div>
-        <div class="px-3 py-4 flex items-center justify-center">
+        <div @click="clickTeam" class="px-3 py-4 flex items-center justify-center">
                 <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="#">
                     {{this.name}}
                 </a>

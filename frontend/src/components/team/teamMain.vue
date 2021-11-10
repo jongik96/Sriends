@@ -23,11 +23,13 @@
             </span>
 
             <!-- follow button -->
+            <div v-if="authority">
             <router-link v-if="(authority=='대표') || (authority='매니저')" to="/teamModify" class="bg-yellow-500 px-2 py-1 
                             text-white font-semibold text-sm rounded block text-center 
                             sm:inline-block"
             >정보수정
             </router-link>
+            </div>
         </div>
 
             <!-- post, following, followers list for medium screens -->
@@ -71,9 +73,10 @@
         </div>
 
         </header>
-        <div v-if="this.authority" class="grid justify-end text-xl">회원님은 {{this.authority}}입니다!</div>
-        <div v-if="this.authority" class="grid justify-end"><button @click="outofTeam">탈퇴하기</button></div>
-        <div v-if="!this.authority" class="grid justify-center">
+        <div v-if="this.authState" class="grid justify-end text-xl">회원님은 {{this.authority}}입니다!</div>
+        <div v-if="!this.authState" class="grid justify-end text-xl">회원님은 손님입니다</div>
+        <div v-if="this.authState" class="grid justify-end"><button @click="outofTeam">탈퇴하기</button></div>
+        <div v-if="!this.authState" class="grid justify-center">
             <div class="mt-7">
                 <router-link to='/joinTeam'>
                     <button class="bg-yellow-500 px-2 py-1 
@@ -116,6 +119,7 @@ export default {
             city : '',
             sportCategory : '',
             authority:'',
+            authState:'',
         }
     },
     created(){
@@ -147,8 +151,10 @@ export default {
                 console.log(res)
                 this.authority = res.data.authority
                 this.$store.commit('setAuth',res.data.authority)
+                this.authState = true
             }).catch(()=>{
-
+                this.authority = false
+                this.$store.commit('setAuth',this.authority)
             })
 
         }).catch((err)=>{
