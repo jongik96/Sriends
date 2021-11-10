@@ -7,6 +7,7 @@ import com.project.autonomous.team.dto.request.SchedulePostReq;
 import com.project.autonomous.team.dto.response.CalendarRes;
 import com.project.autonomous.team.entity.Calendar;
 import com.project.autonomous.team.repository.CalendarRepository;
+import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
 import com.project.autonomous.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,8 +78,7 @@ public class TeamCalendarService {
 
         CalendarRes calendarRes = new CalendarRes();
         calendarRes.setId(calendarId);
-        calendarRes.setWriterId(calendar.getWriterId());
-        calendarRes.setWriterName(userRepository.findById(calendar.getWriterId()).get().getName());
+        calendarRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(calendar.getWriterId()).get()));
         calendarRes.setName(calendar.getName());
         calendarRes.setContent(calendar.getContent());
         calendarRes.setSchedule(calendar.getSchedule());
@@ -94,8 +94,7 @@ public class TeamCalendarService {
         for (Calendar calendar : calendars){
             CalendarRes calendarRes = new CalendarRes();
             calendarRes.setId(calendar.getId());
-            calendarRes.setWriterId(calendar.getWriterId());
-            calendarRes.setWriterName(userRepository.findById(calendar.getWriterId()).get().getName());
+            calendarRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(calendar.getWriterId()).get()));
             calendarRes.setName(calendar.getName());
             calendarRes.setContent(calendar.getContent());
             calendarRes.setSchedule(calendar.getSchedule());

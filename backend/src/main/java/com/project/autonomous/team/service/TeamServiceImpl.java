@@ -3,8 +3,11 @@ package com.project.autonomous.team.service;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
+import com.project.autonomous.picture.service.DBFileStorageService;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
+import com.project.autonomous.team.dto.request.AuthorityPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
 import com.project.autonomous.team.dto.response.*;
@@ -13,18 +16,25 @@ import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.RequestJoinRepository;
 import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.team.repository.TeamRepository;
+import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
 import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService{
 
     @Autowired
@@ -47,15 +57,17 @@ public class TeamServiceImpl implements TeamService{
     @Autowired
     RequestJoinRepository requestJoinRepository;
 
+    private final DBFileStorageService dbFileStorageService;
+
 
     @Override
-    public Team create(TeamCreatePostReq teamInfo) {
+    @Transactional
+    public Team create(TeamCreatePostReq teamInfo) throws IOException {
 
         long userId = SecurityUtil.getCurrentMemberId();
 
 
         Team team = new Team();
-
         team.setName(teamInfo.getName());
         team.setCreateDate(LocalDateTime.now());//현재시각 받는거면 수정
         team.setLeaderId(userId);//만약에 입력에 userId받으면 그냥 Req에 leaderId주석풀면 됨
@@ -66,8 +78,14 @@ public class TeamServiceImpl implements TeamService{
         team.setCity(teamInfo.getCity());
         team.setRecruitmentState(teamInfo.getRecruitmentState());
         team.setMembershipFee(teamInfo.getMembershipFee());
-//        team.setPictureId(teamInfo.getPictureId());
 
+        Picture picture;
+        if (teamInfo.getFile() == null) {
+            picture = null;
+        } else {
+            picture = dbFileStorageService.storeFile(teamInfo.getFile());
+        }
+        team.setPicture(picture);
         team = teamRepository.save(team);
 
         UserTeam userTeam = new UserTeam();
@@ -76,8 +94,7 @@ public class TeamServiceImpl implements TeamService{
         userTeam.setRegisterDate(LocalDateTime.now());
         userTeam.setAuthority("대표");
         userTeamRepository.save(userTeam);
-
-        return null;
+        return team;
     }
 
 
@@ -101,18 +118,19 @@ public class TeamServiceImpl implements TeamService{
                     if(interest.getUserInterestId().getSportCategory().getId() == team.getSportCategoryId()){
                         TeamListRes teamListRes1 = new TeamListRes();
                         teamListRes1.setId(team.getId());
-                        teamListRes1.setLeaderId(team.getLeaderId());
-                        teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
+//                        teamListRes1.setLeaderId(team.getLeaderId());
+//                        teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
+                        teamListRes1.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
                         teamListRes1.setDescription(team.getDescription());
                         teamListRes1.setName(team.getName());
                         teamListRes1.setMembershipFee(team.isMembershipFee());
                         teamListRes1.setSportsCategory(sportCategoryRepository.findById(interest.getUserInterestId().getSportCategory().getId()).get().getName());
                         teamListRes1.setCity(city.toString());
-
                         teamListRes1.setMemberCount(team.getMemberCount());
-
-//                        String downloadUri = pictureRepository.findById(team.getPictureId()).get().getImageUrl();
-//                        teamListRes1.setPictureDownloadUri(downloadUri);
+                        if(team.getPicture() == null)
+                            teamListRes1.setPictureDownloadUri(null);
+                        else
+                            teamListRes1.setPictureDownloadUri(team.getPicture().getImageUrl());
 
                         teamListRes.add(teamListRes1);
 
@@ -145,17 +163,19 @@ public class TeamServiceImpl implements TeamService{
                 if (sportCategoryRepository.findByName(sportCategoryName).get().getId() == team.getSportCategoryId()) {
                     TeamListRes teamListRes1 = new TeamListRes();
                     teamListRes1.setId(team.getId());
-                    teamListRes1.setLeaderId(team.getLeaderId());
-                    teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
+                    teamListRes1.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
+//                    teamListRes1.setLeaderId(team.getLeaderId());
+//                    teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
                     teamListRes1.setDescription(team.getDescription());
                     teamListRes1.setName(team.getName());
                     teamListRes1.setMembershipFee(team.isMembershipFee());
                     teamListRes1.setSportsCategory(sportCategoryName);
                     teamListRes1.setMemberCount(team.getMemberCount());
                     teamListRes1.setCity(cityName);
-
-//                    String downloadUri = pictureRepository.findById(team.getPictureId()).get().getImageUrl();
-//                    teamListRes1.setPictureDownloadUri(downloadUri);
+                    if(team.getPicture() == null)
+                        teamListRes1.setPictureDownloadUri(null);
+                    else
+                        teamListRes1.setPictureDownloadUri(team.getPicture().getImageUrl());
 
                     teamListRes.add(teamListRes1);
                 }
@@ -170,7 +190,7 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public boolean modify(TeamModifyPostReq teamInfo, long teamId) {
+    public boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
 
         long userId = SecurityUtil.getCurrentMemberId();
 
@@ -185,7 +205,19 @@ public class TeamServiceImpl implements TeamService{
             team.setCity(teamInfo.getCity());
             team.setRecruitmentState(teamInfo.getRecruitmentState());
             team.setMembershipFee(teamInfo.getMembershipFee());
-    //        team.setPictureId(teamInfo.getPictureId());
+
+            Picture picture;
+
+            if(team.getPicture() != null) {
+                dbFileStorageService.deleteFile(team.getPicture().getId());
+                pictureRepository.delete(team.getPicture());
+            }
+            if (teamInfo.getFile() == null) {
+                picture = null;
+            } else {
+                picture = dbFileStorageService.storeFile(teamInfo.getFile());
+            }
+            team.setPicture(picture);
 
 
             teamRepository.save(team);
@@ -229,16 +261,19 @@ public class TeamServiceImpl implements TeamService{
         teamInfoRes.setCity(team.getCity());
         teamInfoRes.setDescription(team.getDescription());
         teamInfoRes.setCreateDate(team.getCreateDate());
-        teamInfoRes.setLeaderId(team.getLeaderId());
+        teamInfoRes.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
         teamInfoRes.setMaxCount(team.getMaxCount());
         teamInfoRes.setMemberCount(team.getMemberCount());
         teamInfoRes.setName(team.getName());
         teamInfoRes.setMembershipFee(team.isMembershipFee());
-        teamInfoRes.setLeaderId(team.getLeaderId());
-        teamInfoRes.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
-//        teamInfoRes.setPictureId(team.getPicture().getId());
         teamInfoRes.setRecruitmentState(team.isRecruitmentState());
         teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
+
+        if(team.getPicture() == null){
+            teamInfoRes.setPictureDownloadUrl(null);
+        }else{
+            teamInfoRes.setPictureDownloadUrl(team.getPicture().getImageUrl());
+        }
 
         return teamInfoRes;
     }
@@ -273,9 +308,7 @@ public class TeamServiceImpl implements TeamService{
 
         for(RequestJoin rj : list){
             ApplyListRes applyListRes = new ApplyListRes();
-            applyListRes.setUserId(rj.getUserId());
-            applyListRes.setName(userRepository.findById(rj.getUserId()).get().getName());
-            applyListRes.setEmail(userRepository.findById(rj.getUserId()).get().getEmail());
+            applyListRes.setUser(UserSimpleInfoRes.from(userRepository.findById(userId).get()));
             applyListRes.setDescription(rj.getDescription());
             applyListRes.setCreateDate(rj.getCreate_date());
 
@@ -293,9 +326,9 @@ public class TeamServiceImpl implements TeamService{
 
         for(UserTeam userTeam : list){
             MemberListRes memberListRes = new MemberListRes();
-            memberListRes.setUserId(userTeam.getUser().getId());
-            memberListRes.setName(userTeam.getUser().getName());
+            memberListRes.setUser(UserSimpleInfoRes.from(userTeam.getUser()));
             memberListRes.setEmail(userTeam.getUser().getEmail());
+            memberListRes.setAuthority(userTeam.getAuthority());
             memberListRes.setRegisterDate(userTeam.getRegisterDate());
 
             ret.add(memberListRes);
@@ -318,11 +351,7 @@ public class TeamServiceImpl implements TeamService{
 
             if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 탈퇴했던 사람이 다시 신청할 경우
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
-                System.out.println("회원 있는데");
-//                UserTeam applyUser = userTeamRepository.findByUserId(userId).get();
-//                applyUser.setAuthority("회원");
-//                applyUser.setRegisterDate(LocalDateTime.now());
-//                userTeamRepository.save(applyUser);
+
                 requestJoinRepository.delete(requestJoin);
                 throw new CustomException(ErrorCode.ALREADY_APPLY);
 
@@ -358,12 +387,28 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public boolean giveAuthority(long teamId, long userId) {
+    public boolean giveAuthority(long teamId, long userId, AuthorityPostReq authorityPostReq) {
         long managerId = SecurityUtil.getCurrentMemberId();
         if(userTeamRepository.findByUserIdAndTeamId(managerId,teamId).get().getAuthority().equals("대표")){
+
             UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
 
-            userTeam.setAuthority("매니저");
+            if(authorityPostReq.getAuthority().equals("대표")) {
+                userTeam.setAuthority("대표");
+                Team team = teamRepository.findById(teamId).get();
+                team.setLeaderId(userId);
+                teamRepository.save(team);
+
+                UserTeam userTeam1 = userTeamRepository.findByUserIdAndTeamId(managerId,teamId).get();
+                userTeam1.setAuthority("회원");
+                userTeamRepository.save(userTeam1);
+
+            }else if(authorityPostReq.getAuthority().equals("매니저")){
+                userTeam.setAuthority("매니저");
+            }else{
+                userTeam.setAuthority("회원");
+            }
+
             userTeamRepository.save(userTeam);
 
             return true;
@@ -379,6 +424,8 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         UserTeam userTeam = userTeamRepository.findByUserId(userId).get();
+        if(userTeam.getAuthority().equals("대표"))
+            throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
 
         userTeamRepository.delete(userTeam);
         return;
@@ -391,10 +438,19 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         Team team = teamRepository.findById(teamId).get();
-
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(leaderId,teamId).get();
-        if(userTeam.getAuthority().equals("매니저")||userTeam.getAuthority().equals("대표")){//조회하는 사람이 관리자 이상이면 가능
+
+        if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
             UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
+            if(kickOutUser.getAuthority().equals("회원"))
+                userTeamRepository.delete(kickOutUser);
+            else
+                throw new CustomException(ErrorCode.CANNOT_KICKOUT_MANAGER);
+            return;
+        }else if(userTeam.getAuthority().equals("대표")){
+            UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
+            if(kickOutUser.getAuthority().equals("대표"))
+                throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
             userTeamRepository.delete(kickOutUser);
             return;
         }

@@ -8,12 +8,12 @@ import com.project.autonomous.team.dto.request.CommentPostReq;
 import com.project.autonomous.team.dto.request.PostingReq;
 import com.project.autonomous.team.dto.response.CommentListRes;
 import com.project.autonomous.team.dto.response.CommentRes;
-import com.project.autonomous.team.dto.response.PostViewListRes;
 import com.project.autonomous.team.dto.response.PostViewRes;
 import com.project.autonomous.team.entity.TeamBoard;
 import com.project.autonomous.team.entity.TeamBoardComment;
 import com.project.autonomous.team.repository.TeamBoardCommentRepository;
 import com.project.autonomous.team.repository.TeamBoardRepository;
+import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,8 +89,8 @@ public class TeamBoardService {
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
 
         PostViewRes postViewRes = new PostViewRes();
-        postViewRes.setWriterId(teamBoard.getWriterId());
-        postViewRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
+        postViewRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
+//        postViewRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
         postViewRes.setContent(teamBoard.getContent());
         postViewRes.setTitle(teamBoard.getTitle());
         postViewRes.setCreateDate(teamBoard.getCreateDate());
@@ -98,18 +98,18 @@ public class TeamBoardService {
         return postViewRes;
     }
 
-    public ArrayList<PostViewListRes> postingViewList(long teamId) {
+    public ArrayList<PostViewRes> postingViewList(long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
-        ArrayList<PostViewListRes> ret = new ArrayList<>();
+        ArrayList<PostViewRes> ret = new ArrayList<>();
         System.out.println("서비스");
 
 
         for(TeamBoard teamBoard : teamBoardRepository.findAllByTeamId(teamId)){
             System.out.println("조회중");
-            PostViewListRes postViewListRes = new PostViewListRes();
+            PostViewRes postViewListRes = new PostViewRes();
             postViewListRes.setId(teamBoard.getId());
-            postViewListRes.setWriterId(teamBoard.getWriterId());
-            postViewListRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
+            postViewListRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
+//            postViewListRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
             postViewListRes.setContent(teamBoard.getContent());
             postViewListRes.setTitle(teamBoard.getTitle());
             postViewListRes.setCreateDate(teamBoard.getCreateDate());
@@ -192,8 +192,8 @@ public class TeamBoardService {
         CommentRes commentRes = new CommentRes();
 
         commentRes.setId(teamBoardComment.getId());
-        commentRes.setWriterId(teamBoardComment.getWriterId());
-        commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
+        commentRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoardComment.getWriterId()).get()));
+//        commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
         commentRes.setContent(teamBoardComment.getContent());
         commentRes.setCreateDate(teamBoardComment.getCreateDate());
         commentRes.setModifyDate(teamBoardComment.getModifyDate());
@@ -223,8 +223,8 @@ public class TeamBoardService {
         for (TeamBoardComment teamBoardComment : teamBoardCommentList){
             CommentRes commentRes = new CommentRes();
             commentRes.setId(teamBoardComment.getId());
-            commentRes.setWriterId(teamBoardComment.getWriterId());
-            commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
+            commentRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoardComment.getWriterId()).get()));
+//            commentRes.setName(userRepository.findById(teamBoardComment.getWriterId()).get().getName());
             commentRes.setContent(teamBoardComment.getContent());
             commentRes.setCreateDate(teamBoardComment.getCreateDate());
             commentRes.setModifyDate(teamBoardComment.getModifyDate());

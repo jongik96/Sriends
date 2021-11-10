@@ -1,5 +1,6 @@
 package com.project.autonomous.team.dto.response;
 
+import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +11,10 @@ import java.time.LocalDateTime;
 public class TeamInfoRes {
     String name;
     LocalDateTime createDate;
-    long leaderId;
-    String leaderName;
-    String pictureId;
+    UserSimpleInfoRes leader;
+//    long leaderId;
+//    String leaderName;
+    String pictureDownloadUrl;
     int memberCount;
     int maxCount;
     String description;
