@@ -2,7 +2,6 @@ package com.project.autonomous.matchboard.posts.controller;
 
 import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardCreateReq;
-import com.project.autonomous.matchboard.posts.dto.request.MatchBoardReadConditionReq;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardUpdateReq;
 import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
 import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostSimpleInfoRes;
