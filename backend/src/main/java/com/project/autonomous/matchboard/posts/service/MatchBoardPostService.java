@@ -5,7 +5,6 @@ import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardCreateReq;
-import com.project.autonomous.matchboard.posts.dto.request.MatchBoardReadConditionReq;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardUpdateReq;
 import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
 import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostSimpleInfoRes;
@@ -20,7 +19,6 @@ import com.project.autonomous.user.dto.response.UserTeamListRes;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @Transactional(readOnly = true)
