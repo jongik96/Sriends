@@ -4,8 +4,8 @@ import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.matchboard.comments.dto.request.MatchBoardCreateCommentReq;
 import com.project.autonomous.matchboard.comments.dto.request.MatchBoardUpdateCommentReq;
 import com.project.autonomous.matchboard.comments.dto.response.MatchBoardCommentRes;
-import com.project.autonomous.matchboard.comments.service.MatchBoardCommentServiceImpl;
-import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfo;
+import com.project.autonomous.matchboard.comments.service.MatchBoardCommentService;
+import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MatchBoardCommentController {
 
-    private final MatchBoardCommentServiceImpl matchBoardCommentService;
+    private final MatchBoardCommentService matchBoardCommentService;
 
     @PostMapping("/{postId}")
     @Operation(summary = "댓글 생성", description = "<strong>입력 받은 댓글 id와 댓글 정보</strong>를 사용해 댓글을 생성한다.")
@@ -48,7 +48,7 @@ public class MatchBoardCommentController {
     @Operation(summary = "댓글 정보 리스트 조회", description = "<strong>댓글 id</strong>를 사용해 댓글 정보를 조회한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 정보 리스트 조회",
-            content = @Content(schema = @Schema(implementation = MatchBoardPostInfo.class))),
+            content = @Content(schema = @Schema(implementation = MatchBoardPostInfoRes.class))),
         @ApiResponse(responseCode = "404", description = "BOARD_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
