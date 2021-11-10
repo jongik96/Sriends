@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MatchBoardCommentServiceImpl {
+public class MatchBoardCommentService {
 
     private final UserRepository userRepository;
     private final MatchBoardPostRepository matchBoardPostRepository;
