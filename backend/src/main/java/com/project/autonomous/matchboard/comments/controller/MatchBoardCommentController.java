@@ -5,7 +5,6 @@ import com.project.autonomous.matchboard.comments.dto.request.MatchBoardCreateCo
 import com.project.autonomous.matchboard.comments.dto.request.MatchBoardUpdateCommentReq;
 import com.project.autonomous.matchboard.comments.dto.response.MatchBoardCommentRes;
 import com.project.autonomous.matchboard.comments.service.MatchBoardCommentService;
-import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfoRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,20 +39,22 @@ public class MatchBoardCommentController {
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nBOARD_NOT_FOUND\n\nCOMMENT_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MatchBoardCommentRes> createComment(@PathVariable("postId") long postId, @RequestBody MatchBoardCreateCommentReq req) {
+    public ResponseEntity<MatchBoardCommentRes> createComment(@PathVariable("postId") Long postId,
+        @RequestBody MatchBoardCreateCommentReq req) {
         return ResponseEntity.ok(matchBoardCommentService.createComment(postId, req));
     }
 
-    @GetMapping("/{postId}")
-    @Operation(summary = "댓글 정보 리스트 조회", description = "<strong>댓글 id</strong>를 사용해 댓글 정보를 조회한다.")
+    @GetMapping("/{postId}/{parentId}")
+    @Operation(summary = "댓글 정보 리스트 조회", description = "<strong>댓글 id와 부모 id</strong>를 사용해 댓글 정보를 조회한다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 정보 리스트 조회",
-            content = @Content(schema = @Schema(implementation = MatchBoardPostInfoRes.class))),
+            content = @Content(schema = @Schema(implementation = MatchBoardCommentRes.class))),
         @ApiResponse(responseCode = "404", description = "BOARD_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<List<MatchBoardCommentRes>> getAllComment(@PathVariable("postId") Long postId) {
-        return ResponseEntity.ok(matchBoardCommentService.getAllComment(postId));
+    public ResponseEntity<List<MatchBoardCommentRes>> getAllComment(
+        @PathVariable("postId") Long postId, @PathVariable("parentId") Long parentId) {
+        return ResponseEntity.ok(matchBoardCommentService.getAllComment(postId, parentId));
     }
 
     @PutMapping("/{commentId}")
@@ -66,7 +67,8 @@ public class MatchBoardCommentController {
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nCOMMENT_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MatchBoardCommentRes> updatePost(@PathVariable("commentId") long commentId, @RequestBody
+    public ResponseEntity<MatchBoardCommentRes> updatePost(
+        @PathVariable("commentId") Long commentId, @RequestBody
         MatchBoardUpdateCommentReq req) {
         return ResponseEntity.ok(matchBoardCommentService.updateComment(commentId, req));
     }
@@ -80,7 +82,7 @@ public class MatchBoardCommentController {
         @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND\n\nCOMMENT_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> deleteComment(@PathVariable("commentId") long commentId) {
+    public ResponseEntity<String> deleteComment(@PathVariable("commentId") Long commentId) {
         matchBoardCommentService.deleteComment(commentId);
         return ResponseEntity.ok("삭제되었습니다.");
     }
