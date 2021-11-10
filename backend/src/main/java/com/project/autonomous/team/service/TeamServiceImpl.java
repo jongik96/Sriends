@@ -7,6 +7,7 @@ import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.picture.service.DBFileStorageService;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
+import com.project.autonomous.team.dto.request.AuthorityPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
 import com.project.autonomous.team.dto.response.*;
@@ -386,15 +387,28 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public boolean giveAuthority(long teamId, long userId) {
+    public boolean giveAuthority(long teamId, long userId, AuthorityPostReq authorityPostReq) {
         long managerId = SecurityUtil.getCurrentMemberId();
         if(userTeamRepository.findByUserIdAndTeamId(managerId,teamId).get().getAuthority().equals("대표")){
+
             UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
 
-            if(userTeam.getAuthority().equals("매니저"))
-                userTeam.setAuthority("회원");
-            else
+            if(authorityPostReq.getAuthority().equals("대표")) {
+                userTeam.setAuthority("대표");
+                Team team = teamRepository.findById(teamId).get();
+                team.setLeaderId(userId);
+                teamRepository.save(team);
+
+                UserTeam userTeam1 = userTeamRepository.findByUserIdAndTeamId(managerId,teamId).get();
+                userTeam1.setAuthority("회원");
+                userTeamRepository.save(userTeam1);
+
+            }else if(authorityPostReq.getAuthority().equals("매니저")){
                 userTeam.setAuthority("매니저");
+            }else{
+                userTeam.setAuthority("회원");
+            }
+
             userTeamRepository.save(userTeam);
 
             return true;
@@ -410,6 +424,8 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         UserTeam userTeam = userTeamRepository.findByUserId(userId).get();
+        if(userTeam.getAuthority().equals("대표"))
+            throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
 
         userTeamRepository.delete(userTeam);
         return;
@@ -422,10 +438,19 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         Team team = teamRepository.findById(teamId).get();
-
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(leaderId,teamId).get();
-        if(userTeam.getAuthority().equals("매니저")||userTeam.getAuthority().equals("대표")){//조회하는 사람이 관리자 이상이면 가능
+
+        if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
             UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
+            if(kickOutUser.getAuthority().equals("회원"))
+                userTeamRepository.delete(kickOutUser);
+            else
+                throw new CustomException(ErrorCode.CANNOT_KICKOUT_MANAGER);
+            return;
+        }else if(userTeam.getAuthority().equals("대표")){
+            UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
+            if(kickOutUser.getAuthority().equals("대표"))
+                throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
             userTeamRepository.delete(kickOutUser);
             return;
         }

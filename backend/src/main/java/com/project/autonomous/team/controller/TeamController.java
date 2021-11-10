@@ -2,6 +2,7 @@ package com.project.autonomous.team.controller;
 
 import com.project.autonomous.common.exception.ErrorResponse;
 import com.project.autonomous.team.dto.request.ApplyPostReq;
+import com.project.autonomous.team.dto.request.AuthorityPostReq;
 import com.project.autonomous.team.dto.request.TeamCreatePostReq;
 import com.project.autonomous.team.dto.request.TeamModifyPostReq;
 import com.project.autonomous.team.dto.response.*;
@@ -141,9 +142,9 @@ public class TeamController {
 
     @PutMapping("/manager/{teamId}/{userId}")
     @Operation(summary = "팀 관리자 권한 부여", description = "매니저 권한 주기 (리더만 가능)")
-    public ResponseEntity<Boolean> giveAuthority(@PathVariable("teamId") long teamId, @PathVariable("userId") long userId){
+    public ResponseEntity<Boolean> giveAuthority(@PathVariable("teamId") long teamId, @PathVariable("userId") long userId, @RequestBody AuthorityPostReq authorityPostReq){
 
-        if(teamService.giveAuthority(teamId,userId)){
+        if(teamService.giveAuthority(teamId,userId,authorityPostReq)){
            return ResponseEntity.ok(true);
         }
         return ResponseEntity.status(400).body(false);
