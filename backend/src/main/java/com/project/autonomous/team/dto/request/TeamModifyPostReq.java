@@ -13,7 +13,6 @@ public class TeamModifyPostReq {
     String name;
 //    LocalDateTime createDate;
     long leaderId;
-    String pictureId;
     int memberCount;
     int maxCount;
     String description;

@@ -217,7 +217,6 @@ public class TeamServiceImpl implements TeamService{
                 picture = dbFileStorageService.storeFile(teamInfo.getFile());
             }
             team.setPicture(picture);
-    //        team.setPictureId(teamInfo.getPictureId());
 
 
             teamRepository.save(team);
@@ -351,11 +350,7 @@ public class TeamServiceImpl implements TeamService{
 
             if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 탈퇴했던 사람이 다시 신청할 경우
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
-                System.out.println("회원 있는데");
-//                UserTeam applyUser = userTeamRepository.findByUserId(userId).get();
-//                applyUser.setAuthority("회원");
-//                applyUser.setRegisterDate(LocalDateTime.now());
-//                userTeamRepository.save(applyUser);
+
                 requestJoinRepository.delete(requestJoin);
                 throw new CustomException(ErrorCode.ALREADY_APPLY);
 
@@ -396,7 +391,10 @@ public class TeamServiceImpl implements TeamService{
         if(userTeamRepository.findByUserIdAndTeamId(managerId,teamId).get().getAuthority().equals("대표")){
             UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
 
-            userTeam.setAuthority("매니저");
+            if(userTeam.getAuthority().equals("매니저"))
+                userTeam.setAuthority("회원");
+            else
+                userTeam.setAuthority("매니저");
             userTeamRepository.save(userTeam);
 
             return true;

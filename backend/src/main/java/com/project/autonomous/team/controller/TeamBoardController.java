@@ -11,6 +11,7 @@ import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.entity.TeamBoardComment;
 import com.project.autonomous.team.service.TeamBoardService;
 import com.project.autonomous.team.service.TeamService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,77 +26,67 @@ public class TeamBoardController {
     TeamBoardService teamBoardService;
 
     @PostMapping("/{teamId}")
+    @Operation(summary = "공지사항 등록", description = "팀 내 게시판 글 쓰기")
     public ResponseEntity<Boolean> createPost(@PathVariable("teamId") long teamId, @RequestBody PostingReq postingReq){
-        System.out.println("공지사항 등록");
-
         return ResponseEntity.ok(teamBoardService.posting(postingReq, teamId));
 
     }
 
     @PutMapping("/{teamId}/{boardId}")
+    @Operation(summary = "공지사항 수정", description = "팀 내 게시판 글 수정(본인만 가능)")
     public ResponseEntity<Boolean> modifyPost(@PathVariable("teamId") long teamId, @PathVariable("boardId") long boardId, @RequestBody PostingReq postingReq){
-        System.out.println("공지사항 수정");
-
         return ResponseEntity.ok(teamBoardService.postingModify(postingReq, teamId, boardId));
 
     }
 
     @DeleteMapping("/{teamId}/{boardId}")
+    @Operation(summary = "공지사항 삭제", description = "팀 내 게시판 글 삭제(본인만 가능)")
     public ResponseEntity<Boolean> deletePost(@PathVariable("teamId") long teamId, @PathVariable("boardId") long boardId){
-        System.out.println("공지사항 삭제");
-
         return ResponseEntity.ok(teamBoardService.postingDelete(teamId, boardId));
 
     }
 
     @GetMapping("/{teamId}/{boardId}")
+    @Operation(summary = "공지사항 조회", description = "팀 내 게시판 글 조회(한 개)")
     public ResponseEntity<PostViewRes> getPost(@PathVariable("teamId") long teamId, @PathVariable("boardId") long boardId){
-        System.out.println("공지사항 조회");
-
         return ResponseEntity.ok(teamBoardService.postingView(teamId, boardId));
 
     }
 
     @GetMapping("/{teamId}")
+    @Operation(summary = "공지사항 목록 조회", description = "팀 내 게시판 글 목록 조회(여러개)")
     public ResponseEntity<ArrayList<PostViewRes>> getPostList(@PathVariable("teamId") long teamId){
-        System.out.println("공지사항 리스트 조회");
-
         return ResponseEntity.ok(teamBoardService.postingViewList(teamId));
 
     }
 
     @PostMapping("/{boardId}/comments")
+    @Operation(summary = "댓글 작성", description = "댓글 작성(대댓글도 같음)")
     public ResponseEntity<TeamBoardComment> comment(@PathVariable("boardId") long boardId, @RequestBody CommentPostReq commentPostReq){
-        System.out.println("댓글 작성");
-
         return ResponseEntity.ok(teamBoardService.comment(commentPostReq, boardId));
     }
 
     @PutMapping("/comments/{commentId}")
+    @Operation(summary = "댓글 수정", description = "댓글 수정 (작성한 본인만 가능)")
     public ResponseEntity<TeamBoardComment> modifyComment(@PathVariable("commentId") long commentId, @RequestBody CommentModifyPutReq commentModifyPutReq){
-        System.out.println("댓글 수정");
-
         return ResponseEntity.ok(teamBoardService.modifyComment(commentModifyPutReq, commentId));
     }
 
     @DeleteMapping("/comments/{commentId}")
+    @Operation(summary = "댓글 삭제", description = "댓글 삭제(작성한 본인만 가능)")
     public ResponseEntity<Boolean> deleteComment(@PathVariable("commentId") long commentId){
-        System.out.println("댓글 삭제");
-
         return ResponseEntity.ok(teamBoardService.deleteComment(commentId));
     }
 
     @GetMapping("/comments/{commentId}")
+    @Operation(summary = "댓글 조회", description = "댓글 조회(1개)")
     public ResponseEntity<CommentRes> getComment(@PathVariable("commentId") long commentId){
-        System.out.println("댓글 조회");
-
         return ResponseEntity.ok(teamBoardService.getComment(commentId));
     }
 
     @GetMapping("/{boardId}/comments/{parentId}")
+    @Operation(summary = "댓글 목록 조회", description = "댓글 목록 조회(부모 없으면 0)")
     public ResponseEntity<CommentListRes> getCommentsList(@PathVariable("boardId") long boardId, @PathVariable("parentId") long parentId){
-        System.out.println("댓글 리스트 조회");
-
         return ResponseEntity.ok(teamBoardService.getCommentList(boardId, parentId));
     }
 
