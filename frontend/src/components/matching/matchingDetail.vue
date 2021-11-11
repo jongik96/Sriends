@@ -4,7 +4,7 @@
             <div>
                 <div class="border-b">
                     <h2 @click="clickTeam" class="text-2xl font-semibold">{{team.name}}</h2>
-                    <div class="float-right">
+                    <div class="float-right" v-if="writer.id==myId">
                         <button @click="clickModify" class="mr-3">수정</button>
                         <button @click="clickDelete" class="mr-3">삭제</button>
                     </div>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="mt-2 float-right">
-                    <img @click="clickUser" :src="writer.pictureUrl" class="h-10 w-10 rounded-xl" alt="">
+                    <img @click="clickUser" :src="writer.pictureUrl" @error="imgError" class="h-10 w-10 rounded-xl" alt="">
                     <p @click="clickUser" class="">{{writer.name}}</p>
                     <p class="">{{createAt}}</p>
                 </div>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import img from '@/assets/sideImg.png'
 import { getMatchDetail } from '@/api/matching.js'
 import store from '@/store/index.js'
 import { getDate } from '@/utils/date.js'
@@ -62,7 +63,8 @@ export default {
                 id:'',
                 name:'',
                 pictureUrl:'',
-            }
+            },
+            myId: store.state.userId
         }
     },
     created(){
@@ -129,6 +131,9 @@ export default {
         clickUser:function(){
             this.$store.commit('setTempUserId', this.writer.id)
             this.$router.push('/user')
+        },
+        imgError:function(e){
+            e.target.src = img
         }
     }
 }

@@ -2,11 +2,11 @@
     <!-- 대댓글은 40자 이하로 설정할 것 -->
     <div class=" rounded-md border-2 border-yellow-500 mb-1">
         <div v-if="!modifyState" class="grid grid-cols-6 h-10">
-            <p class="col-start-1 break-words col-span-5 text-justify leading-tight text-gray-800">{{ this.reComment.content }}</p>
+            <p class="col-start-1 break-words col-span-5 text-justify leading-tight text-gray-800">{{ this.content }}</p>
             <div class="col-start-6 col-span-1 lg:ml-10 xl:ml-20">
-                <p class=" text-yellow-600"><button @click="clickUser">{{this.writer.name}}</button></p>
-                <img :src="writer.pictureUrl" class="h-6 w-6 rounded-xl" alt="">
-                <p class="text-xs">{{this.reComment.createDate}}</p>
+                <p class=" text-yellow-600"><button @click="clickUser">{{this.writerName}}</button></p>
+                <img :src="this.writerImg" class="h-6 w-6 rounded-xl" alt="">
+                <p class="text-xs">{{getTime}}</p>
             </div>
         </div>
         <div v-if="modifyState">
@@ -28,7 +28,7 @@
 
 <script>
 import { getDate } from '@/utils/date.js'
-import { getArticleComments } from '@/api/matchComment.js'
+// import { getArticleComments } from '@/api/matchComment.js'
 import { deleteArticleComments } from '@/api/matchComment.js'
 // import { putArticleComments } from '@/api/comment.js'
 
@@ -42,7 +42,11 @@ export default {
     props:{
         commentId : [String,Number],
         parentId: [String,Number],
-        writerId: [String,Number]
+        writerId: [String,Number],
+        writerName: [String],
+        writerImg: [String,File],
+        content: [String],
+        createdAt: [String,Date]
     },
     data(){
         return{
@@ -65,19 +69,7 @@ export default {
         }
     },
     mounted(){
-        getArticleComments(this.commentId)
-        .then((res)=>{
-            this.reComment.createDate = getDate(res.data.createDate)
-            this.reComment.content = res.data.content
-            this.reComment.modified = res.data.modified
-            this.reComment.modifyDate = res.data.modifyDate
-            this.writer.name = res.data.writer.name
-            this.reComment.parentId = res.data.parentId
-            this.writer.writerId = res.data.writer.writerId
-            this.writer.pictureUrl = res.data.writer.pictureUrl
-        }).catch((err)=>{
-            console.log(err)
-        })
+
     },
     methods:{
         deleteComment:function(){
@@ -116,7 +108,7 @@ export default {
         modifyComment:function(){
             axios({
                 method:'put',
-                url:`${baseURL}/teams/board/comments/${this.commentId}`,
+                url:`${baseURL}/match/board/comments/${this.commentId}`,
                 headers:this.getToken,
                 data:{
                     content:this.modifyReContent
@@ -149,6 +141,10 @@ export default {
             }else{
                 return false
             }
+        },
+        getTime(){
+            const time = getDate(this.createdAt)
+            return time
         }
     }
 }

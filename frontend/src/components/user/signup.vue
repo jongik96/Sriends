@@ -305,6 +305,7 @@ import { validatePhone } from '@/utils/phoneNumberValidation.js';
 import { duplicatedCheckEmail } from '@/api/auth.js'
 import { certificationEmail } from '@/api/auth.js'
 import { certificationEmailCode } from '@/api/auth.js'
+// import store from '@/store/index.js'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
@@ -378,9 +379,14 @@ export default {
             }).then((res)=>{
                 console.log(res.data)
                 console.log(this.form.password)
-                if(res.data=='정상 가입'){
-                Swal.fire('회원가입이 완료되었습니다!')}
-                this.$router.push('/')
+                Swal.fire('회원가입이 완료되었습니다! 관심종목을 선택해주세요!')
+                this.$store.commit('setAccessToken',res.data.accessToken)
+                this.$router.push('/selectCategory')
+                //로그인 과정 추가하고 관심목록정하기로 바로가게하기
+                // 여기서 토큰받고 관심목록설정으로 바로이동
+
+
+                // this.$router.push('/')
             }).catch((err)=>{
                 console.log(err)
             }) 

@@ -34,7 +34,7 @@ export default {
     methods:{
         postComment: function(){
             const postId = store.state.postId
-            postArticleComments(postId,this.content,this.parentId)
+            postArticleComments(postId,this.parentId,this.content)
             .then((res)=>{
                 console.log(res)
                 Swal.fire('댓글이 작성되었습니다.')

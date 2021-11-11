@@ -5,7 +5,7 @@
             <button @click="clickTeam">
             <!-- <router-link :to="{'name': 'team', params:{'teamId':this.id}}"> -->
             <img :src=this.pictureDownloadUrl @error="imgError"
-                class="w-full h-full object-center object-cover">
+                class="w-full h-full object-center object-contain">
             <!-- </router-link> -->
             </button>
         </div>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import img from '@/assets/sideImg.png'
+import img from '@/assets/sports.png'
 // import store from '@/store/index.js'
 import {getTeamInfo} from '@/api/team.js'
 export default {
@@ -37,7 +37,9 @@ export default {
         .then((res)=>{
             console.log(res)
             this.name = res.data.name
+            if(res.data.pictureDownloadUrl!=null){
             this.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
         }).catch((err)=>{
             console.log(err)
             this.state=false

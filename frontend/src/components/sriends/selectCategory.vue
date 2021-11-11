@@ -16,7 +16,7 @@
                             <p class="bg-yellow-400 py-1 px-2 font-base text-lg text-black rounded-lg" href="#">
                                 축구/풋살
                             </p>
-                            <input class="h-5 w-5 ml-3" type="checkbox" value="축구/풋살" v-model="sportCategory">
+                            <input class="h-5 w-5 ml-3" type="checkbox" value="풋살" v-model="sportCategory">
                     </div>
                 </article>
                 <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">

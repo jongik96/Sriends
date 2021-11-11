@@ -5,7 +5,7 @@
       <div class="md:w-3/12 md:ml-16">
         <!-- profile image -->
         <img v-if="!this.modifyState" class="w-30 h-30 md:w-60 md:h-60  object-contain rounded-xl
-                     border-2 border-yellow-500 p-1" :src=pictureUrl alt="profile">
+                     border-2 border-yellow-500 p-1" :src=pictureUrl @error="imgError">
         <div v-if="this.modifyState">
           <p class="text-xl font-bold">profileImg</p>
           <input type="file" @change="fileSelect" id="image" ref="image" class=" text-sm w-3/4 rounded-md border-2 border-yellow-400">
@@ -312,6 +312,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 import {getProfileInfo} from '@/api/auth.js'
 import { getInterest } from '@/api/auth.js'
@@ -353,7 +354,9 @@ export default {
       this.name = res.data.name
       this.phone = modifyNumber(res.data.phone)
       this.gender = res.data.gender
+      if(res.data.pictureUrl!=null){
       this.pictureUrl = res.data.pictureUrl
+      }
       this.city = res.data.city
       console.log(this.pictureUrl)
       // string 형식 date로 바꿔서 나이계산
@@ -376,6 +379,9 @@ export default {
     })
   },
   methods:{
+    imgError:function(e){
+            e.target.src = img
+        },
     fileSelect(){
             console.log(this.$refs.image.files[0])
             // this.form.uuid = this.$refs.image.files[0]

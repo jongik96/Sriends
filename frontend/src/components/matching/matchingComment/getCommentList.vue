@@ -10,6 +10,7 @@
                 :writerId="item.writer.id"
                 :writerName="item.writer.name"
                 :writerImg="item.writer.pictureUrl"
+                :replyCount="item.replyCount"
             >
                 <!-- <p class="text-justify leading-tight text-gray-800">{{ item.content }}<p>
                 <div class="mt-3">
@@ -48,6 +49,9 @@ export default {
         console.log(res)
         this.comments = res.data
         this.replyCount = res.data.replyCount
+        if(res.data.writer.pictureUrl!=null){
+        this.comments.writer.pictureUrl = res.data.writer.pictureUrl
+        }
     }).catch((err)=>{
         console.log(err)
     })

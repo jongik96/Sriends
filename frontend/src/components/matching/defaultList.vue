@@ -78,7 +78,7 @@ export default {
             cities: store.state.myCity,
             // sportCategories: store.state.selectSportCategory,
             sportCategories: [
-                '축구와풋살','농구','야구','배구','탁구','배드민턴','테니스','기타'
+                '풋살','농구','야구','배구','탁구','배드민턴','테니스','기타'
             ],
             matchBoardCategories: [
                 '매칭','용병'

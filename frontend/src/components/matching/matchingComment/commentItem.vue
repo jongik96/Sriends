@@ -5,13 +5,12 @@
             <div class="col-start-6 col-span-1 ml-3 lg:ml-10 xl:ml-20">
                 <p class=" text-yellow-600">
                     <button @click="clickUser">{{ this.writerName }}</button>
-                    <img :src="writer.pictureUrl" class="h-10 w-10 rounded-xl" alt="">
+                    <img :src="writerImg" @error="imgError" class="h-10 w-10 rounded-xl" alt="">
                 </p>
-                <p class="text-xs">{{ this.createAt }}</p>
+                <p class="text-xs">{{getTime}}</p>
             </div>
         </div>
         <div v-if="modifyState">
-            
             <textarea v-model="modifyContent" id="comment" rows=2 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
             <button @click="modifyComment" :disabled="!modifyContent" class="">수정하기</button>
             <button @click="deleteComment" class="ml-3">삭제</button>
@@ -20,7 +19,7 @@
         </div>
         <div v-if="!modifyState" class="flex">
             <!-- <span class="float-right">By: <a class="text-purple-500" href="#">{{ comments.postedBy }}</a></span> -->
-            <div v-if=" this.comments.userId==this.writer.writerId && !reCommentState" class="">
+            <div v-if=" this.myUserId==this.writerId && !reCommentState" class="">
                 <button @click="modifyState=true" class="mr-3">수정</button>
                 
             </div>
@@ -34,17 +33,21 @@
             </div>
         </div>
 
-        <div v-if="rereplyCount>0" class="w-6/7 ml-5">
+        <div v-if="replyCount>0" class="w-6/7 ml-5">
             <!-- <p>답글  개 </p> -->
             <div v-if="!hideComment">
-                <button @click="hideComment=true">{{rereplyCount}}개의 답글 확인하기</button>
+                <button @click="hideComment=true">{{replyCount}}개의 답글 확인하기</button>
             </div>
             <div v-if="hideComment">
                 <button @click="hideComment=false">답글 숨기기</button>
             <reCommentItem v-for="item in reply" :key="item.id" 
-             :commentId=item.id
-             :parentId=item.parentId
-             :writerId=item.writer.id
+             :commentId="item.id"
+             :parentId="item.parentId"
+             :writerId="item.writer.id"
+             :writerName="item.writer.name"
+             :writerImg="item.writer.pictureUrl"
+             :content="item.content"
+             :createdAt="item.createdAt"
             >
                 <!-- <div class="grid grid-cols-6 h-10">
                     <p class="col-start-1 col-span-3 text-justify leading-tight text-gray-800">{{ item.content }}</p>
@@ -61,7 +64,8 @@
 </template>
 
 <script>
-// import { getDate } from '@/utils/date.js'
+import img from '@/assets/profile.png'
+import { getDate } from '@/utils/date.js'
 // import { getArticleComments } from '@/api/matchComment.js'
 import { deleteArticleComments } from '@/api/matchComment.js'
 import { getArticleCommentsList } from '@/api/matchComment.js'
@@ -83,10 +87,12 @@ export default {
         createAt:[String,Date],
         writerId:[String,Number],
         writerName:[String],
-        writerImg:[String]
+        writerImg:[String,File],
+        replyCount:[String, Number]
     },
     data(){
         return{
+            myUserId: store.state.userId ,
             hideComment:false,
             reCommentContent:'',
             reCommentState:false,
@@ -103,7 +109,6 @@ export default {
                     name:'',
                     pictureUrl:''
             },
-            replyCount:0,
             reply:[],
             rereplyCount:0,
         }
@@ -133,14 +138,13 @@ export default {
         //     console.log(err)
         // })
         const postId = store.state.postId
-        getArticleCommentsList(postId,this.commentId)
+        getArticleCommentsList(postId, this.commentId)
         .then((res)=>{
-            console.log(res)
+            console.log(res.data)
             this.reply = res.data
-            this.rereplyCount = res.data.replyCount
-        }).catch((err=>{
+        }).catch((err)=>{
             console.log(err)
-        }))
+        })
     },
     methods:{
         deleteComment:function(){
@@ -170,7 +174,7 @@ export default {
         modifyComment:function(){
             axios({
                 method:'put',
-                url:`${baseURL}/teams/board/comments/${this.commentId}`,
+                url:`${baseURL}/match/board/comments/${this.commentId}`,
                 headers:this.getToken,
                 data:{
                     content:this.modifyContent
@@ -178,7 +182,8 @@ export default {
             })
             .then((res)=>{
                 console.log(res)
-                // Swal.fire('댓글이수정되었습니다')
+                console.log(this.commentId)
+                Swal.fire('댓글이수정되었습니다')
                 this.$router.go()
             }).catch((err)=>{
                 console.log(err)
@@ -190,8 +195,9 @@ export default {
             postArticleComments(postId,this.commentId,this.reCommentContent)
             .then((res)=>{
                 console.log(res.data)
+                Swal.fire('댓글이 작성되었습니다.')
+                this.$router.go()
                 
-                console.log("대댓글 작성시 부모ID "+this.commentId)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -199,6 +205,9 @@ export default {
         clickUser: function(){
             this.$store.commit('setTempUserId', this.writer.writerId)
             this.$router.push('/user')
+        },
+        imgError:function(e){
+            e.target.src = img
         }
 
     },
@@ -216,6 +225,10 @@ export default {
             }else{
                 return false
             }
+        },
+        getTime(){
+            const time = getDate(this.createAt)
+            return time
         }
     }
 }
