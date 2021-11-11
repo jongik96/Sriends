@@ -277,6 +277,7 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import store from '@/store/index.js'
 import { deleteTeam } from '@/api/team.js'
+import { getTeamInfo } from '@/api/team.js'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
@@ -295,6 +296,26 @@ export default {
             auth:store.state.auth
             
         }
+    },
+    created(){
+        const teamId = store.state.teamId
+        getTeamInfo(teamId)
+        .then((res)=>{
+            console.log(res)
+            this.form.name = res.data.name
+            
+            this.form.file = res.data.pictureDownloadUrl
+            
+            this.form.maxCount = res.data.maxCount
+            this.form.description = res.data.description
+            this.form.recruitmentState = res.data.recruitmentState
+            this.form.membershipFee = res.data.membershipFee
+            this.form.city = res.data.city
+            this.form.sportCategory = res.data.sportCategory
+            }).catch((err)=>{
+            console.log(err)
+        })
+
     },
     computed: {
         getToken(){

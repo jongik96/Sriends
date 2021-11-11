@@ -8,7 +8,7 @@
             </div>
             <div class="col-start-6 col-span-1">
                 <div class="">
-                    <img :src="writer.pictureUrl" class="rounded-full object-contain w-12 h-12" alt="">
+                    <img :src="writer.pictureUrl" class="rounded-full object-contain w-12 h-12" @error="imgError">
                 </div>
                 <p class="text-xl">{{ this.writer.name }}</p>
                 <p class="left">{{ this.createDate }}</p>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import {getDate} from '@/utils/date.js'
 import store from '@/store/index.js'
 import { getArticleInfo } from '@/api/article.js'
@@ -49,7 +50,9 @@ export default {
         then((res)=>{
             console.log(res)
             this.writer.name = res.data.writer.name
+            if(res.data.writer.pictureUrl!=null){
             this.writer.pictureUrl = res.data.writer.pictureUrl
+            }
             this.title = res.data.title
             this.content = res.data.content
             this.createDate = getDate(res.data.createDate)
@@ -62,7 +65,10 @@ export default {
         clickArticle: function(){
             this.$store.commit('setBoardId',this.boardId)
             this.$router.push('/team/articleDetail')
-        }
+        },
+        imgError:function(e){
+            e.target.src = img
+        },
     }
 }
 </script>

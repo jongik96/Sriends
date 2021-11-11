@@ -20,10 +20,19 @@ export default new Vuex.Store({
     selectCity: '',
     selectSportCategory: '',
     auth:'',
+    category:'',
+    myCity:'',
   },
   mutations: {
+
+    setMyCity(state,myCity){
+      state.myCity = myCity
+    },
     setAuth(state,auth){
         state.auth = auth
+    },
+    setCategory(state,category){
+        state.category = category
     },
     setMatchingId(state,postId){
         state.postId = postId

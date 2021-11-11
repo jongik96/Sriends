@@ -5,7 +5,7 @@
             <div class="col-start-6 col-span-1 ml-3 lg:ml-10 xl:ml-20">
                 <p class=" text-yellow-600">
                     <button @click="clickUser">{{ this.writer.name }}</button>
-                    <img :src="writer.pictureUrl" class="h-10 w-10 rounded-xl" alt="">
+                    <img :src="writer.pictureUrl" class="h-10 w-10 rounded-xl" @error="imgError">
                 </p>
                 <p class="text-xs">{{ this.comments.createDate }}</p>
             </div>
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import { getDate } from '@/utils/date.js'
 import { getArticleComments } from '@/api/comment.js'
 import { deleteArticleComments } from '@/api/comment.js'
@@ -111,7 +112,9 @@ export default {
             this.writer.name = res.data.writer.name
             this.comments.createDate = getDate(res.data.createDate)
             this.writer.writerId = res.data.writer.id
+            if(res.data.writer.pictureUrl!=null){
             this.writer.pictureUrl = res.data.writer.pictureUrl
+            }
             this.replyCount = res.data.replyCount
             if(res.data.replyCount>0){
                 const boardId = store.state.boardId
@@ -184,7 +187,10 @@ export default {
         clickUser: function(){
             this.$store.commit('setTempUserId', this.writer.writerId)
             this.$router.push('/user')
-        }
+        },
+        imgError:function(e){
+            e.target.src = img
+        },
 
     },
     computed:{

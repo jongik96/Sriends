@@ -5,7 +5,7 @@
       <div class="md:w-3/12 md:ml-16">
         <!-- profile image -->
         <img v-if="!this.modifyState" class="w-30 h-30 md:w-60 md:h-60  object-contain rounded-xl
-                     border-2 border-yellow-500 p-1" :src=pictureUrl alt="profile">
+                     border-2 border-yellow-500 p-1" :src=pictureUrl @error="imgError">
         <div v-if="this.modifyState">
           <p class="text-xl font-bold">profileImg</p>
           <input type="file" @change="fileSelect" id="image" ref="image" class=" text-sm w-3/4 rounded-md border-2 border-yellow-400">
@@ -62,9 +62,9 @@
         <div class=" text-xl">
           <div>
             이름
-            <input type="text" v-model="form.name" class="md:ml-8 text-xl w-3/4 rounded-md border-2 border-yellow-400">
+            <input type="text" v-model="name" class="md:ml-8 text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
-                              <span v-if="!form.name" class="text-base text-yellow-600">이름은 2자 이상 6자 이하로 입력해주세요.</span>
+                              <span v-if="!name" class="text-base text-yellow-600">이름은 2자 이상 6자 이하로 입력해주세요.</span>
                           </p>
           </div>
           <div class="mt-3">
@@ -79,7 +79,7 @@
                             <option value="6">제주</option>
                             <option value="7">광주/전라</option>
                         </select>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="city">
                             <option disabled value="">시/군</option>
                             <option value="서울">서울특별시</option>
                             <option value="인천광역시">인천광역시</option>
@@ -115,7 +115,7 @@
                             <option value="양평군">양평군</option>
                             <option value="연천군">연천군</option>
                         </select>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='2'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='2'" v-model="city">
                             <option disabled value="">시/군</option>
                             <option value="대전광역시">대전광역시</option>
                             <option value="세종특별자치시">세종특별자치시</option>
@@ -146,7 +146,7 @@
                             <option value="증평군">증평군</option>
                             <option value="진천군">진천군</option>
                         </select>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='3'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='3'" v-model="city">
                             <option disabled value="">시/군</option>
                             <option value="대구광역시">대구광역시</option>
                             <option value="경산시">경산시</option>
@@ -173,7 +173,7 @@
                             <option value="청송군">청송군</option>
                             <option value="칠곡군">칠곡군</option>
                         </select>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='4'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='4'" v-model="city">
                             <option disabled value="">시/군</option>
                             <option value="강릉시">강릉시</option>
                             <option value="동해시">동해시</option>
@@ -191,7 +191,7 @@
                             <option value="철원군">철원군</option>
                             <option value="평창군">평창군</option>
                         </select>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='5'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='5'" v-model="city">
                             <option disabled value="">시/군</option>
                             <option value="부산광역시">부산광역시</option>
                             <option value="울산광역시">울산광역시</option>
@@ -214,12 +214,12 @@
                             <option value="함양군">함양군</option>
                             <option value="합천군">합천군</option>
                         </select>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='6'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='6'" v-model="city">
                             <option disabled value="">시/군</option>
                             <option value="제주시">제주시</option>
                             <option value="서귀포시">서귀포시</option>
                         </select>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='7'" v-model="form.city">
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='7'" v-model="city">
                             <option disabled value="">시/군</option>
                             <option value="광주광역시">광주</option>
                             <option value="광양시">전주</option>
@@ -260,15 +260,16 @@
                             <option value="화순시">화순</option>
                         </select>
                         <br/>
-                        <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
+                        <p v-if="this.city" class="mt-2 font-medium">선택지역 : {{ this.city }} </p>
           </div>
         </div>
         <div class=" text-xl mt-3">
           <div>
             전화번호
-            <input type="text" v-model="form.phone" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+            <input type="text" v-model="phone" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                             <span v-if="!isPhoneValid" class="text-yellow-600">올바른 전화번호를 입력해주세요.</span>
+                            <span v-if="!isPhoneValid" class="text-yellow-600">(-)기호를 빼주세요.</span>
                           </p>
           </div>
         </div>
@@ -311,6 +312,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 import {getProfileInfo} from '@/api/auth.js'
 import { getInterest } from '@/api/auth.js'
@@ -352,7 +354,9 @@ export default {
       this.name = res.data.name
       this.phone = modifyNumber(res.data.phone)
       this.gender = res.data.gender
+      if(res.data.pictureUrl!=null){
       this.pictureUrl = res.data.pictureUrl
+      }
       this.city = res.data.city
       console.log(this.pictureUrl)
       // string 형식 date로 바꿔서 나이계산
@@ -362,6 +366,7 @@ export default {
       console.log(new Date(res.data.birth))
       // localStorage.setItem('userid',res.data.id)
       this.$store.commit("setUserId", res.data.id)
+      this.$store.commit("setMyCity",res.data.city)
     }).catch((err)=>{
       console.log(err)
     }),
@@ -374,6 +379,9 @@ export default {
     })
   },
   methods:{
+    imgError:function(e){
+            e.target.src = img
+        },
     fileSelect(){
             console.log(this.$refs.image.files[0])
             // this.form.uuid = this.$refs.image.files[0]
@@ -397,9 +405,9 @@ export default {
             const token = store.state.accessToken
             const formData = new FormData();
             formData.append('file', this.$refs.image.files[0])
-            formData.append('name', this.form.name)
-            formData.append('phone', this.form.phone)
-            formData.append('city', this.form.city)
+            formData.append('name', this.name)
+            formData.append('phone', this.phone)
+            formData.append('city', this.city)
             for(const element of formData){
                 console.log(element)
             }
@@ -428,14 +436,14 @@ export default {
   },
   computed:{
     btnDisabled(){
-            if(!this.form.city || !this.form.name){
+            if(!this.city || !this.name){
                 return false
             }
             return true
         },
     
     isPhoneValid(){
-            if((this.form.phone).length==0 || (validatePhone(this.form.phone) && (this.form.phone).length == 11)){
+            if((this.phone).length==0 || (validatePhone(this.phone) && (this.phone).length == 11)){
 
                 return true;
             }

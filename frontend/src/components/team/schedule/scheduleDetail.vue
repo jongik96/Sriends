@@ -11,12 +11,12 @@
                         <div class="col-start-1 col-span-5">
                             <p class="text-base">일시 : {{schedule}}</p>
                         </div>
-                        <div class="col-start-6 col-span-1 ml-5">
+                        <div @click="clickUser" class="col-start-6 col-span-1 ml-5">
                             <img :src="writer.pictureUrl" class="rounded-xl h-10 w-10" alt="">
                             <p>{{writer.name}}</p>
                         </div>
                     </div>
-                    <div class="float-right" @click="clickUser">
+                    <div class="float-right">
                        
                         <button @click="modifyState=true">수정하기</button>
 
