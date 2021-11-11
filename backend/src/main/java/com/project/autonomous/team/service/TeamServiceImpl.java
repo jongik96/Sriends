@@ -308,7 +308,7 @@ public class TeamServiceImpl implements TeamService{
 
         for(RequestJoin rj : list){
             ApplyListRes applyListRes = new ApplyListRes();
-            applyListRes.setUser(UserSimpleInfoRes.from(userRepository.findById(userId).get()));
+            applyListRes.setUser(UserSimpleInfoRes.from(userRepository.findById(rj.getUserId()).get()));
             applyListRes.setDescription(rj.getDescription());
             applyListRes.setCreateDate(rj.getCreate_date());
 
