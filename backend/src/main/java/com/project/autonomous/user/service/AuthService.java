@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface AuthService {
 
-    void signup(UserRegisterReq userRegisterReq) throws IOException;
+    TokenDto signup(UserRegisterReq userRegisterReq) throws IOException;
 
     boolean checkEmail(String email);
 
