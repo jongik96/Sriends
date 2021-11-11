@@ -20,7 +20,7 @@ public class PictureInfoDto {
     @Schema(description = "사진 타입", example = "image/jpeg")
     private String type;
 
-    @Schema(description = "이미지 저장 경로", example = "not yet")
+    @Schema(description = "이미지 저장 경로", example = "https://matchhere.s3.ap-northeast-2.amazonaws.com/%EA%%B8_EC%A7%84.JPG")
     private String imageUrl;
 
     public static PictureInfoDto from(Picture picture) {

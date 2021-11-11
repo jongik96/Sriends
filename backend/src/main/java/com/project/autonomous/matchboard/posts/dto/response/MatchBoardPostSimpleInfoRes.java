@@ -1,30 +1,28 @@
 package com.project.autonomous.matchboard.posts.dto.response;
 
-import static com.project.autonomous.common.exception.ValidatorMessage.DATE_FORMAT;
 import static com.project.autonomous.common.exception.ValidatorMessage.EMPTY_MESSAGE;
 
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
-import com.project.autonomous.user.dto.response.UserTeamListRes;
+import com.project.autonomous.user.entity.User;
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Schema(title = "매치 게시글 상세 정보")
 @Getter
 @Builder
 @AllArgsConstructor
-public class MatchBoardPostInfo {
+public class MatchBoardPostSimpleInfoRes {
 
     @Schema(description = "게시글 id", example = "3")
-    private long postId;
+    private Long postId;
 
-    @Schema(description = "작성자 정보", example = "[\"id\" : 4, \"name\" : \"박범진\", \"city\" : \"대구광역시\", \"pictureUrl\" : \"경로미정\"]")
+    @Schema(description = "작성자 정보", example = "[\"id\" : 4, \"name\" : \"박범진\", \"city\" : \"대구광역시\", \"pictureUrl\" : \"https://matchhere.s3.ap-northeast-2.amazonaws.com/%EA%%B8_EC%A7%84.JPG\"]")
     private UserSimpleInfoRes writer;
 
     @Schema(description = "작성일자", example = "2021-09-06 06:57:37.667537")
@@ -39,41 +37,37 @@ public class MatchBoardPostInfo {
     @Schema(description = "게시판 유형", example = "매칭 or 용병")
     private String matchBoardCategory;
 
-    @Schema(description = "경기 날짜", example = "1995-09-06")
-    @DateTimeFormat(pattern = DATE_FORMAT)
-    private LocalDate playingTime;
-
     @Schema(description = "지역", example = "서울특별시")
     @NotBlank(message = EMPTY_MESSAGE)
     private String city;
 
-    @Schema(description = "경기 장소", example = "인동초등학교")
-    private String place;
-
     @Schema(description = "모집 인원", example = "4 ~ 10명")
     private String recruitmentCount;
 
-    @Schema(description = "팀 정보", example = "{\"id\": 4, \"name\":\"대명농구회\", \"pictureUrl\":\"경로 미정\"}")
-    private UserTeamListRes team;
+    @QueryProjection
+    public MatchBoardPostSimpleInfoRes(Long postId,
+        User user, LocalDateTime createAt, boolean recruited,
+        String sportCategory, String matchBoardCategory, String city, String recruitmentCount) {
+        this.postId = postId;
+        this.writer = UserSimpleInfoRes.from(user);
+        this.createAt = createAt;
+        this.recruited = recruited;
+        this.sportCategory = sportCategory;
+        this.matchBoardCategory = matchBoardCategory;
+        this.city = city;
+        this.recruitmentCount = recruitmentCount;
+    }
 
-    @Schema(description = "내용", example = "5 : 5 농구 인원구합니다.")
-    private String content;
-
-    public static MatchBoardPostInfo from(MatchBoardPost matchBoardPost) {
-        return MatchBoardPostInfo.builder()
+    public static MatchBoardPostSimpleInfoRes from(MatchBoardPost matchBoardPost) {
+        return MatchBoardPostSimpleInfoRes.builder()
             .postId(matchBoardPost.getId())
             .writer(UserSimpleInfoRes.from(matchBoardPost.getUser()))
             .createAt(matchBoardPost.getCreatedAt())
             .recruited(matchBoardPost.isRecruited())
             .sportCategory(matchBoardPost.getSportCategory().getName())
             .matchBoardCategory(matchBoardPost.getMatchBoardCategory().toString())
-            .playingTime(matchBoardPost.getPlayingTime())
             .city(matchBoardPost.getCity().toString())
-            .place(matchBoardPost.getPlace())
             .recruitmentCount(matchBoardPost.getRecruitmentCount())
-            .team(matchBoardPost.getTeam() == null ? null : UserTeamListRes.from(
-                matchBoardPost.getTeam()))
-            .content(matchBoardPost.getContent())
             .build();
     }
 }
