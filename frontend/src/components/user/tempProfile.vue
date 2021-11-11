@@ -5,7 +5,7 @@
       <div class="md:w-3/12 md:ml-16">
         <!-- profile image -->
         <img  class="w-30 h-30 md:w-50 md:h-72  object-cover rounded-xl
-                     border-2 border-yellow-500 p-1" :src=pictureUrl alt="profile">
+                     border-2 border-yellow-500 p-1" :src=pictureUrl @error="imgError">
       </div>
       <!-- profile meta -->
       <div class="w-7/12 md:w-7/12 = md:ml-5 ml-4 2xl:ml-20">
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import img from '@/assets/profiledefault.jpg'
 import {getTempProfileInfo} from '@/api/auth.js'
 import { getInterest } from '@/api/auth.js'
 import store from '@/store/index.js'
@@ -120,6 +121,9 @@ export default {
     })
   },
   methods:{
+    imgError:function(e){
+            e.target.src = img
+        }
   },
   computed:{
 

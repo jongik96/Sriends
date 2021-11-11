@@ -13,6 +13,7 @@
                 </button>
                 </router-link>
             </div>
+            <div v-if="!state" class="text-2xl">조건에 해당하는 팀이 현재 없습니다</div>
             <searchTeamListItem v-for="item in teams" :key="item.id"
                 :id="item.id"
              >
@@ -72,6 +73,7 @@ export default {
                     sportsCategory : '',
                 }
             ],
+            state:true
             
         }
     },
@@ -84,6 +86,7 @@ export default {
             this.teams = res.data
         }).catch((err)=>{
             console.log(err)
+            this.state=false
         })
     },
     

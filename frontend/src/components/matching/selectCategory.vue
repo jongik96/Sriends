@@ -1,75 +1,32 @@
 <template>
-    <div class="grid grid-cols-6">
-        <div class="col-start-2 col-span-4 ">
-          <div class="flex justify-center mt-10">
-              <p class="text-3xl text-yellow-500 font-bold">매칭글 작성</p>
-          </div>
-        </div>
-        <div class="col-start-1 col-span-6  md:col-start-2 md:col-span-4">
-            <div class="grid grid-cols-6  mt-10 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
-                <div class="col-start-1 col-span-3 ">
-                        <!-- <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">제목</p>
-                            <input  id="joinIntro" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
-                        </div> -->
-                        
-                        <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">일시</p>
-                            <input v-model="form.playingTime" id="joinIntro" type="date" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+  <div class="grid grid-cols-6">
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
+            <div>
+                <p class="text-3xl font-extrabold text-gray-900">종류 / 지역 / 종목 선택</p>
+            </div>
+            <div class="mt-10">
+                <form>
+                    <div class="grid grid-cols-6">
+                        <div class="col-start-1 col-span-3 mb-3">
+                            <p class="text-2xl">글 분류를 선택해주세요</p>
+                            <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.category">
+                                <option disabled value="">분류</option>
+                                <option value="매칭">경기 매칭</option>
+                                <option value="용병">게스트 모집</option>
+                            </select>
+
                         </div>
-                        
-                        <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">장소</p>
-                            <input v-model="form.place" id="joinIntro" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
-                        </div>
-                        <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">모집인원</p>
-                            <input v-model="form.recruitmentCount" id="joinIntro" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
-                        </div>
-                </div>
-                <div class="col-start-4 col-span-3">
-                    <div class="md:pt-5 md:pl-10  pt-5 pl-2">
-                        <p class="text-xl font-bold">글 분류</p>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="form.matchBoardCategory">
-                            <option disabled value="">분류</option>
-                            <option value="매칭">경기 매칭</option>
-                            <option value="용병">게스트 모집</option>
-                        </select>
-                    </div>
-                    <div class="md:pt-5 md:pl-10  pt-5 pl-2">
-                        <p class="text-xl font-bold">팀 선택</p>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="form.teamId">
-                            <option disabled value="">분류</option>
-                            <option v-for="item in myTeam" :key="item.id" :value="item.id">{{item.name}}</option>
-                            <!-- <option value="2">대구한국가스공사</option> -->
-                        </select>
-                        <p class="text-2xl">종목</p>
-                        <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
-                            <option disabled value="">종목</option>
-                            <option value="풋살">축구/풋살</option>
-                            <option value="배구">배구</option>
-                            <option value="농구">농구</option>
-                            <option value="배드민턴">배드민턴</option>
-                            <option value="야구">야구</option>
-                            <option value="테니스">테니스</option>
-                            <option value="탁구">탁구</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </div>
-                    <div class="md:pt-3 md:pl-10 pt-3 pl-2">
-                            <p class="text-xl font-bold">지역 *</p>
-                            <p>
-                                <span v-if="!form.city" class="text-yellow-600">지역을 선택해주세요</span>
-                            </p>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="selectDo">
-                                <option disabled value="">지역</option>
-                                <option value="1">서울/인천/경기</option>
-                                <option value="2">대전/충청</option>
-                                <option value="3">대구/경북</option>
-                                <option value="4">강원</option>
-                                <option value="5">부산/울산/경남</option>
-                                <option value="6">제주</option>
-                                <option value="7">광주/전라</option>
+                        <div class="col-start-1 col-span-3 border-r border-yellow-300">
+                            <p class="text-2xl">지역을 선택해주세요</p>
+                            <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="selectDo">
+                            <option disabled value="">지역</option>
+                            <option value="1">서울/인천/경기</option>
+                            <option value="2">대전/충청</option>
+                            <option value="3">대구/경북</option>
+                            <option value="4">강원</option>
+                            <option value="5">부산/울산/경남</option>
+                            <option value="6">제주</option>
+                            <option value="7">광주/전라</option>
                             </select>
                             <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                                 <option disabled value="">시/군</option>
@@ -252,75 +209,64 @@
                                 <option value="화순시">화순</option>
                             </select>
                             <br/>
-                            <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
+                            <p v-if="this.form.city" class="mt-2 text-base md:text-xl font-medium">선택 : {{ this.form.city }} </p>
                         </div>
-                </div>
-                <div class="col-start-1 col-span-6">
-                    <div class="md:pt-3 md:pl-10  pt-3 pl-2">
-                            <p class="text-xl font-bold">내용을 입력해주세요.</p>
-                            <textarea v-model="form.content" id="joinIntro" rows=5 type="text" class="text-xl w-4/5 rounded-md border-2 border-yellow-400 mt-2"/>
+                        <div class="col-start-4 col-span-3 ml-3">
+                            <p class="text-2xl">종목을 선택해주세요</p>
+                            <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
+                            <option disabled value="">종목</option>
+                            <option value="풋살">축구/풋살</option>
+                            <option value="배구">배구</option>
+                            <option value="농구">농구</option>
+                            <option value="배드민턴">배드민턴</option>
+                            <option value="야구">야구</option>
+                            <option value="테니스">테니스</option>
+                            <option value="탁구">탁구</option>
+                            <option value="기타">기타</option>
+                        </select>
+                        <p v-if="this.form.sportCategory" class="mt-2 text-xl font-medium">선택종목 : {{ this.form.sportCategory }} </p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-start-1 col-span-6 mt-10 flex justify-center">
-                    <!-- <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">Log In</button> -->
-                    <button @click="clickPost" class="border-solid border-2 mr-3 mb-3 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ml-3">
-                        작성
-                    </button>
-                    <router-link to="/matchingList">
-                        <button class="border-solid border-2 mb-3 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">
-                            취소
-                        </button>
-                    </router-link>
-
-                </div>
+                </form>
+            </div>
+            <div class="mt-10 flex justify-end">
+                <!-- <router-link :to="{'name':'searchTeamList', props:{'city':this.form.city, 'sportCategory': this.form.sportCategory}}">
+                <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">조회하기</button>
+                </router-link> -->
+                <button @click="clickBtn()" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">조회하기</button>
             </div>
         </div>
-    </div>
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4">
+            자기 지역을 기반으로 한 전체종목 조회
+            <defaultList></defaultList>
+        </div>
+  </div>
 </template>
 
 <script>
-import { getMyTeam } from '@/api/matching.js'
-import { postMatching } from '@/api/matching.js'
-import Swal from 'sweetalert2'
+import defaultList from '@/components/matching/defaultList.vue'
 export default {
+    components:{
+        defaultList
+    },
     data(){
         return{
-            selectDo:'',
-            myTeam:[],
+            selectDo: '',
             form:{
-                city:'',
-                place:'',
-                teamId: '',
-                sportCategory:'',
-                matchBoardCategory:'',
-                playingTime: '',
-                recruitmentCount:'',
-                content:'',
-            },
+                category:'',
+                city: '',
+                sportCategory: '',
+            }
         }
-    },
-
-    created(){
-        getMyTeam().then((res)=>{
-            console.log(res)
-            this.myTeam = res.data
-        }).catch((err)=>{
-            console.log(err)
-        })
     },
     methods:{
-        clickPost: function(){
-            postMatching(this.form)
-            .then((res)=>{
-                console.log(res)
-                Swal.fire('매칭이 등록되었습니다!')
-                this.$router.push('/matchingCategory')
-            }).catch((err)=>{
-                console.log(err)
-            })
+        clickBtn(){
+            this.$store.commit("setCity",this.form.city)
+            this.$store.commit("setSportCategory",this.form.sportCategory)
+            this.$store.commit("setCategory",this.form.category)
+            this.$router.push('/matchingList')
         }
     }
-
 }
 </script>
 

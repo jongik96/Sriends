@@ -97,14 +97,16 @@ function getPermitState(teamId){
 }
 
 // 팀 관리자 권한 부여
-function givePermit(teamId,userId){
+function givePermit(teamId,userId,authority){
     // return axios({
     //     method:'post',
     //     url: `${SERVER_URL}/teams/manager/${teamId}/${userId}`,
     //     headers: config,
     // })
 
-    return instance.post(`teams/manager/${teamId}/${userId}`)
+    return instance.put(`teams/manager/${teamId}/${userId}`,{
+        'authority' : authority
+    })
 
 }
 

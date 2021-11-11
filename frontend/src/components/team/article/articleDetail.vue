@@ -16,7 +16,7 @@
                 <p>
                 <div class="mt-2 float-right">
                     <button @click="clickUser">
-                        <img :src="writer.pictureUrl" class="h-10 w-10 rounded-xl" alt="">
+                        <img :src="writer.pictureUrl" @error="imgError" class="h-10 w-10 rounded-xl" alt="">
                         <p class="">{{this.writer.name}}</p>
                     </button>
                     <p class="">{{this.createDate}}</p>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import { getDate } from '@/utils/date.js'
 import { deleteArticle } from '@/api/article.js'
 import { getArticleInfo } from '@/api/article.js'
@@ -60,7 +61,9 @@ export default {
         then((res)=>{
             console.log(res)
             this.writer.name = res.data.writer.name
+            if(res.data.writer.pictureUrl!=null){
             this.writer.pictureUrl = res.data.writer.pictureUrl
+            }
             this.title = res.data.title
             this.content = res.data.content
             this.createDate = getDate(res.data.createDate)
@@ -98,6 +101,9 @@ export default {
 
                
             })
+        },
+        imgError:function(e){
+            e.target.src = img
         },
 
         clickUser: function(){
