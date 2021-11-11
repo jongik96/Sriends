@@ -31,15 +31,15 @@ public class MatchBoardCommentService {
     // 댓글 생성
     @Transactional
     public MatchBoardCommentRes createComment(Long postId, MatchBoardCreateCommentReq matchBoardCreateCommentReq) {
-        if(matchBoardCreateCommentReq.getParnetId() > 0) { // 부모 댓글이 존재한다면
-            MatchBoardComment parentComment = findMatchBoardComment(matchBoardCreateCommentReq.getParnetId());
+        if(matchBoardCreateCommentReq.getParentId() > 0) { // 부모 댓글이 존재한다면
+            MatchBoardComment parentComment = findMatchBoardComment(matchBoardCreateCommentReq.getParentId());
             parentComment.addReplyCount();
         }
         MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
         MatchBoardComment matchBoardComment = matchBoardCreateCommentReq.toMatchBoardComment(matchBoardPost, user);
-        matchBoardComment.setDepth(matchBoardCreateCommentReq.getParnetId());
+        matchBoardComment.setDepth(matchBoardCreateCommentReq.getParentId());
         matchBoardPost.getComments().add(matchBoardComment);
         user.getComments().add(matchBoardComment);
         matchBoardCommentRepository.save(matchBoardComment);
