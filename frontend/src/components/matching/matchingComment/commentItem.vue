@@ -208,6 +208,8 @@ export default {
         },
         imgError:function(e){
             e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
 
     },

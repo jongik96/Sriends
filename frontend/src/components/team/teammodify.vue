@@ -304,7 +304,7 @@ export default {
             console.log(res)
             this.form.name = res.data.name
             
-            this.form.file = res.data.pictureDownloadUrl
+            // this.form.file = res.data.pictureDownloadUrl
             
             this.form.maxCount = res.data.maxCount
             this.form.description = res.data.description
@@ -350,6 +350,9 @@ export default {
             formData.append('description', this.form.description)
             formData.append('sportCategory', this.form.sportCategory)
             formData.append('recruitmentState', this.form.recruitmentState)
+            for(const element of formData){
+                console.log(element)
+            }
             axios({
                 method: 'put',
                 url: `${SERVER_URL}/teams/${teamId}`,
