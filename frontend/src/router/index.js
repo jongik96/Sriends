@@ -9,6 +9,7 @@ export default new VueRouter({
         // 로그인 & 실행 후 첫페이지
         {
             path:'/',
+            name: 'login',
             component: () => import('@/views/user/loginPage.vue')
         },
         // 회원가입
@@ -25,6 +26,11 @@ export default new VueRouter({
         {
             path: '/main',
             component: () => import('@/views/user/mainPage.vue')
+        },
+        // 다른사람 프로필 들어갔을 때
+        {
+            path: '/user',
+            component: () => import('@/views/user/memberProfile.vue')
         },
         // 비밀번호 찾기 페이지
         {
@@ -54,7 +60,9 @@ export default new VueRouter({
         // 팀 메인페이지
         {
             path : '/team',
-            component: () => import('@/views/team/teamMainPage.vue')
+            component: () => import('@/views/team/teamMainPage.vue'),
+            name : 'team',
+            props: true
         },
         // 팀 가입신청
         {
@@ -71,10 +79,17 @@ export default new VueRouter({
             path: '/team/createArticle',
             component: () => import('@/views/team/article/createArticlePage.vue')
         },
+
         // 팀 일정관리 페이지
         {
             path: '/team/calendar',
             component: () => import('@/views/team/schedule/teamCalendarPage.vue')
+        },
+        
+        // 팀 일정 상세페이지
+        {
+            path: '/team/calendar/detail',
+            component: () => import('@/views/team/schedule/scheduleDetailPage.vue')
         },
 
         // 팀 일정 추가페이지
@@ -95,10 +110,32 @@ export default new VueRouter({
             component: () => import('@/views/team/member/waitingMemberPage.vue')
         },
         
-        // 팀찾기 목록
+        // 회원가입 후 관심종목 선택
+        {
+            path: '/selectCategory',
+            component: () => import('@/views/sriends/selectCategoryPage.vue')
+        },
+
+        // 관심목록 팀찾기 목록
         {
             path: '/teamList',
-            component: () => import('@/views/sriends/teamListPage.vue')
+            component: () => import('@/views/sriends/teamListPage.vue'),
+            name: 'teamList',
+            props:true
+        },
+
+        // 검색할 지역/종목 선택 페이지
+        {
+            path: '/searchTeam',
+            component: () => import('@/views/sriends/searchTeamPage.vue')
+        },
+
+        // 지역/종목에 해당하는 팀 리스트페이지
+        {
+            path: '/searchTeamList',
+            name: 'searchTeamList',
+            component: () => import('@/views/sriends/searchTeamListPage.vue'),
+            props: true
         },
 
         // 경기/스렌드 찾기 목록페이지
@@ -107,22 +144,44 @@ export default new VueRouter({
             component: () => import('@/views/matching/matchingListPage.vue')
         },
 
-        // 매칭목록
+        // 매칭생성
         {
             path: '/createMatching',
             component: () => import('@/views/matching/createMatchingPage.vue')
         },
 
+        // 매칭수정
+        {
+            path: '/modifyMatching',
+            component: () => import('@/views/matching/modifyMatchingPage.vue')
+        },
+
         // 팀게시글 상세페이지
         {
             path: '/team/articleDetail',
-            component: () => import('@/views/team/article/articleDetailPage.vue')
+            component: () => import('@/views/team/article/articleDetailPage.vue'),
+            name: 'articleDetail',
+            props: true
+        },
+
+        // 팀게시글 수정페이지
+        {
+            path: '/team/modifyArticle',
+            component: () => import('@/views/team/article/modifyArticlePage.vue'),
+            name: 'modifyArticle',
+            props: true
         },
 
         // 매칭글 상세페이지
         {
             path: '/matchingDetail',
             component: () => import('@/views/matching/matchingDetailPage.vue')
+        },
+
+        // 매칭글 조건 선택
+        {
+            path:'/matchingCategory',
+            component:() => import('@/views/matching/selectCategoryPage.vue')
         }
     ]
 })
