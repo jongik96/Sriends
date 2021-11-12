@@ -2,7 +2,8 @@
   <div class="shadow-md rounded-xl p-4 mt-5 mx-6 mb-4 min-w-300">
                 <div class="grid grid-cols-7">
                     <div class="col-start-1 col-span-1">
-                        <img :src=pictureUrl class="h-10 w-10 rounded-md md:h-20 md:w-20" alt="">
+                        <img v-if="this.pictureUrl!=null" :src=pictureUrl class="h-10 w-10 rounded-md md:h-20 md:w-20" alt="">
+                        <img v-if="this.pictureUrl==null" src="@/assets/profile.png" class="h-10 w-10 rounded-md md:h-20 md:w-20" alt="">
                     </div>
                     <div class="ml-1 md:ml-0 col-start-2 col-span-1 grid text-sm md:text-base sm:place-items-center">
                          {{name}}

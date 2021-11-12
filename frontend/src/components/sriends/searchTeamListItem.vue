@@ -61,7 +61,9 @@ export default {
         .then((res)=>{
             console.log(res)
             this.name = res.data.name
+            if(res.data.pictureDownloadUrl){
             this.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
             this.sportCategory = res.data.sportCategory
             this.leaderName = res.data.leader.name
             this.memberCount = res.data.memberCount
@@ -90,6 +92,8 @@ export default {
         },
         imgError:function(e){
             e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
     }
 }

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import img from '@/assets/sideImg.png'
+import img from '@/assets/profile.png'
 import { getMatchDetail } from '@/api/matching.js'
 import store from '@/store/index.js'
 import { getDate } from '@/utils/date.js'
@@ -91,7 +91,9 @@ export default {
             this.team.pictureUrl = res.data.team.pictureUrl
             this.writer.id = res.data.writer.id
             this.writer.name = res.data.writer.name
+            if(res.dadta.writer.pictureUrl!=null){
             this.writer.pictureUrl = res.data.writer.pictureUrl
+            }
         }).catch((err)=>{
             console.log(err)
         })

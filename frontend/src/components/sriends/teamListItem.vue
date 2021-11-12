@@ -59,7 +59,9 @@ export default {
             this.createDate = res.data.createDate
             this.leaderId = res.data.leaderId
             this.leaderName = res.data.leader.name
+            if(res.data.pictureDownloadUrl){
             this.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
             this.memberCount = res.data.memberCount
             this.maxCount = res.data.maxCount
             this.description = res.data.description
@@ -84,6 +86,8 @@ export default {
         },
         imgError:function(e){
             e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
     }
 }

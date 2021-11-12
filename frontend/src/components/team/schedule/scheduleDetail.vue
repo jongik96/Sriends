@@ -12,7 +12,7 @@
                             <p class="text-base">일시 : {{schedule}}</p>
                         </div>
                         <div @click="clickUser" class="col-start-6 col-span-1 ml-5">
-                            <img :src="writer.pictureUrl" class="rounded-xl h-10 w-10" alt="">
+                            <img :src="writer.pictureUrl" @error="imgError" class="rounded-xl h-10 w-10" alt="">
                             <p>{{writer.name}}</p>
                         </div>
                     </div>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import store from '@/store/index.js'
 import { getSchedule } from '@/api/schedule.js'
 import { putSchedule } from '@/api/schedule.js'
@@ -94,7 +95,9 @@ export default {
             this.schedule = timestamp(res.data.schedule)
             this.writer.id = res.data.writer.id
             this.writer.name = res.data.writer.name
+            if(res.data.writer.pictureUrl){
             this.writer.pictureUrl = res.data.writer.pictureUrl
+            }
         }).catch((err)=>{
             console.log(err)
         })
@@ -153,6 +156,11 @@ export default {
         clickUser: function(){
             this.$store.commit('setTempUserId', this.writer.id)
             this.$router.push('/user')
+        },
+        imgError:function(e){
+            e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
     },
     computed:{
