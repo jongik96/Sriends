@@ -22,14 +22,14 @@
                       </div>
                       <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">E-mail</p>
-                          <input id="email" type="text" v-model="form.email" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400"/>
+                          <input id="email" type="text" v-model="form.email" class=" text-xl xl:w-5/6 w-3/4 rounded-md border-2 border-yellow-400"/>
                           <p>
                               <span v-if="(form.email).length>0 && !isEmailValid" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
                           </p>
                       </div>
                       <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">Password</p>
-                          <input id="password" type="password" v-model="form.password" class="text-xl w-3/4 rounded-md border-2 border-yellow-400"/>
+                          <input id="password" type="password" v-model="form.password" class="text-xl xl:w-5/6 w-3/4 rounded-md border-2 border-yellow-400"/>
                           <!-- <p>
                               <span class="text-yellow-600">비밀번호를 입력해주세요.</span>
                           </p> -->
@@ -41,12 +41,12 @@
                         </button>
                         
                         </div>
-                        <div class="flex justify-center p-2 ">
+                        <!-- <div class="flex justify-center p-2 ">
                         <router-link to="/findPassword">
                             <button class="rounded-md hover:bg-gray-200"><p>비밀번호 찾기</p></button>
                         </router-link>
-                        </div>
-                        <div class="flex justify-center p-2">
+                        </div> -->
+                        <div class="flex justify-center p-2 mt-6">
                         <router-link to="/signup">
                             <button class="rounded-md hover:bg-gray-200">아직 회원이 아니신가요?</button>
                         </router-link>
@@ -60,8 +60,11 @@
 </template>
 
 <script>
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// import axios from 'axios'
 import Swal from 'sweetalert2'
 import { validateEmail } from '@/utils/validation.js';
+import { loginUser } from '@/api/auth.js'
 export default {
     data() {
         return {
@@ -84,8 +87,19 @@ export default {
     },
     methods:{
         submitForm: function(){
-            console.log('click')
-            Swal.fire('로그인됨')
+            loginUser(this.form)
+            .then((res)=>{
+                console.log(res.data.accessToken)
+                console.log(res.data)
+                // localStorage.setItem('token',res.data.accessToken)
+                this.$store.commit('setAccessToken',res.data.accessToken)
+                Swal.fire('로그인되었습니다.')
+                this.$router.push({path: '/main'})
+            }).catch((err)=>{
+                console.log(err)
+                Swal.fire('ID 또는 비밀번호를 확인해주세요.')
+            }) 
+            
         },
     }
 }

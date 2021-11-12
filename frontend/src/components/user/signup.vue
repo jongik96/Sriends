@@ -14,19 +14,23 @@
                           <p class="text-3xl font-bold flex justify-center">Sign Up</p>
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
+                          <p class="text-base font-bold">profileImg</p>
+                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-base w-3/4 rounded-md border-2 border-yellow-400">
+                      </div>
+                      <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">E-mail *</p>
                           <input type="text" v-model="form.email" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
                               <span v-if="(form.email).length>0 && !isEmailValid" class="text-yellow-600">올바른 이메일 형식이 아닙니다.</span>
                           </p>
-                          <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">중복검사</button>
+                          <button @click.self.prevent="duplicateEmail" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">중복검사</button>
                           &nbsp;
-                          <button @click="clickEmailAuth" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">인증</button>
+                          <button @click.self.prevent="clickEmailAuth" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">인증</button>
                           <div v-if="EmailAuthBtn" class="mt-2">
-                            <p class="text-md font-bold">인증번호를 입력해주세요</p>
+                            <p class="text-md font-bold">5분 이내에 인증번호를 입력해주세요</p>
                             <input type="text" v-model="authCode" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                             <br/>
-                            <button class="border-solid border-2 mt-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">확인</button>
+                            <button @click.self.prevent="checkEmail" class="border-solid border-2 mt-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-8 font-semibold text-sm">확인</button>
                           </div>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
@@ -52,16 +56,16 @@
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">생년월일 *</p>
-                          <input type="date" v-model="form.bitrh" class="text-md md:text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="date" v-model="form.birth" class="text-md md:text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <!-- <p>
                               <span v-if="!form.birth" class="text-yellow-600">생년월일을 선택해주세요.</span>
                           </p> -->
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                         <p class="text-xl font-bold">성별 *</p>
-                        <input class="mt-3 " type="radio" id="man" value="man" v-model="form.gender">
+                        <input class="mt-3 " type="radio" id="man" value="남성" v-model="form.gender">
                         <label class="mr-3 font-semibold" for="man">남성</label>
-                        <input type="radio" id="woman" value="woman" v-model="form.gender">
+                        <input type="radio" id="woman" value="여성" v-model="form.gender">
                         <label class="font-semibold" for="woman">여성</label>
                         <br>
                         <span>{{ this.form.gender }}</span>
@@ -89,6 +93,7 @@
                             <option value="4">강원</option>
                             <option value="5">부산/울산/경남</option>
                             <option value="6">제주</option>
+                            <option value="7">광주/전라</option>
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
@@ -230,16 +235,56 @@
                             <option value="제주시">제주시</option>
                             <option value="서귀포시">서귀포시</option>
                         </select>
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='7'" v-model="form.city">
+                            <option disabled value="">시/군</option>
+                            <option value="광주광역시">광주</option>
+                            <option value="광양시">전주</option>
+                            <option value="광양시">군산</option>
+                            <option value="광양시">익산</option>
+                            <option value="광양시">남원</option>
+                            <option value="광양시">정읍</option>
+                            <option value="광양시">김제</option>
+                            <option value="광양시">완주</option>
+                            <option value="광양시">진안</option>
+                            <option value="광양시">무주</option>
+                            <option value="광양시">장수</option>
+                            <option value="광양시">임실</option>
+                            <option value="광양시">순창</option>
+                            <option value="광양시">고창</option>
+                            <option value="광양시">부안</option>
+                            <option value="광양시">광양</option>
+                            <option value="나주시">나주</option>
+                            <option value="목포시">목포</option>
+                            <option value="순천시">순천</option>
+                            <option value="여수시">여수</option>
+                            <option value="강진시">강진</option>
+                            <option value="고흥시">고흥</option>
+                            <option value="곡성시">곡성</option>
+                            <option value="구례시">구례</option>
+                            <option value="담양시">담양</option>
+                            <option value="무안시">무안</option>
+                            <option value="보성시">보성</option>
+                            <option value="신안시">신안</option>
+                            <option value="영광시">영광</option>
+                            <option value="영암시">영암</option>
+                            <option value="완도시">완도</option>
+                            <option value="장성시">장성</option>
+                            <option value="장흥시">장흥</option>
+                            <option value="진도시">진도</option>
+                            <option value="함평시">함평</option>
+                            <option value="해남시">해남</option>
+                            <option value="화순시">화순</option>
+                        </select>
                         <br/>
                         <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button type="submit"  class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/">
-                            <button class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
+                            <button type="submit" class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
                         </router-link>
                     </div>          
                   </form>
@@ -252,9 +297,16 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+import axios from 'axios'
 import { validateEmail } from '@/utils/validation.js';
 import { validatePassword } from '@/utils/passwordValidation.js';
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
+import { duplicatedCheckEmail } from '@/api/auth.js'
+import { certificationEmail } from '@/api/auth.js'
+import { certificationEmailCode } from '@/api/auth.js'
+// import store from '@/store/index.js'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
     data() {
         return {
@@ -262,21 +314,23 @@ export default {
             EmailAuthBtn : false,
             authCode: '',
             passwordConfirm: '',
+            isDuplicated: true,
             form:{
                 email: '',
                 password: '',
                 name: '',
-                bitrh: '',
+                birth: '',
                 phone: '',
                 city : '',
                 gender: '',
+                file:'',
             }
             
         }
     },
     computed: {
         btnDisabled(){
-            if(!this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
+            if(this.isDuplicated || !this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
                 return false
             }
             return true
@@ -296,12 +350,86 @@ export default {
         }
     },
     methods:{
-        submitForm: function(){
-            console.log('click')
+        fileSelect(){
+            console.log(this.$refs.image.files[0])
+            // this.form.uuid = this.$refs.image.files[0]
         },
+        //회원가입
+        submitForm: function(){
+            if(this.form.phone==''){
+                this.form.phone = null
+            }
+            const formData = new FormData();
+            formData.append('file', this.$refs.image.files[0])
+            formData.append('email', this.form.email)
+            formData.append('password', this.form.password)
+            formData.append('name', this.form.name)
+            formData.append('birth', this.form.birth)
+            formData.append('phone', this.form.phone)
+            formData.append('city', this.form.city)
+            formData.append('gender', this.form.gender)
+            for(const element of formData){
+                console.log(element)
+            }
+            axios({
+                method: 'post',
+                url: `${SERVER_URL}/auth/sign-up`,
+                headers: {'Content-Type' : 'multipart/form-data'},
+                data: formData
+            }).then((res)=>{
+                console.log(res.data)
+                console.log(this.form.password)
+                Swal.fire('회원가입이 완료되었습니다! 관심종목을 선택해주세요!')
+                this.$store.commit('setAccessToken',res.data.accessToken)
+                this.$router.push('/selectCategory')
+                //로그인 과정 추가하고 관심목록정하기로 바로가게하기
+                // 여기서 토큰받고 관심목록설정으로 바로이동
+
+
+                // this.$router.push('/')
+            }).catch((err)=>{
+                console.log(err)
+            }) 
+        },
+        // 이메일 인증번호 전송
         clickEmailAuth: function(){
             this.EmailAuthBtn = true;
-        }        
+            certificationEmail(this.form.email)
+            .then((res)=>{
+                console.log(res)
+                if(res.data == true){
+                    Swal.fire('인증번호가 전송되었습니다!')
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+
+        checkEmail: function(){
+            this.EmailAuthBtn = false;
+            certificationEmailCode(this.form.email, this.authCode)
+            .then((res)=>{
+                console.log(res)
+                Swal.fire('인증이 완료되었습니다.')
+            }).catch((err)=>{
+                console.log(err)
+                Swal.fire('코드가 일치하지 않습니다ㅠ')
+            })
+        },
+        //이메일 중복검사
+        duplicateEmail: function(){
+            duplicatedCheckEmail(this.form.email)
+            .then((res)=>{
+                if(res.data == true){
+                    Swal.fire('이미 가입된 ID입니다.')
+                    this.isDuplicated = false
+                }else{
+                    Swal.fire('사용가능한 ID입니다.')
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
     }
 
 }
