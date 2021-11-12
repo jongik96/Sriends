@@ -49,7 +49,7 @@ export default {
         console.log(res)
         this.comments = res.data
         this.replyCount = res.data.replyCount
-        if(res.data.writer.pictureUrl!=null){
+        if(res.data.id.writer.pictureUrl!=null){
         this.comments.writer.pictureUrl = res.data.writer.pictureUrl
         }
     }).catch((err)=>{
