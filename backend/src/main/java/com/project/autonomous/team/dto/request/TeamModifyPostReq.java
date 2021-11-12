@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class TeamModifyPostReq {
     String name;
 //    LocalDateTime createDate;
-    int memberCount;
     int maxCount;
     String description;
     Boolean recruitmentState;
