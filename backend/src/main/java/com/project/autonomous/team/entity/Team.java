@@ -34,7 +34,6 @@ public class Team extends BaseEntity {
     String description;
     boolean recruitmentState;
     boolean membershipFee;
-    boolean publicState;
     String city;
     Long sportCategoryId;
 

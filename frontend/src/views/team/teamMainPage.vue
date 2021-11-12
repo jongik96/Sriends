@@ -2,7 +2,7 @@
   <div>
     <topmenu></topmenu>
     <teamMenu></teamMenu>
-    <teamMain></teamMain>
+    <teamMain v-bind:teamId="this.teamId"></teamMain>
   </div>
 </template>
 
@@ -11,6 +11,9 @@ import topmenu from '@/components/topMenu.vue'
 import teamMenu from '@/components/team/teamMenu.vue'
 import teamMain from '@/components/team/teamMain.vue'
 export default {
+    props:{
+      teamId: [String,Number]
+    },
     components: {
         topmenu,
         teamMenu,

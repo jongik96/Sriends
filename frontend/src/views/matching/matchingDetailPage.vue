@@ -2,22 +2,25 @@
   <div>
     <topMenu></topMenu>
     <matchingDetail></matchingDetail>
-    <articleComment></articleComment>
-    <articleCommentList></articleCommentList>
+    <postComment v-bind:postId="this.postId"></postComment>
+    <commentList v-bind:postId="this.postId"></commentList>
   </div>
 </template>
 
 <script>
 import topMenu from '@/components/topMenu.vue'
 import matchingDetail from '@/components/matching/matchingDetail.vue'
-import articleComment from '@/components/team/article/articleComment.vue'
-import articleCommentList from '@/components/team/article/articleCommentList.vue'
+import postComment from '@/components/matching/matchingComment/postComment.vue'
+import commentList from '@/components/matching/matchingComment/getCommentList.vue'
 export default {
+    props:{
+      postId: [String,Number]
+    },
     components:{
         topMenu,
         matchingDetail,
-        articleComment,
-        articleCommentList
+        postComment,
+        commentList
     }
 
 }

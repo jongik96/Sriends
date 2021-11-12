@@ -9,13 +9,19 @@
                           <p class="text-3xl font-bold flex justify-center">회원정보 수정</p>
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
-                          <p class="text-xl font-bold">profileImg</p>
-                          <input type="file"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <p class="text-base font-bold">profileImg</p>
+                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-base w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
-                          <p class="text-xl font-bold">Password *</p>
+                          <p class="text-xl font-bold">Password</p>
                             <router-link to="/modifyPassword">
                                 <button class="border-2 rounded-xl border-yellow-500  font-medium w-40 h-10 mt-3">비밀번호 변경하기</button>
+                            </router-link>
+                      </div>
+                      <div class="md:pt-5 md:pl-20 pt-5 pl-5">
+                          <p class="text-xl font-bold">관심종목</p>
+                            <router-link to="/selectCategory">
+                                <button class="border-2 rounded-xl border-yellow-500  font-medium w-40 h-10 mt-3">관심종목 선택하기</button>
                             </router-link>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
@@ -34,9 +40,9 @@
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                         <p class="text-xl font-bold">성별 *</p>
-                        <input class="mt-3 " type="radio" id="man" value="man" v-model="form.gender">
+                        <input class="mt-3 " type="radio" id="man" value="남성" v-model="form.gender">
                         <label class="mr-3 font-semibold" for="man">남성</label>
-                        <input type="radio" id="woman" value="woman" v-model="form.gender">
+                        <input type="radio" id="woman" value="여성" v-model="form.gender">
                         <label class="font-semibold" for="woman">여성</label>
                         <br>
                         <span>{{ this.form.gender }}</span>
@@ -51,6 +57,7 @@
                             <span v-if="!isPhoneValid" class="text-yellow-600">올바른 전화번호를 입력해주세요.</span>
                           </p>
                       </div>
+                      
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                         <p class="text-xl font-bold">거주 지역 *</p>
                         <p>
@@ -64,10 +71,11 @@
                             <option value="4">강원</option>
                             <option value="5">부산/울산/경남</option>
                             <option value="6">제주</option>
+                            <option value="7">광주/전라</option>
                         </select>
                         <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                             <option disabled value="">시/군</option>
-                            <option value="서울특별시">서울특별시</option>
+                            <option value="서울">서울특별시</option>
                             <option value="인천광역시">인천광역시</option>
                             <option value="고양시">고양시</option>
                             <option value="과천시">과천시</option>
@@ -205,16 +213,59 @@
                             <option value="제주시">제주시</option>
                             <option value="서귀포시">서귀포시</option>
                         </select>
+                        <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='7'" v-model="form.city">
+                            <option disabled value="">시/군</option>
+                            <option value="광주광역시">광주</option>
+                            <option value="광양시">전주</option>
+                            <option value="광양시">군산</option>
+                            <option value="광양시">익산</option>
+                            <option value="광양시">남원</option>
+                            <option value="광양시">정읍</option>
+                            <option value="광양시">김제</option>
+                            <option value="광양시">완주</option>
+                            <option value="광양시">진안</option>
+                            <option value="광양시">무주</option>
+                            <option value="광양시">장수</option>
+                            <option value="광양시">임실</option>
+                            <option value="광양시">순창</option>
+                            <option value="광양시">고창</option>
+                            <option value="광양시">부안</option>
+                            <option value="광양시">광양</option>
+                            <option value="나주시">나주</option>
+                            <option value="목포시">목포</option>
+                            <option value="순천시">순천</option>
+                            <option value="여수시">여수</option>
+                            <option value="강진시">강진</option>
+                            <option value="고흥시">고흥</option>
+                            <option value="곡성시">곡성</option>
+                            <option value="구례시">구례</option>
+                            <option value="담양시">담양</option>
+                            <option value="무안시">무안</option>
+                            <option value="보성시">보성</option>
+                            <option value="신안시">신안</option>
+                            <option value="영광시">영광</option>
+                            <option value="영암시">영암</option>
+                            <option value="완도시">완도</option>
+                            <option value="장성시">장성</option>
+                            <option value="장흥시">장흥</option>
+                            <option value="진도시">진도</option>
+                            <option value="함평시">함평</option>
+                            <option value="해남시">해남</option>
+                            <option value="화순시">화순</option>
+                        </select>
                         <br/>
                         <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
 
                       </div>
-                      <div class="flex justify-center p-2 mt-10">
+                    <div class="flex justify-center p-2 mt-10">
                         <button type="submit" :disabled="!btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">수정</button>
+                    </div>
+                    <div class="flex justify-center p-2">
+                        <button @click.self.prevent="clickDelete"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">삭제</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/main">
-                            <button class="rounded-md hover:bg-gray-200"><p>취소</p></button>
+                            <p class="rounded-md hover:bg-gray-200">취소</p>
                         </router-link>
                     </div>          
                   </form>
@@ -228,7 +279,9 @@
 
 <script>
 // import { validateEmail } from '@/utils/validation.js';
-import { validatePassword } from '@/utils/passwordValidation.js';
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import store from '@/store/index.js'
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 export default {
     data() {
@@ -247,16 +300,10 @@ export default {
     },
     computed: {
         btnDisabled(){
-            if(!this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
+            if(!this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
                 return false
             }
             return true
-        },
-        // isEmailValid(){
-        //     return validateEmail(this.form.email);
-        // },
-        isPasswordValid(){
-            return validatePassword(this.form.password);
         },
         isPhoneValid(){
             if((this.form.phone).length==0 || (validatePhone(this.form.phone) && (this.form.phone).length == 11)){
@@ -264,13 +311,61 @@ export default {
                 return true;
             }
             return false;
+        },
+        getToken(){
+        const token = store.state.accessToken
+        const config = {
+            Authorization: `Bearer ${token}`
         }
+        return config
+        },
     },
     methods:{
+        fileSelect(){
+            console.log(this.$refs.image.files[0])
+            // this.form.uuid = this.$refs.image.files[0]
+        },
         submitForm: function(){
-            console.log('click')
-        }        
-    }
+            const userid = store.state.userId
+            console.log(userid)
+            if(this.form.phone==''){
+                this.form.phone = null
+            }
+            console.log('수정클릭')
+            const token = store.state.accessToken
+            const formData = new FormData();
+            formData.append('uuid', this.$refs.image.files[0])
+            formData.append('name', this.form.name)
+            formData.append('bitrh', this.form.bitrh)
+            formData.append('phone', this.form.phone)
+            formData.append('city', this.form.city)
+            formData.append('gender', this.form.gender)
+            for(const element of formData){
+                console.log(element)
+            }
+            console.log(formData)
+            axios({
+                method: 'put',
+                url: `${SERVER_URL}/users/${userid}`,
+                headers: {
+                    'Content-Type' : 'multipart/form-data',
+                    // 'Content-Type' : 'application/json',
+                    Authorization : `Bearer ${token}`,
+                },
+                data: formData
+
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((err)=>{
+                console.log(formData)
+                console.log(err)
+            }) 
+        },
+        clickDelete: function(){
+        this.$router.push('/confirmPassword')
+        }     
+    },
+    
 
 }
 </script>
