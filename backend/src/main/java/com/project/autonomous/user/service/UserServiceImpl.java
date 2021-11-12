@@ -40,23 +40,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    UserRepositorySupport userRepositorySupport;
-
-    @Autowired
-    UserTeamRepository userTeamRepository;
-
-    @Autowired
-    PictureRepository pictureRepository;
-
-    @Autowired
-    SportCategoryRepository sportCategoryRepository;
-
-    @Autowired
-    UserInterestRepository userInterestRepository;
+    private final UserRepository userRepository;
+    private final UserTeamRepository userTeamRepository;
+    private final PictureRepository pictureRepository;
+    private final SportCategoryRepository sportCategoryRepository;
+    private final UserInterestRepository userInterestRepository;
     private final PasswordEncoder passwordEncoder;
     private final DBFileStorageService dbFileStorageService;
 
