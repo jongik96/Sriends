@@ -190,6 +190,7 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    @Transactional
     public boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
 
         long userId = SecurityUtil.getCurrentMemberId();
@@ -207,10 +208,10 @@ public class TeamServiceImpl implements TeamService{
             team.setMembershipFee(teamInfo.getMembershipFee());
 
             Picture picture;
-//            if(team.getPicture() != null) {
-//                dbFileStorageService.deleteFile(team.getPicture().getId());
-//                pictureRepository.delete(team.getPicture());
-//            }
+            if(team.getPicture() != null) {
+                dbFileStorageService.deleteFile(team.getPicture().getId());
+                pictureRepository.delete(team.getPicture());
+            }
             if (teamInfo.getFile() == null) {
                 picture = null;
             } else {
