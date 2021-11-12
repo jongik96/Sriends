@@ -48,14 +48,14 @@ public class AuthController {
     @PostMapping(path = "/sign-up", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "회원 가입", description = "<strong>입력 받은 정보</strong>를 사용해 회원 가입한다.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "정상 가입", content = @Content),
+        @ApiResponse(responseCode = "200", description = "정상 가입",
+            content = @Content(schema = @Schema(implementation = TokenDto.class))),
         @ApiResponse(responseCode = "400", description = "ALREADY_JOIN\n\nBAD_REQUEST",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<String> signUp(@Valid @ModelAttribute UserRegisterReq userRegisterReq, BindingResult theBindingResult)
+    public ResponseEntity<TokenDto> signUp(@Valid @ModelAttribute UserRegisterReq userRegisterReq, BindingResult theBindingResult)
         throws IOException {
-        authService.signup(userRegisterReq);
-        return ResponseEntity.ok("정상 가입");
+        return ResponseEntity.ok(authService.signup(userRegisterReq));
     }
 
     @GetMapping("/sign-up/{email}")
