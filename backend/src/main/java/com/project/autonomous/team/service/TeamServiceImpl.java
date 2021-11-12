@@ -207,11 +207,10 @@ public class TeamServiceImpl implements TeamService{
             team.setMembershipFee(teamInfo.getMembershipFee());
 
             Picture picture;
-
-            if(team.getPicture() != null) {
-                dbFileStorageService.deleteFile(team.getPicture().getId());
-                pictureRepository.delete(team.getPicture());
-            }
+//            if(team.getPicture() != null) {
+//                dbFileStorageService.deleteFile(team.getPicture().getId());
+//                pictureRepository.delete(team.getPicture());
+//            }
             if (teamInfo.getFile() == null) {
                 picture = null;
             } else {
