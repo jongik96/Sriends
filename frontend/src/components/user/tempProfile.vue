@@ -5,7 +5,7 @@
       <div class="md:w-3/12 md:ml-16">
         <!-- profile image -->
         <img  class="w-30 h-30 md:w-50 md:h-72  object-cover rounded-xl
-                     border-2 border-yellow-500 p-1" :src=pictureUrl alt="profile">
+                     border-2 border-yellow-500 p-1" :src=pictureUrl @error="imgError">
       </div>
       <!-- profile meta -->
       <div class="w-7/12 md:w-7/12 = md:ml-5 ml-4 2xl:ml-20">
@@ -37,7 +37,7 @@
             <span class="">{{this.phone}}</span>
           </li>
         </ul>
-        <ul class="md:flex text-xl">
+        <ul v-if="sports.length!=0" class="md:flex text-xl">
           <li class="">
             관심종목 :
             <span v-for="item in sports" :key="item.id" class=""> {{item.interest}}</span>
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import {getTempProfileInfo} from '@/api/auth.js'
 import { getInterest } from '@/api/auth.js'
 import store from '@/store/index.js'
@@ -86,7 +87,7 @@ export default {
       city : '',
       age :'',
       pictureUrl : '',
-      sports:[]
+      sports:[],
     }
   },
   created: function(){
@@ -98,7 +99,9 @@ export default {
       this.name = res.data.name
       this.phone = res.data.phone
       this.gender = res.data.gender
+      if(res.data.pictureUrl!=null){
       this.pictureUrl = res.data.pictureUrl
+      }
       this.city = res.data.city
       console.log(this.pictureUrl)
       // string 형식 date로 바꿔서 나이계산
@@ -107,7 +110,7 @@ export default {
       this.age = today.getFullYear() - new Date(res.data.birth).getFullYear()+1;
       console.log(new Date(res.data.birth))
       // localStorage.setItem('userid',res.data.id)
-      this.$store.commit("setUserId", res.data.id)
+      this.$store.commit("setTempUserId", res.data.id)
     }).catch((err)=>{
       console.log(err)
     }),
@@ -120,6 +123,9 @@ export default {
     })
   },
   methods:{
+    imgError:function(e){
+            e.target.src = img
+        }
   },
   computed:{
 

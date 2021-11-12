@@ -32,6 +32,7 @@
 
 <script>
 import store from '@/store/index.js'
+import Swal from 'sweetalert2'
 import { joinTeam } from '@/api/team.js'
 export default {
     data(){
@@ -47,9 +48,11 @@ export default {
             joinTeam(teamId,userId,this.description)
             .then((res)=>{
                 console.log(res)
+                Swal.fire('가입신청이 완료되었습니다')
                 this.$router.push('/team')
             }).catch((err)=>{
-                console.log(err)
+                console.log(err.response.data.message)
+                Swal.fire('이미 가입신청이 되어 있습니다!')
             })
         }
     }

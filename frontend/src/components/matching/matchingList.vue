@@ -29,66 +29,87 @@
                     모집인원
                 </div>
                 <div class="grid col-start-4 col-span-1">
-                    작성자
+                    작성팀
                 </div>
                 <div class="grid col-start-5 col-span-2">
                     작성일시
                 </div>
-            
-        </div>
+            </div>
+            <matchingListItem v-for="item,index in teams" :key="index"
+                :postId=item.postId
+            >
+                <!-- <div class="grid col-start-1 col-span-1">
+                    
+                </div>
+                <div class="grid col-start-2 col-span-1">
+                   
+                </div>
+                <div class="grid col-start-3 col-span-1">
+                    
+                </div>
+                <div class="grid col-start-4 col-span-1">
+                    
+                </div>
+                <div class="grid col-start-5 col-span-2">
+                    
+                </div> -->
+            </matchingListItem>
+            <infinite-loading @infinite="infiniteHandler" spinner="sprial">
+                <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+            </infinite-loading>
       </div>
   </div>
 </template>
 
 <script>
+import matchingListItem from '@/components/matching/matchingListItem.vue'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import axios from 'axios'
+import InfiniteLoading from 'vue-infinite-loading'
+import store from '@/store/index.js'
 export default {
+    components:{
+        InfiniteLoading,
+        matchingListItem
+    },
     data() {
         return{
-            items: [
-            { id: 1,
-                title: "동호회1",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user525"
-            },
-            { id: 2,
-                title: "동호회1",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user120"
-            },
-            { id: 3,
-                title: "동호회1",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 4,
-                title: "동호회1",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 5,
-                title: "동호회1",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 6,
-                title: "동호회1",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            },
-            { id: 7,
-                title: "동호회1",
-                description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-                datePosted: "10/09/2020",
-                postedBy: "user345"
-            }
-            ]
+            page:0,
+            cities: store.state.selectCity,
+            sportCategories: store.state.selectSportCategory,
+            matchBoardCategories: store.state.category,
+            teams:[]
         }
+  },
+  methods:{
+      infiniteHandler($state) {
+            const token = store.state.accessToken
+            axios({
+                method: 'get',
+                url: `${SERVER_URL}/match/board/posts/all/${this.cities}/${this.sportCategories}/${this.matchBoardCategories}?page=` + (this.page),
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
+                console.log(res.data)
+                setTimeout(() => {
+                    if(res.data.content.length) {
+                    this.teams = this.teams.concat(res.data.content)
+                    $state.loaded()
+                    this.page += 1
+                    // 끝인지 판별
+                    if(res.data.content.length / 10 < 1) {
+                        $state.complete()
+                    }
+                    } else {
+                    // 끝 지정(No more data)
+                    $state.complete()
+                    }
+                }, 1000)
+            }).catch(err => {
+                console.error(err);
+            })
+        },
   }
 }
 </script>

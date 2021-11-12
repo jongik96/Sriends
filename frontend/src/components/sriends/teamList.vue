@@ -17,6 +17,7 @@
                 </button>
                 </router-link>
             </div>
+            <div v-if="!state" class="text-2xl">회원정보수정에서 관심종목을 등록해주세요!</div>
             <teamListItem v-for="item in teams" :key="item.id"
                 :id="item.id"
                 :leaderId="item.leaderId"
@@ -74,6 +75,7 @@ export default {
                     sportsCategory : '',
                 }
             ],
+            state:true
         }
   },
   created(){
@@ -83,7 +85,7 @@ export default {
             this.teams = res.data
         }).catch((err)=>{
             console.log(err)
-            
+            this.state=false
             
         })
       

@@ -5,9 +5,17 @@ cors:
   origin:
     url:
 
-images:
-  absolute:
-    location: /home/ubuntu/images/
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAYTDTAZKBOTC7OA5X
+      secretKey: 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
+    s3:
+      bucket: matchhere
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 spring:
   datasource:

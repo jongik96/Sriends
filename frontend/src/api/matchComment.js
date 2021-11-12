@@ -18,13 +18,13 @@ function getArticleComments(commentId){
 }
 
 // 댓글목록 조회하기
-function getArticleCommentsList(postId){
-    return instance.get(`match/board/comments/${postId}`)
+function getArticleCommentsList(postId,parentId){
+    return instance.get(`match/board/comments/${postId}/${parentId}`)
 }
 
 // 댓글 작성하기
 function postArticleComments(postId,parentId,content){
-    return instance.post(`match/board/comments${postId}`,{
+    return instance.post(`match/board/comments/${postId}`,{
          'parentId': parentId,'content': content
     })
 }

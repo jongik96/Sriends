@@ -175,6 +175,12 @@ export default new VueRouter({
         {
             path: '/matchingDetail',
             component: () => import('@/views/matching/matchingDetailPage.vue')
+        },
+
+        // 매칭글 조건 선택
+        {
+            path:'/matchingCategory',
+            component:() => import('@/views/matching/selectCategoryPage.vue')
         }
     ]
 })

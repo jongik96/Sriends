@@ -8,9 +8,10 @@
             </div>
             <waitingMemberItem v-for="item in member" :key="item.id"
                 :createDate="item.createDate"
-                :name="item.name"
-                :userId="item.userId"
+                :name="item.user.name"
+                :userId="item.user.id"
                 :description="item.description"
+                :pictureUrl="item.user.pictureUrl"
             >
                 <!-- <div class="grid grid-cols-7">
                     <div class="col-start-1 col-span-1">

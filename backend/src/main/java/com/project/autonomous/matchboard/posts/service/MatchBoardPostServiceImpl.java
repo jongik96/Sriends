@@ -1,10 +1,10 @@
 package com.project.autonomous.matchboard.posts.service;
 
-import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.matchboard.posts.dto.request.MatchBoardCreateReq;
+import com.project.autonomous.matchboard.posts.dto.request.MatchBoardUpdateReq;
 import com.project.autonomous.matchboard.posts.dto.response.MatchBoardPostInfo;
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.matchboard.posts.repository.MatchBoardPostRepository;
@@ -39,6 +39,7 @@ public class MatchBoardPostServiceImpl {
             .stream().map(UserTeamListRes::from).collect(Collectors.toList());
     }
 
+    // 게시글 생성
     @Transactional
     public MatchBoardPostInfo createPost(MatchBoardCreateReq matchBoardCreateReq) {
         User user = findMember(SecurityUtil.getCurrentMemberId());
@@ -54,6 +55,26 @@ public class MatchBoardPostServiceImpl {
     // 매치 게시글 상세 조회
     public MatchBoardPostInfo getPostInfo(Long postId) {
         return MatchBoardPostInfo.from(findMatchBoardPost(postId));
+    }
+
+    // 게시글 수정
+    @Transactional
+    public MatchBoardPostInfo updatePost(Long postId, MatchBoardUpdateReq matchBoardUpdateReq) {
+        SportCategory sportCategory = findSportCategory(matchBoardUpdateReq.getSportCategory());
+        Team team = findTeam(matchBoardUpdateReq.getTeamId());
+
+        MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
+        checkAuthority(SecurityUtil.getCurrentMemberId(), matchBoardPost.getUser().getId());
+        matchBoardPost.update(matchBoardUpdateReq, sportCategory, team);
+        return MatchBoardPostInfo.from(matchBoardPost);
+    }
+
+    // 게시글 삭제
+    @Transactional
+    public void deletePost(Long postId) {
+        MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
+        checkAuthority(SecurityUtil.getCurrentMemberId(), matchBoardPost.getUser().getId());
+        matchBoardPostRepository.delete(matchBoardPost);
     }
 
     public User findMember(long userId) {
@@ -78,4 +99,11 @@ public class MatchBoardPostServiceImpl {
         return matchBoardPostRepository.findById(postId)
             .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
     }
+
+    public void checkAuthority(long userId, long writerId) {
+        if(userId != writerId) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_CHANGE);
+        }
+    }
+
 }

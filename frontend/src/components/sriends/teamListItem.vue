@@ -1,8 +1,8 @@
 <template>
-    <div  class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
+    <div v-if="state" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
         <div class="grid md:col-start-1 md:col-span-2 col-start-1 col-span-6">
             <button @click="clickTeam">
-                <img src='@/assets/logo.png' class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
+                <img :src=pictureDownloadUrl @error="imgError" class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
             </button>
             <p class="visible md:invisible ml-14 w-36"></p>
 
@@ -19,6 +19,9 @@
                 <p>대표 : {{this.leaderName}}</p>
             </div>
             <div class="">
+                <p>현재 {{this.recruitmentState}}</p>
+            </div>
+            <div class="">
                 <p class="truncate w-96 invisible lg:visible">소개 : {{this.description}} </p>
             </div>
         </div>
@@ -26,6 +29,7 @@
 </template>
 
 <script>
+import img from '@/assets/sideImg.png'
 import { getTeamInfo } from '@/api/team.js'
 export default {
     props:{
@@ -36,13 +40,14 @@ export default {
             name:'',
             leaderId:'',
             leaderName:'',
-            pictureId:'',
+            pictureDownloadUrl:'',
             memberCount:'',
             membershipFee:'',
             recruitmentState:'',
             city:'',
             sportCategory:'',
             description:'',
+            state:true
         }
     }
     ,
@@ -53,17 +58,24 @@ export default {
             this.name = res.data.name
             this.createDate = res.data.createDate
             this.leaderId = res.data.leaderId
-            this.leaderName = res.data.leaderName
-            this.pictureId = res.data.pictureId
+            this.leaderName = res.data.leader.name
+            if(res.data.pictureDownloadUrl){
+            this.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
             this.memberCount = res.data.memberCount
             this.maxCount = res.data.maxCount
             this.description = res.data.description
-            this.recruitmentState = res.data.recruitmentState
+            if(res.data.recruitmentState==true){
+                this.recruitmentState='모집중!'
+            }else{
+                this.recruitmentState='모집완료'
+            }
             this.membershipFee = res.data.membershipFee
             this.city = res.data.city
             this.sportCategory = res.data.sportCategory
         }).catch((err)=>{
             console.log(err)
+            this.state=false
         })
     },
     methods:{
@@ -71,6 +83,11 @@ export default {
             this.$store.commit('setTeamId',this.id)
             this.$store.commit('setTeamName', this.name)
             this.$router.push('/team')
+        },
+        imgError:function(e){
+            e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
     }
 }

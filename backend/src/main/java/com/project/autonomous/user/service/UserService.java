@@ -8,6 +8,7 @@ import com.project.autonomous.user.dto.response.MyInfoRes;
 import com.project.autonomous.user.dto.response.UserInfoRes;
 import com.project.autonomous.user.dto.response.UserInterestRes;
 import com.project.autonomous.user.dto.response.UserTeamListRes;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -18,7 +19,7 @@ public interface UserService {
 
     void changePassword(CheckPasswordReq checkPasswordReq);
 
-    MyInfoRes modifyUser(UserModifyReq modifyInfo);
+    MyInfoRes modifyUser(UserModifyReq modifyInfo) throws IOException;
 
     Slice<UserTeamListRes> getMyTeams(Pageable pageable);
 

@@ -13,7 +13,7 @@
                           <p class="text-xl font-bold">S-riends 명</p>
                           <input type="text"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p class="text-xl font-bold">TeamImg</p>
-                          <input type="file"  id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">S-riends 이름</p>
@@ -298,7 +298,8 @@ export default {
                 city : '',
                 description: '',
                 sportCategory:'',
-                recruitmentState: ''
+                recruitmentState: '',
+                file:'',
             }
             
         }
@@ -325,6 +326,10 @@ export default {
         },
     },
     methods:{
+        fileSelect(){
+            console.log(this.$refs.image.files[0])
+            // this.form.uuid = this.$refs.image.files[0]
+        },
         submitForm: function(){
 
             if(!this.form.name || !this.form.membershipFee || !this.form.city
@@ -334,13 +339,27 @@ export default {
             ){
                 Swal.fire('입력되지 않은 칸이 있습니다.')
             }else{
+                    const token = store.state.accessToken
+            const formData = new FormData();
+            formData.append('name', this.form.name)
+            formData.append('maxCount', this.form.maxCount)
+            formData.append('description', this.form.description)
+            formData.append('recruitmentState', this.form.recruitmentState)
+            formData.append('membershipFee', this.form.membershipFee)
+            formData.append('city', this.form.city)
+            formData.append('sportCategory', this.form.sportCategory)
+            formData.append('file', this.$refs.image.files[0])
+            for(const element of formData){
+                console.log(element)
+            }
                 axios({
                     method: 'post',
                     url: `${SERVER_URL}/teams/`,
-                    headers: this.getToken,
-                        // 'Content-Type' : 'multipart/form-data',
-                        // // 'Content-Type' : 'application/json',
-                    data: this.form
+                    headers: {
+                        'Content-Type' : 'multipart/form-data',
+                        Authorization : `Bearer ${token}`,
+                    },
+                    data: formData
 
                 }).then((res)=>{
                     console.log(res.data)

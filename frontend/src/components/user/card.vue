@@ -40,7 +40,7 @@
 // import {getProfileInfo} from '@/api/index.js'
 import cardItem from '@/components/user/cardItem.vue'
 import axios from 'axios'
-import InfiniteLoading from 'vue-infinite-loading';
+import InfiniteLoading from 'vue-infinite-loading'
 import store from '@/store/index.js'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {

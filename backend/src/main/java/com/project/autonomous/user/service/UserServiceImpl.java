@@ -24,6 +24,7 @@ import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -78,10 +79,14 @@ public class UserServiceImpl implements UserService {
 
     // 회원 수정
     @Transactional
-    public MyInfoRes modifyUser(UserModifyReq userModifyReq) {
+    public MyInfoRes modifyUser(UserModifyReq userModifyReq) throws IOException {
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
         Picture picture;
+        if(user.getPicture() != null) {
+            dbFileStorageService.deleteFile(user.getPicture().getId());
+            pictureRepository.delete(user.getPicture());
+        }
         if (userModifyReq.getFile() == null) {
             picture = null;
         } else {

@@ -246,11 +246,16 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public void apply(long teamId, long userId, ApplyPostReq applyPostReq) {
 
+        long userid = SecurityUtil.getCurrentMemberId();
+
         if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){
+            throw new CustomException(ErrorCode.ALREADY_JOIN);
+        }
+        if(requestJoinRepository.findByUserIdAndTeamId(userid, teamId).isPresent()){
             throw new CustomException(ErrorCode.ALREADY_APPLY);
         }
         RequestJoin requestJoin = new RequestJoin();
-        requestJoin.setUserId(userId);
+        requestJoin.setUserId(userid);
         requestJoin.setTeamId(teamId);
         requestJoin.setDescription(applyPostReq.getDescription());
         requestJoin.setCreate_date(LocalDateTime.now());

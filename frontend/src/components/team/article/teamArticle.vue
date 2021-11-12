@@ -17,15 +17,7 @@
                 :createDate="item.createDate"
                 :name="item.name"
              >
-                <!-- <router-link :to="{'name': 'articleDetail', params:{'boardId':item.id}}">
-                <h2 class="text-2xl font-semibold"><a href="#">{{ item.title }}</a></h2>
-                <p class="text-justify leading-tight text-gray-800">{{ item.content }}<p>
-                <div class="mt-2">
-                <span class="left">Posted On: {{ item.createDate }}</span>
-                <span class="float-right">By: <a class="text-purple-500" href="#">{{ item.name }}</a></span>
-                </div>
-                </router-link> -->
-                
+
             </articleItem>
         </div>
   </div>
