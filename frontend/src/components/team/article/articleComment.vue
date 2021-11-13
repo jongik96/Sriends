@@ -4,7 +4,7 @@
             <p class="text-2xl">댓글</p>
             <div>
                 <textarea v-model="content" id="comment" rows=3 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
-                 <p v-if="content.length>40"> 40자 이하로 작성 가능합니다</p>
+                 <p v-if="content.length>50"> 50자 이하로 작성 가능합니다</p>
             </div>
             <div class="flex justify-end">
                 <button @click="postComment" :disabled="btnDisabled" class="bg-yellow-500 px-2 py-1 
@@ -47,7 +47,7 @@ export default {
     },
     computed:{
         btnDisabled(){
-            if((this.content.length>40) || (this.content.length ==0) ){
+            if((this.content.length>50) || (this.content.length ==0) ){
                 return true
             }else{
                 return false

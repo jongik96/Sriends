@@ -5,8 +5,7 @@
             <div class="col-start-6 col-span-1 ml-3 lg:ml-10 xl:ml-20">
                 <p class=" text-yellow-600">
                     <button @click="clickUser">{{ this.writerName }}</button>
-                    <img v-if="this.writerImg!=null" :src="writerImg" @error="imgError" class="h-10 w-10 rounded-xl" alt="">
-                    <img v-if="this.writerImg==null" src="@/assets/profile.png" class="h-10 w-10 rounded-xl">
+                    <img :src="writerImg" @error="imgError" class="h-10 w-10 rounded-xl" alt="">
                 </p>
                 <p class="text-xs">{{getTime}}</p>
             </div>
@@ -204,7 +203,7 @@ export default {
             })
         },
         clickUser: function(){
-            this.$store.commit('setTempUserId', this.writerId)
+            this.$store.commit('setTempUserId', this.writer.writerId)
             this.$router.push('/user')
         },
         imgError:function(e){

@@ -5,7 +5,7 @@
             <p class="col-start-1 break-words col-span-5 text-justify leading-tight text-gray-800">{{ this.reComment.content }}</p>
             <div class="col-start-6 col-span-1 lg:ml-10 xl:ml-20">
                 <p class=" text-yellow-600"><button @click="clickUser">{{this.writer.name}}</button></p>
-                <img :src="writer.pictureUrl" class="h-6 w-6 rounded-xl" alt="">
+                <img :src="writer.pictureUrl" class="h-6 w-6 rounded-xl" @error="imgError">
                 <p class="text-xs">{{this.reComment.createDate}}</p>
             </div>
         </div>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import img from '@/assets/profile.png'
 import { getDate } from '@/utils/date.js'
 import { getArticleComments } from '@/api/comment.js'
 import { deleteArticleComments } from '@/api/comment.js'
@@ -74,7 +75,9 @@ export default {
             this.writer.name = res.data.writer.name
             this.reComment.parentId = res.data.parentId
             this.writer.writerId = res.data.writer.writerId
+            if(res.data.writer.pictureUrl!=null){
             this.writer.pictureUrl = res.data.writer.pictureUrl
+            }
         }).catch((err)=>{
             console.log(err)
         })
@@ -133,6 +136,11 @@ export default {
         clickUser: function(){
             this.$store.commit('setTempUserId', this.writer.writerId)
             this.$router.push('/user')
+        },
+        imgError:function(e){
+            e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
     },
     computed:{

@@ -7,7 +7,7 @@
             <div class="mt-10">
                 <form>
                     <div class="grid grid-cols-6">
-                        <div class="col-start-1 col-span-3 mb-3">
+                        <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-6 mb-3">
                             <p class="text-2xl">글 분류를 선택해주세요</p>
                             <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.category">
                                 <option disabled value="">분류</option>
@@ -16,7 +16,7 @@
                             </select>
 
                         </div>
-                        <div class="col-start-1 col-span-3 border-r border-yellow-300">
+                        <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-6 border-r border-yellow-300">
                             <p class="text-2xl">지역을 선택해주세요</p>
                             <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="selectDo">
                             <option disabled value="">지역</option>
@@ -211,7 +211,7 @@
                             <br/>
                             <p v-if="this.form.city" class="mt-2 text-base md:text-xl font-medium">선택 : {{ this.form.city }} </p>
                         </div>
-                        <div class="col-start-4 col-span-3 ml-3">
+                        <div class="md:col-start-4 md:col-span-3 col-start-1 col-span-6 mt-3 md:mt-0 ml-0 md:ml-3">
                             <p class="text-2xl">종목을 선택해주세요</p>
                             <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
                             <option disabled value="">종목</option>

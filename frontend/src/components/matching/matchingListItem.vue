@@ -9,10 +9,10 @@
         <div class="grid col-start-3 col-span-1">
                 {{recruitmentCount}}
         </div>
-        <div class="grid col-start-4 col-span-1">
+        <div class="grid col-start-4 col-span-2 ml-5">
                 {{team.name}}
         </div>
-        <div class="grid col-start-5 col-span-2">
+        <div class="grid col-start-6 col-span-1">
                 {{createAt}}        
         </div>
     </div>

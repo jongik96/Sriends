@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import img from '@/assets/profiledefault.jpg'
+import img from '@/assets/profile.png'
 import {getTempProfileInfo} from '@/api/auth.js'
 import { getInterest } from '@/api/auth.js'
 import store from '@/store/index.js'
@@ -99,7 +99,9 @@ export default {
       this.name = res.data.name
       this.phone = res.data.phone
       this.gender = res.data.gender
+      if(res.data.pictureUrl!=null){
       this.pictureUrl = res.data.pictureUrl
+      }
       this.city = res.data.city
       console.log(this.pictureUrl)
       // string 형식 date로 바꿔서 나이계산

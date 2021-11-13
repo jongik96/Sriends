@@ -1,6 +1,6 @@
 <template>
   <div v-if="state" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-48 md:w-96 lg:w-full h-48 grid grid-cols-6">
-                <div class="grid col-start-1 col-span-2">
+                <div class="grid col-start-1 col-span-6 md:col-start-1 md:col-span-2">
                     <button @click="clickTeam">
                         <img :src=pictureDownloadUrl @error="imgError" class="object-contain rounded-md h-36 w-36 " alt="">
                     </button>
@@ -61,7 +61,9 @@ export default {
         .then((res)=>{
             console.log(res)
             this.name = res.data.name
+            if(res.data.pictureDownloadUrl){
             this.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
             this.sportCategory = res.data.sportCategory
             this.leaderName = res.data.leader.name
             this.memberCount = res.data.memberCount
@@ -90,6 +92,8 @@ export default {
         },
         imgError:function(e){
             e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
     }
 }

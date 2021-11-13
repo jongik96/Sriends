@@ -18,7 +18,7 @@
                 <span class="float-right">By: <a class="text-purple-500" href="#">{{ item.postedBy }}</a></span>
                 </div>
             </div> -->
-            <div class="grid grid-cols-6 mt-10">
+            <div class="grid grid-cols-6 mt-10 border-b border-yellow-500">
                 <div class="grid col-start-1 col-span-1">
                     글 분류
                 </div>
@@ -28,10 +28,10 @@
                 <div class="grid col-start-3 col-span-1">
                     모집인원
                 </div>
-                <div class="grid col-start-4 col-span-1">
+                <div class="grid col-start-4 col-span-2 ml-5">
                     작성팀
                 </div>
-                <div class="grid col-start-5 col-span-2">
+                <div class="grid col-start-6 col-span-1">
                     작성일시
                 </div>
             </div>

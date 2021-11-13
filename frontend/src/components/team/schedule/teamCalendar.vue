@@ -8,10 +8,10 @@
         <calendar></calendar>
       </div>
        -->
-      <div class="col-start-3 col-span-2 self-center xl:self-auto  xl:col-start-2 xl:col-span-1 xl:-ml-10 border-b bg-white mt-10">
+      <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 self-center xl:self-auto  xl:col-start-2 xl:col-span-1 xl:-ml-10 border-b bg-white mt-10">
         <calendar></calendar>
       </div>
-      <div class="col-start-2 col-span-4  xl:ml-0 xl:col-start-3 xl:col-span-3 border-b rounded-xl bg-white overflow-y-auto h-4/5 mt-10">
+      <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 xl:ml-0 xl:col-start-3 xl:col-span-3 border-b rounded-xl bg-white overflow-y-auto h-4/5 mt-10">
         <todoList></todoList>
       </div>
   </div>

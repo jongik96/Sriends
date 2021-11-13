@@ -1,14 +1,14 @@
 <template>
   <div>
-      <header class="flex flex-wrap items-center p-4 md:py-8">
+      <div class="flex flex-wrap items-center p-4 md:py-8">
 
       <div class="md:w-3/12 md:ml-16">
         <!-- profile image -->
-        <img v-if="!this.modifyState" class="w-30 h-30 md:w-60 md:h-60  object-contain rounded-xl
+        <img v-if="!this.modifyState" class="w-84 h-84 md:w-60 md:h-60  object-contain rounded-xl
                      border-2 border-yellow-500 p-1" :src=pictureUrl @error="imgError">
         <div v-if="this.modifyState">
           <p class="text-xl font-bold">profileImg</p>
-          <input type="file" @change="fileSelect" id="image" ref="image" class=" text-sm w-3/4 rounded-md border-2 border-yellow-400">
+          <input type="file" @change="fileSelect" id="image" ref="image" class=" text-sm w-full md:w-3/4 rounded-md border-2 border-yellow-400">
           <div id="preview" class="profile-image" v-if="form.uuid">
             <img class="profileImg" :src="form.uuid" />
           </div>
@@ -43,7 +43,7 @@
             <span class="">{{this.age}}</span>
           </li>
         </ul>
-        <ul class="md:flex text-xl">
+        <ul class="md:flex md:text-xl text-base">
           <li v-if="phone!=null">
             전화번호 :
             <span class="">{{this.phone}}</span>
@@ -307,7 +307,7 @@
         <p>Lorem ipsum dolor sit amet consectetur</p>
       </div> -->
 
-    </header>
+    </div>
   </div>
 </template>
 

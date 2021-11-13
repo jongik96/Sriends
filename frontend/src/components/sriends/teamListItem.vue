@@ -7,7 +7,7 @@
             <p class="visible md:invisible ml-14 w-36"></p>
 
         </div>
-        <div class=" grid md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
+        <div class=" grid  md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
             <div class="">
                 <p>팀명 : {{this.name}} </p>
             </div>
@@ -59,7 +59,9 @@ export default {
             this.createDate = res.data.createDate
             this.leaderId = res.data.leaderId
             this.leaderName = res.data.leader.name
+            if(res.data.pictureDownloadUrl){
             this.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
             this.memberCount = res.data.memberCount
             this.maxCount = res.data.maxCount
             this.description = res.data.description
@@ -84,6 +86,8 @@ export default {
         },
         imgError:function(e){
             e.target.src = img
+            console.log(img)
+            console.log(e.target.src)
         }
     }
 }

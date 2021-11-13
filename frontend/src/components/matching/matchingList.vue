@@ -28,10 +28,10 @@
                 <div class="grid col-start-3 col-span-1">
                     모집인원
                 </div>
-                <div class="grid col-start-4 col-span-1">
+                <div class="grid col-start-4 col-span-2">
                     작성팀
                 </div>
-                <div class="grid col-start-5 col-span-2">
+                <div class="grid col-start-6 col-span-1">
                     작성일시
                 </div>
             </div>
