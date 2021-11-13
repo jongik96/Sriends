@@ -1,6 +1,6 @@
 <template>
   <div v-if="state" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-48 md:w-96 lg:w-full h-48 grid grid-cols-6">
-                <div class="grid col-start-1 col-span-2">
+                <div class="grid col-start-1 col-span-6 md:col-start-1 md:col-span-2">
                     <button @click="clickTeam">
                         <img :src=pictureDownloadUrl @error="imgError" class="object-contain rounded-md h-36 w-36 " alt="">
                     </button>

@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-6">
-        <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div class="flex justify-start">
                 종목 : {{selectSportCategory}} 지역 : {{selectCity}}
             </div>

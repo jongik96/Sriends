@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-6">
-        <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
+        <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div class="grid place-content-end">
                 <router-link to="/team/memberList">
                 <p class="bg-yellow-400 px-2 py-1 text-black font-semibold text-sm rounded">돌아가기</p>

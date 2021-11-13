@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-6">
-        <div class="col-start-2 col-span-4 border-b px-4 py-2 bg-white mt-10">
+        <div class="col-start-1 col-span-6 sm:col-start-2 sm:col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div class="md:flex md:justify-end ml-5 md:ml-0">
                 <router-link to="/searchTeam">
                 <button class="bg-yellow-500 px-2 mb-2 md:mb-0 py-1 
@@ -9,13 +9,13 @@
                             다른 지역, 종목 찾아보기
                 </button>
                 </router-link>
-                <router-link to="/team/createArticle">
+                <!-- <router-link to="/team/createArticle">
                 <button class="bg-yellow-500 px-2 py-1 
                     text-white font-semibold text-sm rounded block text-center 
                     sm:inline-block mr-5">
                             모집글 작성하기
                 </button>
-                </router-link>
+                </router-link> -->
             </div>
             <div v-if="!state" class="text-2xl">회원정보수정에서 관심종목을 등록해주세요!</div>
             <teamListItem v-for="item in teams" :key="item.id"

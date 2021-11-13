@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-6">
-      <div class="col-start-2 col-span-4">
+      <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4">
         <header class="flex flex-wrap items-center p-4 md:py-8">
 
         <div class="md:w-4/12 md:ml-16">
@@ -55,22 +55,20 @@
                 <span v-if="!recruitmentState" class="font-semibold">모집 중</span>
                 <span v-if="recruitmentState" class="font-semibold">모집 완료</span>
             </li>
+            <li>
+                소개
+               <p>{{this.description}}</p>
+            </li>
             </ul>
 
-            <!-- user meta form medium screens -->
-            <div class="hidden md:block">
-            <!-- <h1 class="font-semibold">우리팀의 짱 박범진.</h1>
-            <span>Travel, Nature and Music</span> -->
-            소개
-            <p>{{this.description}}</p>
-            </div>
+
 
         </div>
 
         <!-- user meta form small screens -->
-        <div class="md:hidden text-sm my-2">
+        <!-- <div class="md:hidden text-sm my-2">
             <p>{{this.description}}</p>
-        </div>
+        </div> -->
 
         </header>
         <div v-if="this.authState" class="grid justify-end text-xl">회원님은 {{this.authority}}입니다!</div>
@@ -132,7 +130,9 @@ export default {
             this.createDate = res.data.createDate
             this.leader.id = res.data.leader.id
             this.leader.name = res.data.leader.name
+            if(res.data.pictureDownloadUrl){
             this.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
             this.memberCount = res.data.memberCount
             this.maxCount = res.data.maxCount
             this.description = res.data.description

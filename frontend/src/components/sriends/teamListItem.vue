@@ -7,7 +7,7 @@
             <p class="visible md:invisible ml-14 w-36"></p>
 
         </div>
-        <div class=" grid md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
+        <div class=" grid  md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
             <div class="">
                 <p>팀명 : {{this.name}} </p>
             </div>
