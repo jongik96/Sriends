@@ -1,13 +1,11 @@
 <template>
-    <div v-if="state" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-60 md:w-96 lg:w-full h-48 grid grid-cols-6">
-        <div class="grid md:col-start-1 md:col-span-2 col-start-1 col-span-6">
+    <div v-if="state" class="border-2 border-yellow-500 rounded-xl shadow-md p-4 mt-5 mx-6 mb-4 w-auto md:w-96 lg:w-full h-48 grid grid-cols-6">
+        <div class="grid md:col-start-1 md:col-span-2 col-start-1 col-span-2">
             <button @click="clickTeam">
-                <img :src=pictureDownloadUrl @error="imgError" class="rounded-md h-20 w-20 md:ml-10 ml-16" alt="">
+                <img :src=pictureDownloadUrl @error="imgError" class="rounded-md h-20 w-20 md:ml-10 sm:ml-16" alt="">
             </button>
-            <p class="visible md:invisible ml-14 w-36"></p>
-
         </div>
-        <div class=" grid  md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
+        <div class=" grid col-start-3 col-span-4  md:col-start-3 md:col-span-4 ml-0 md:ml-5 lg:ml-0">
             <div class="">
                 <p>팀명 : {{this.name}} </p>
             </div>
@@ -22,7 +20,7 @@
                 <p>현재 {{this.recruitmentState}}</p>
             </div>
             <div class="">
-                <p class="truncate w-96 invisible lg:visible">소개 : {{this.description}} </p>
+                <p class="truncate w-96  lg:visible">소개 : {{this.description}} </p>
             </div>
         </div>
     </div>
