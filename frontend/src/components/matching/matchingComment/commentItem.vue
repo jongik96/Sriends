@@ -13,9 +13,9 @@
         </div>
         <div v-if="modifyState">
             <textarea v-model="modifyContent" id="comment" rows=2 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
-            <button @click="modifyComment" :disabled="!modifyContent" class="">수정하기</button>
+            <button @click="modifyComment" :disabled="btnDisabled" class="">수정하기</button>
             <button @click="deleteComment" class="ml-3">삭제</button>
-            <p v-if="modifyContent.length>100"> 100자 이하로 작성 가능합니다</p>
+            <p v-if="modifyContent.length>40"> 40자 이하로 작성 가능합니다</p>
             <button @click="modifyState=false" class="ml-5">취소</button>
         </div>
         <div v-if="!modifyState" class="flex">
@@ -29,7 +29,8 @@
             </div>
             <div v-if="reCommentState">
                 <textarea v-model="reCommentContent" id="comment" rows=2 type="text" class="text-xl w-full rounded-md border-2 border-yellow-400 mt-2"/>
-                <button @click="postReComment">작성</button>      
+                <p v-if="reCommentContent.length>40"> 40자 이하로 작성 가능합니다</p>
+                <button :disabled="btn2Disabled" @click="postReComment">작성</button>      
                 <button @click="reCommentState=false" class="ml-5">취소</button>
             </div>
         </div>
@@ -223,7 +224,14 @@ export default {
             return config
         },
         btnDisabled(){
-            if((this.modifyContent.length>100) || (this.modifyContent.length ==0) ){
+            if((this.modifyContent.length>40) || (this.modifyContent.length ==0) ){
+                return true
+            }else{
+                return false
+            }
+        },
+        btn2Disabled(){
+            if((this.reCommentContent.length>40) || (this.reCommentContent.length ==0) ){
                 return true
             }else{
                 return false

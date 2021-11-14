@@ -5,7 +5,7 @@
             <button @click="clickTeam">
             <!-- <router-link :to="{'name': 'team', params:{'teamId':this.id}}"> -->
             <img :src=this.pictureDownloadUrl @error="imgError"
-                class="w-full h-80 md:w-full md:h-full object-center object-contain">
+                class="w-full h-80 md:w-full md:h-48 object-center md:object-contain">
             <!-- </router-link> -->
             </button>
         </div>

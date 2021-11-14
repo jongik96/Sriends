@@ -28,7 +28,7 @@
         </div>
       </div>
       <div v-if="id!=myId" 
-       class=" sm:visible col-start-1 col-span-4 sm:col-start-4 sm:col-span-3 grid sm:place-items-center">
+       class="ml-1 sm:visible col-start-1 col-span-4 sm:col-start-4 sm:col-span-3 grid sm:place-items-center">
           <div v-if="Myauth">
             <select class="border-2 border-solid w-16 h-6 border-yellow-500 rounded-md" v-model="modifyAuth">
                             <option disabled value="">권한</option>
