@@ -16,6 +16,7 @@
                         <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                             <p class="text-xl font-bold">내용</p>
                             <textarea v-model="content" rows=5 type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+                            <p v-if="content.length>100" class="text-yellow-600">100자 이내로 입력해주세요</p>
                         </div>
                         <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                             <p class="text-xl font-bold">일시</p>
@@ -23,7 +24,7 @@
                         </div>
                         <div class="flex justify-center p-2 mt-10">
                             <!-- <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">Log In</button> -->
-                            <button @click="addSchedule"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">
+                            <button @click="addSchedule" :disabled="btnDisabled" class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">
                                 작성
                             </button>
                             <router-link to="/team/calendar">
@@ -74,6 +75,13 @@ export default {
                 Authorization: `Bearer ${token}`
             }
             return config
+        },
+        btnDisabled(){
+            if((this.content.length>100) || (this.content.length ==0) || !this.name || !this.createDate ){
+                return true
+            }else{
+                return false
+            }
         },
     }
 }

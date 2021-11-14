@@ -280,7 +280,7 @@
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit"  class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button type="submit" :disabled="btnDisabled" class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/">
@@ -313,6 +313,7 @@ export default {
             selectDo : '',
             EmailAuthBtn : false,
             authCode: '',
+            authState:false,
             passwordConfirm: '',
             isDuplicated: true,
             form:{
@@ -330,10 +331,10 @@ export default {
     },
     computed: {
         btnDisabled(){
-            if(this.isDuplicated || !this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
-                return false
+            if(!this.authState || !this.isDuplicated || !this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
+                return true
             }
-            return true
+            return false
         },
         isEmailValid(){
             return validateEmail(this.form.email);
@@ -411,9 +412,11 @@ export default {
             .then((res)=>{
                 console.log(res)
                 Swal.fire('인증이 완료되었습니다.')
+                this.authState = true
             }).catch((err)=>{
                 console.log(err)
                 Swal.fire('코드가 일치하지 않습니다ㅠ')
+                this.authState = false
             })
         },
         //이메일 중복검사
@@ -425,6 +428,7 @@ export default {
                     this.isDuplicated = false
                 }else{
                     Swal.fire('사용가능한 ID입니다.')
+                    this.isDuplicated = true
                 }
             }).catch((err)=>{
                 console.log(err)
