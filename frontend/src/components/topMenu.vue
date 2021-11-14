@@ -21,6 +21,9 @@
               <li>
                 <router-link to="/main"><p class="hover:bg-yellow-500">My S-riends</p></router-link>
               </li>
+              <li>
+                <router-link to="/chatList"><p class="hover:bg-yellow-500">Chat</p></router-link>
+              </li>
               <!-- <li>
                 <router-link to="/modify"><p class="hover:bg-yellow-500">정보 수정</p></router-link>
               </li> -->
@@ -49,8 +52,11 @@
               My S-riends
             </p>
           </router-link>
+          <router-link to="/chatList">
+            Chat <font-awesome-icon icon="comments"/>
+          </router-link>
           <button @click="logout()">
-            <p class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200  w-23 mr-4">
+            <p class="ml-3 text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200  w-23 mr-4">
               로그아웃
             </p>
           </button>
