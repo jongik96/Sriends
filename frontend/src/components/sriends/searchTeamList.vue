@@ -19,7 +19,7 @@
                             <option value="6">제주</option>
                             <option value="7">광주/전라</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
+                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-0 md:ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="서울특별시">서울특별시</option>
                                 <option value="인천광역시">인천광역시</option>
