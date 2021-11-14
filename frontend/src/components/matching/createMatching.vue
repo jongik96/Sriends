@@ -263,7 +263,7 @@
                 </div>
                 <div class="col-start-1 col-span-6 mt-10 flex justify-center">
                     <!-- <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">Log In</button> -->
-                    <button @click="clickPost" class="border-solid border-2 mr-3 mb-3 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ml-3">
+                    <button @click="clickPost" :disabled="btnDisabled" class="border-solid border-2 mr-3 mb-3 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ml-3">
                         작성
                     </button>
                     <router-link to="/matchingList">
@@ -319,6 +319,19 @@ export default {
                 console.log(err)
             })
         }
+    },
+    computed:{
+        btnDisabled(){
+            if(!this.form.city || !this.form.place || !this.form.teamId
+                || !this.form.sportCategory || !this.form.matchBoardCategory
+                || !this.form.playingTime || !this.form.recruitmentCount ||  !this.form.content
+            ){
+                return true
+            }
+            return false
+        },
+
+        
     }
 
 }

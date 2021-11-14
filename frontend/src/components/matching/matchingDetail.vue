@@ -9,7 +9,7 @@
                         <button @click="clickDelete" class="mr-3">삭제</button>
                     </div>
                 </div>
-                <p class="text-justify leading-tight border-b-2 text-gray-800 h-36 mt-10">
+                <p class="text-justify break-words leading-tight border-b-2 text-gray-800 h-36 mt-10">
                     {{content}}
                 <p>
                 <div class="grid grid-cols-6 mt-5">

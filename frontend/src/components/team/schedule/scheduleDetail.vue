@@ -43,9 +43,10 @@
                 <div class="mt-5 ml-3">
                     <p class="text-xl">내용</p>
                     <textarea rows="5" type="text" v-model="modifyContent" class=" text-medium w-3/4 rounded-md border-2 border-yellow-400"></textarea>
+                    <p v-if="modifyContent.length>100" class="text-yellow-600">100자 이내로 입력해주세요</p>
                 </div>
                 <div class="mt-7 ml-3">
-                    <button @click="modifyCalendar">수정하기</button>
+                    <button @click="modifyCalendar" :disabled="btnDisabled">수정하기</button>
                     <button @click="deleteCalendar" class="ml-5">삭제</button>
                     <button class="ml-5" @click="modifyState=false">취소</button>
 
@@ -170,6 +171,12 @@ export default {
                 Authorization: `Bearer ${token}`
             }
             return config
+        },
+        btnDisabled(){
+            if(!this.modifyName || (this.modifyContent.length>100) || (this.modifyContent.length ==0) || !this.modifyDate ){
+                return true
+            }
+            return false
         },
     }
 }
