@@ -46,7 +46,7 @@
       </div>
       <div v-if="myId!==id" class="col-start-5 col-span-3 sm:col-start-7 sm:col-span-1">
           <div class="flex justify-end">
-            <button><font-awesome-icon icon="comments"/></button>
+            <router-link to="/chatList"><font-awesome-icon icon="comments"/></router-link>
           </div>
           <div v-if="!noGrade" class="flex justify-end mt-5">
             <button @click="clickBan"><font-awesome-icon icon="ban"/></button>
