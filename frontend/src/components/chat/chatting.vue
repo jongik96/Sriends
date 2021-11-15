@@ -37,7 +37,7 @@
                     </div>
                   </div>
                 </div> -->
-                <div v-for="item in items" :key="item.id" class="col-start-1 col-end-8 p-3 rounded-lg">
+                <div v-for="item in recvList" :key="item.id" class="col-start-1 col-end-8 p-3 rounded-lg">
                   <div v-if="item.userId==3" class="flex flex-row items-center">
                     <div
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-200 flex-shrink-0"
@@ -51,7 +51,7 @@
                     </div>
                   </div>
                 </div>
-                <div v-for="item in items" :key="item.id" class="col-start-6 col-end-13 p-3 rounded-lg">
+                <div v-for="item in recvList" :key="item.id" class="col-start-6 col-end-13 p-3 rounded-lg">
                   <div v-if="item.userId==1" class="flex items-center justify-start flex-row-reverse">
                     <div
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-500 flex-shrink-0"
