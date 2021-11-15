@@ -12,11 +12,12 @@
                       <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                           <p class="text-xl font-bold">간단한 소개글을 적어주세요.</p>
                           <textarea v-model="description" id="description" rows=5 type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+                          <p v-if="description.length>100" class="text-yellow-600">100자 이내로 입력해주세요</p>
                       </div>
                       <div class="flex justify-center p-2 mt-10">
                         <!-- <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">Log In</button> -->
                         
-                        <button @click="clickJoin" :disabled="!this.description"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ">
+                        <button @click="clickJoin" :disabled="btnDisabled"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10 ">
                             요청
                         </button>
                         <router-link to="/team"   >
@@ -55,6 +56,15 @@ export default {
                 Swal.fire('이미 가입신청이 되어 있습니다!')
             })
         }
+    },
+    computed:{
+        btnDisabled(){
+            if((this.description.length>400) || (this.description.length ==0)){
+                return true
+            }else{
+                return false
+            }
+        },
     }
 }
 </script>

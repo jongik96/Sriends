@@ -86,7 +86,7 @@
               </div>
             </div>
             <div class="ml-4">
-              <button
+              <button @click="sendMessage"
                 class="flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
               >
                 <span>Send</span>
@@ -129,6 +129,7 @@ export default {
             roomId:1,
             opponentId:3,
             userName:'',
+            recvList:[],
             Myid:1,
             items:[
                 {
@@ -177,25 +178,31 @@ export default {
     // }
     created() {
         // App.vue가 생성되면 소켓 연결을 시도합니다.
+        // this.findRoom();
         this.connect()
     },
     methods: {
-        sendMessage (e) {
-        if(e.keyCode === 13 && this.userName !== '' && this.message !== ''){
+        sendMessage () {
             this.send()
-            this.message = ''
-        }
+            //  위의 sendMessage는 유효성검사
+            // 조건에 충족하면 아래 send()이벤트 실행
         },    
+
         send() {
         console.log("Send message:" + this.message);
+        // ws = this.stompClient
         if (this.stompClient && this.stompClient.connected) {
             const msg = { 
-            userName: this.userName,
-            content: this.message 
+            // userName: this.userName,
+            type: 'TALK',
+            roomId: 1,
+            message: this.message,
+            sender: 1
             };
-            this.stompClient.send("/receive", JSON.stringify(msg), {});
+            this.stompClient.send(`${SERVER_URL}/pub/chat/message`, JSON.stringify(msg), {});
         }
         },    
+
         connect() {
         let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
         this.stompClient = Stomp.over(socket);
@@ -208,12 +215,14 @@ export default {
             console.log('소켓 연결 성공', frame);
             // 서버의 메시지 전송 endpoint를 구독합니다.
             // 이런형태를 pub sub 구조라고 합니다.
-            this.stompClient.subscribe("/send", res => {
-                console.log('구독으로 받은 메시지 입니다.', res.body);
+                this.stompClient.subscribe(`${SERVER_URL}/sub/chat/room`, res => {
+                    console.log('res=>'+res)
+                    console.log('subscribe 로 받은 메시지 입니다.', res.body);
 
-                // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-                this.recvList.push(JSON.parse(res.body))
-            });
+                    // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+                    this.recvList.push(JSON.parse(res.body))
+                    console.log(this.recvList)
+                });
             },
             error => {
             // 소켓 연결 실패

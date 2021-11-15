@@ -42,9 +42,9 @@
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">Password Confirm *</p>
-                          <input type="password" v-model="form.passwordConfirm" class="text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="password" v-model="passwordConfirm" class="text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p class="w-3/4">
-                              <span v-if="(form.password).length>0 && (form.password != form.passwordConfirm)" class=" text-yellow-600">비밀번호가 일치하지 않습니다!</span>
+                              <span v-if="(form.password).length>0 && (form.password != passwordConfirm)" class=" text-yellow-600">비밀번호가 일치하지 않습니다!</span>
                           </p>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
@@ -280,11 +280,11 @@
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit" :disabled="btnDisabled" class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button type="submit" :disabled="!btnDisabled"  class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/">
-                            <button type="submit" class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
+                            <button  class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
                         </router-link>
                     </div>          
                   </form>
@@ -315,7 +315,7 @@ export default {
             authCode: '',
             authState:false,
             passwordConfirm: '',
-            isDuplicated: true,
+            isDuplicated: false,
             form:{
                 email: '',
                 password: '',
@@ -331,10 +331,16 @@ export default {
     },
     computed: {
         btnDisabled(){
-            if(!this.authState || !this.isDuplicated || !this.isEmailValid || !this.isPasswordValid || !this.form.bitrh || !this.form.gender || !this.form.city || !this.form.name){
-                return true
+            if(!this.authState || !this.isDuplicated || !this.isEmailValid || !this.isPasswordValid || !this.isValidAny){
+                return false
             }
-            return false
+            return true
+        },
+        isValidAny(){
+            if((this.form.birth=='') || (this.form.gender=='') || (this.form.city=='') || (this.form.name=='') ){
+                return false
+            }
+            return true
         },
         isEmailValid(){
             return validateEmail(this.form.email);
