@@ -10,6 +10,16 @@
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">TeamImg</p>
                           <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <div id="preview" class="grid grid-cols-2 profile-image" >
+                            <div>
+                            <p>현재 프로필</p>
+                            <img class="profileImg h-10 w-15" :src=form.pictureDownloadUrl />
+                            </div>
+                            <div>
+                            <p>변경할 프로필</p>
+                            <img class="profileImg h-10 w-15" :src=modifyPicture />
+                            </div>
+                        </div>
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">S-riends 이름</p>
@@ -283,6 +293,7 @@ export default {
     data() {
         return {
             selectDo : '',
+            modifyPicture:'',
             form:{
                 name: '',
                 file: '',
@@ -292,6 +303,7 @@ export default {
                 description: '',
                 sportCategory:'',
                 recruitmentState: '',
+                pictureDownloadUrl:'',
             },
             auth:store.state.auth
             
@@ -305,7 +317,9 @@ export default {
             this.form.name = res.data.name
             
             // this.form.file = res.data.pictureDownloadUrl
-            
+            if(res.data.pictureDownloadUrl!=null){
+                this.form.pictureDownloadUrl = res.data.pictureDownloadUrl
+            }
             this.form.maxCount = res.data.maxCount
             this.form.description = res.data.description
             this.form.recruitmentState = res.data.recruitmentState
@@ -329,7 +343,8 @@ export default {
     methods:{
         fileSelect(){
             console.log(this.$refs.image.files[0])
-            // this.form.uuid = this.$refs.image.files[0]
+            const file = this.$refs.image.files[0]
+            this.modifyPicture = URL.createObjectURL(file)
         },
         submitForm: function(){
             const teamId = store.state.teamId

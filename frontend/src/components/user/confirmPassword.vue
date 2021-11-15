@@ -35,7 +35,7 @@
 import Swal from 'sweetalert2'
 import { confirmPassword } from '@/api/auth.js'
 import { deleteUser } from '@/api/auth.js'
-import store from '@/store/index.js'
+// import store from '@/store/index.js'
 export default {
  data(){
    return{
@@ -46,14 +46,14 @@ export default {
  },
  methods:{
    submitForm(){
-     const userid = store.state.userId
+    //  const userid = store.state.userId
 
     confirmPassword(this.form)
      .then((res)=>{
        console.log(res)
        if(res.data==true){
 
-        deleteUser(userid)
+        deleteUser()
          .then((res)=>{
            console.log(res)
            Swal.fire('회원삭제 되었습니다.')
