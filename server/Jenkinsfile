@@ -57,7 +57,7 @@ pipeline {
                 // | xargs -r docker rmi'
                 sh 'docker images -f dangling=true && docker rmi $(docker images -f dangling=true -q)'
                 // docker container 실행
-                sh 'docker run -d --name frontend -v /home/ubuntu/ssl:/home/ssl -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul -p 80:80 -p 443:443 --network sriends-net frontend:latest'
+                sh 'docker run -d --name frontend -v /home/ubuntu/ssl:/home/ssl -p 80:80 -p 443:443 --network sriends-net frontend:latest'
                 sh 'docker run -d --name backend -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul -p 8080:8080 --network sriends-net backend:latest'
             }
         }
