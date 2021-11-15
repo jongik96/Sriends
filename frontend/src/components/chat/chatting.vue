@@ -38,7 +38,7 @@
                   </div>
                 </div> -->
                 <div v-for="item in recvList" :key="item.id" class="col-start-1 col-end-8 p-3 rounded-lg">
-                  <div v-if="item.userId==3" class="flex flex-row items-center">
+                  <div v-if="item.sender==56" class="flex flex-row items-center">
                     <div
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-200 flex-shrink-0"
                     >
@@ -52,7 +52,7 @@
                   </div>
                 </div>
                 <div v-for="item in recvList" :key="item.id" class="col-start-6 col-end-13 p-3 rounded-lg">
-                  <div v-if="item.userId==1" class="flex items-center justify-start flex-row-reverse">
+                  <div v-if="item.sender==58" class="flex items-center justify-start flex-row-reverse">
                     <div
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-500 flex-shrink-0"
                     >
@@ -118,8 +118,9 @@
 <script>
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
+import store from '@/store/index.js'
 // import axios from 'axios'
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
 
     data(){
@@ -128,54 +129,24 @@ export default {
             message:'',
             roomId:1,
             opponentId:3,
-            userName:'',
+            userName:store.state.userId,
             recvList:[],
             Myid:1,
-            items:[
-                {
-                    name:'testA',
-                    message:'HiHi',
-                    userId:1
-                },
-                {
-                    name:'testB',
-                    message:'Hello',
-                    userId:3
-                }
-            ]
+            // items:[
+            //     {
+            //         name:'testA',
+            //         message:'HiHi',
+            //         userId:1
+            //     },
+            //     {
+            //         name:'testB',
+            //         message:'Hello',
+            //         userId:3
+            //     }
+            // ]
         }
     },
-    // created(){
-    //     this.findRoom();
-    // },
-    // methods:{
-    //     findRoom: function() {
-    //         axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; });
-    //     },
-    //     connect:function() {
-    //         // pub/sub event
-    //         Stomp.connect({}, function() {
-    //             Stomp.subscribe("/sub/chat/room/"+this.roomId, function(sendText) {
-    //                 var recv = JSON.parse(sendText.body);
-    //                 Stomp.recvMessage(recv);
-    //             });
-    //             Stomp.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId:this.roomId, sender:this.items.userId}));
-    //         }, function(error) {
-    //             console.log(error)
-    //             if(this.reconnect++ <= 5) {
-    //                 setTimeout(function() {
-    //                     console.log("connection reconnect");
-    //                     sock = new SockJS(`${SERVER_URL}/ws-stomp`);
-    //                     Stomp = Stomp.over(sock);
-    //                     this.connect();
-    //                 },10*1000);
-    //             }
-    //         });
-    //     },
-    //     recvMessage: function(recv) {
-    //         this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
-    //     }
-    // }
+
     created() {
         // App.vue가 생성되면 소켓 연결을 시도합니다.
         // this.findRoom();
@@ -195,16 +166,18 @@ export default {
             const msg = { 
             // userName: this.userName,
             type: 'TALK',
-            roomId: 1,
+            roomId: '1',
             message: this.message,
-            sender: 1
+            sender: this.userName
             };
-            this.stompClient.send(`https://k5d106.p.ssafy.io/pub/chat/message`, JSON.stringify(msg), {});
+            this.stompClient.send(`/pub/chat/message`, JSON.stringify(msg), {});
+        }else{
+          console.log("not connect!")
         }
         },    
 
         connect() {
-        let socket = new SockJS(`https://k5d106.p.ssafy.io/ws-stomp`);
+        let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
         this.stompClient = Stomp.over(socket);
         console.log(`소켓 연결을 시도합니다. 서버 주소:'https://k5d106.p.ssafy.io:/api/ws-stomp'`)
         this.stompClient.connect(
@@ -215,7 +188,7 @@ export default {
             console.log('소켓 연결 성공', frame);
             // 서버의 메시지 전송 endpoint를 구독합니다.
             // 이런형태를 pub sub 구조라고 합니다.
-                this.stompClient.subscribe(`https://k5d106.p.ssafy.io/sub/chat/room`, res => {
+                this.stompClient.subscribe('/sub/chat/room/' + this.roomId, res => {
                     console.log('res=>'+res)
                     console.log('subscribe 로 받은 메시지 입니다.', res.body);
 
