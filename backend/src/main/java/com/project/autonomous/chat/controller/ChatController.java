@@ -14,17 +14,17 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ChatController {
     private final SimpMessagingTemplate simpMessagingTemplate;
-//    private final ChatService chatService;
-//
-//    @PostMapping
-//    public ChatRoom createRoom(@RequestParam String name) {
-//        return chatService.createRoom(name);
-//    }
-//
-//    @GetMapping
-//    public List<ChatRoom> findAllRoom() {
-//        return chatService.findAllRoom();
-//    }
+    // private final ChatService chatService;
+    //
+    // @PostMapping
+    // public ChatRoom createRoom(@RequestParam String name) {
+    // return chatService.createRoom(name);
+    // }
+    //
+    // @GetMapping
+    // public List<ChatRoom> findAllRoom() {
+    // return chatService.findAllRoom();
+    // }
 
     private final SimpMessageSendingOperations messagingTemplate;
 

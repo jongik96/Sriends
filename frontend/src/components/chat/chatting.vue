@@ -119,7 +119,7 @@
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 // import axios from 'axios'
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
 
     data(){
@@ -199,12 +199,12 @@ export default {
             message: this.message,
             sender: 1
             };
-            this.stompClient.send(`${SERVER_URL}/pub/chat/message`, JSON.stringify(msg), {});
+            this.stompClient.send(`https://k5d106.p.ssafy.io/pub/chat/message`, JSON.stringify(msg), {});
         }
         },    
 
         connect() {
-        let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
+        let socket = new SockJS(`https://k5d106.p.ssafy.io/ws-stomp`);
         this.stompClient = Stomp.over(socket);
         console.log(`소켓 연결을 시도합니다. 서버 주소:'https://k5d106.p.ssafy.io:/api/ws-stomp'`)
         this.stompClient.connect(
@@ -215,7 +215,7 @@ export default {
             console.log('소켓 연결 성공', frame);
             // 서버의 메시지 전송 endpoint를 구독합니다.
             // 이런형태를 pub sub 구조라고 합니다.
-                this.stompClient.subscribe(`${SERVER_URL}/sub/chat/room`, res => {
+                this.stompClient.subscribe(`https://k5d106.p.ssafy.io/sub/chat/room`, res => {
                     console.log('res=>'+res)
                     console.log('subscribe 로 받은 메시지 입니다.', res.body);
 
