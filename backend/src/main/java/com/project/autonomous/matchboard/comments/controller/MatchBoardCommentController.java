@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +41,7 @@ public class MatchBoardCommentController {
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public ResponseEntity<MatchBoardCommentRes> createComment(@PathVariable("postId") Long postId,
-        @RequestBody MatchBoardCreateCommentReq req) {
+        @Valid @RequestBody MatchBoardCreateCommentReq req) {
         return ResponseEntity.ok(matchBoardCommentService.createComment(postId, req));
     }
 
@@ -68,8 +69,7 @@ public class MatchBoardCommentController {
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public ResponseEntity<MatchBoardCommentRes> updatePost(
-        @PathVariable("commentId") Long commentId, @RequestBody
-        MatchBoardUpdateCommentReq req) {
+        @PathVariable("commentId") Long commentId, @Valid @RequestBody MatchBoardUpdateCommentReq req) {
         return ResponseEntity.ok(matchBoardCommentService.updateComment(commentId, req));
     }
 
