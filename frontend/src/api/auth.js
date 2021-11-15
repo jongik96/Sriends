@@ -53,8 +53,8 @@ function confirmPassword(password){
 }
 
 // 회원삭제 api
-function deleteUser(userid){
-    return instance.delete(`users/${userid}`)
+function deleteUser(){
+    return instance.delete('users')
 }
 
 // 관심종목 선택 api

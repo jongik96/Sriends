@@ -10,7 +10,9 @@
                     </button>
                 </router-link>
             </div>
+            <div class="text-xl">{{this.myCity}} 의 <span class="mr-3" v-for="item in mySportCategory" :key="item.id">{{item.interest}}</span>에 해당하는 스렌즈 리스트입니다~</div>
             <div v-if="!state" class="text-2xl">회원정보수정에서 관심종목을 등록해주세요!</div>
+            <div v-if="teams.length==0">{{this.myCity}}의 <span v-for="item in mySportCategory" :key="item.id">{{item.interest}}</span>에 해당하는 팀이 없습니다.</div>
             <teamListItem v-for="item in teams" :key="item.id"
                 :id="item.id"
                 :leaderId="item.leaderId"
@@ -23,6 +25,8 @@
 <script>
 import teamListItem from '@/components/sriends/teamListItem.vue'
 import { getInterestTeam } from '@/api/team.js'
+import { getInterest } from '@/api/auth.js'
+import store from '@/store/index.js'
 // import Swal from 'sweetalert2'
 export default {
     components:{
@@ -30,6 +34,8 @@ export default {
     },
     data() {
         return{
+            myCity: store.state.myCity,
+            mySportCategory:[],
             teams:[
                 {    
                     id : '',
@@ -55,6 +61,13 @@ export default {
             console.log(err)
             this.state=false
             
+        }),
+        getInterest()
+        .then((res)=>{
+        console.log(res)  
+        this.mySportCategory = res.data    
+        }).catch((err)=>{
+        console.log(err)
         })
       
   },

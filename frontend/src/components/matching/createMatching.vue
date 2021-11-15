@@ -259,6 +259,7 @@
                     <div class="md:pt-3 md:pl-10  pt-3 pl-2">
                             <p class="text-xl font-bold">내용을 입력해주세요.</p>
                             <textarea v-model="form.content" id="joinIntro" rows=5 type="text" class="text-xl w-5/6 md:w-4/5 rounded-md border-2 border-yellow-400 mt-2"/>
+                            <p v-if="form.content.length>400" class="text-yellow-600">400자 이내로 입력해주세요</p>
                     </div>
                 </div>
                 <div class="col-start-1 col-span-6 mt-10 flex justify-center">

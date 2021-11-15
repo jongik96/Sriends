@@ -9,8 +9,15 @@
         <div v-if="this.modifyState">
           <p class="text-xl font-bold">profileImg</p>
           <input type="file" @change="fileSelect" id="image" ref="image" class=" text-sm w-full md:w-3/4 rounded-md border-2 border-yellow-400">
-          <div id="preview" class="profile-image" v-if="form.uuid">
-            <img class="profileImg" :src="form.uuid" />
+          <div id="preview" class="grid grid-cols-2 profile-image" >
+            <div>
+              <p>현재 프로필</p>
+              <img class="profileImg" :src=pictureUrl />
+            </div>
+            <div>
+              <p>변경할 프로필</p>
+              <img class="profileImg" :src=modifyPicture />
+            </div>
           </div>
         </div>
       </div>
@@ -343,6 +350,7 @@ export default {
       city : '',
       age :'',
       pictureUrl : '',
+      modifyPicture:'',
       sports:[]
     }
   },
@@ -384,6 +392,8 @@ export default {
         },
     fileSelect(){
             console.log(this.$refs.image.files[0])
+            const file = this.$refs.image.files[0]
+            this.modifyPicture = URL.createObjectURL(file)
             // this.form.uuid = this.$refs.image.files[0]
     },
     clickModify(){

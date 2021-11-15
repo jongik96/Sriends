@@ -16,7 +16,7 @@
                         <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                             <p class="text-xl font-bold">내용</p>
                             <textarea v-model="content" rows=5 type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
-                            <p v-if="content.length>100" class="text-yellow-600">100자 이내로 입력해주세요</p>
+                            <p v-if="content.length>400" class="text-yellow-600">400자 이내로 입력해주세요</p>
                         </div>
                         <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                             <p class="text-xl font-bold">일시</p>
@@ -77,7 +77,7 @@ export default {
             return config
         },
         btnDisabled(){
-            if((this.content.length>100) || (this.content.length ==0) || !this.name || !this.createDate ){
+            if((this.content.length>400) || (this.content.length ==0) || !this.name || !this.createDate ){
                 return true
             }else{
                 return false

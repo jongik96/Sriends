@@ -1,7 +1,7 @@
 <template>
     <!-- 대댓글은 40자 이하로 설정할 것 -->
     <div class=" rounded-md border-2 border-yellow-500 mb-1">
-        <div v-if="!modifyState" class="grid grid-cols-6 h-10">
+        <div v-if="!modifyState" class="grid grid-cols-6 h-16">
             <p class="col-start-1 break-words col-span-5 text-justify leading-tight text-gray-800">{{ this.reComment.content }}</p>
             <div class="col-start-6 col-span-1 lg:ml-10 xl:ml-20">
                 <p class=" text-yellow-600"><button @click="clickUser">{{this.writer.name}}</button></p>
