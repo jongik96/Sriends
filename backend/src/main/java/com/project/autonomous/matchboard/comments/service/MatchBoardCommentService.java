@@ -10,6 +10,8 @@ import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
 import com.project.autonomous.matchboard.comments.repository.MatchBoardCommentRepository;
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.matchboard.posts.repository.MatchBoardPostRepository;
+import com.project.autonomous.notification.dto.MatchNotification;
+import com.project.autonomous.notification.service.NotificationService;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import java.util.List;
@@ -27,6 +29,7 @@ public class MatchBoardCommentService {
     private final UserRepository userRepository;
     private final MatchBoardPostRepository matchBoardPostRepository;
     private final MatchBoardCommentRepository matchBoardCommentRepository;
+    private final NotificationService notificationService;
 
     // 댓글 생성
     @Transactional
@@ -43,6 +46,8 @@ public class MatchBoardCommentService {
         matchBoardPost.getComments().add(matchBoardComment);
         user.getComments().add(matchBoardComment);
         matchBoardCommentRepository.save(matchBoardComment);
+
+        notificationService.sendNotification(new MatchNotification(user, matchBoardPost.getUser(), matchBoardPost));
 
         return MatchBoardCommentRes.from(matchBoardComment);
     }
