@@ -22,9 +22,12 @@ export default new Vuex.Store({
     auth:'',
     category:'',
     myCity:'',
+    mySportCategory:'',
   },
   mutations: {
-
+    setMySportCategory(state,mySportCategory){
+      state.mySportCategory = mySportCategory
+    },
     setMyCity(state,myCity){
       state.myCity = myCity
     },

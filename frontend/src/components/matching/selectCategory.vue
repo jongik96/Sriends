@@ -237,7 +237,7 @@
             </div>
         </div>
         <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4">
-            자기 지역을 기반으로 한 전체종목 조회
+            {{myCity}} 의 전체 스렌즈 조회
             <defaultList></defaultList>
         </div>
   </div>
@@ -245,6 +245,7 @@
 
 <script>
 import defaultList from '@/components/matching/defaultList.vue'
+import store from '@/store/index.js'
 export default {
     components:{
         defaultList
@@ -252,6 +253,7 @@ export default {
     data(){
         return{
             selectDo: '',
+            myCity:store.state.myCity,
             form:{
                 category:'',
                 city: '',
