@@ -8,8 +8,8 @@
             <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
                 <div class="relative w-full h-80 md:h-64 lg:h-44">
                     <router-link to="/teamCreate">
-                        <img src="@/assets/plus.jpg"
-                            alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
+                        <img :src="pictureDownloadUrl" @error="imgError"
+                            
                             class="w-full h-full object-center object-cover">
                     </router-link>
                 </div>
@@ -27,6 +27,7 @@
             </cardItem>
             <infinite-loading @infinite="infiniteHandler" spinner="sprial">
                 <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+                <div slot="no-results" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">가입된 팀이 없습니다 :)</div>
             </infinite-loading>
 
             
@@ -38,6 +39,7 @@
 
 <script>
 // import {getProfileInfo} from '@/api/index.js'
+import img from '@/assets/sideImg.png'
 import cardItem from '@/components/user/cardItem.vue'
 import axios from 'axios'
 import InfiniteLoading from 'vue-infinite-loading'
@@ -89,6 +91,9 @@ export default {
                 console.error(err);
             })
         },
+        imgError:function(e){
+            e.target.src = img
+        }
     },
     computed:{
         getToken(){

@@ -1,18 +1,18 @@
 <template>
-    <div @click="clickMatch" class="grid mt-10 cursor-pointer">
-        <div class="grid col-start-1 col-span-1">
+    <div @click="clickMatch" class="grid grid-cols-6 mt-10 cursor-pointer text-center">
+        <div class="grid col-start-1 col-span-1 text-center">
                 {{matchBoardCategory}}
         </div>
-        <div class="grid col-start-2 col-span-1">
+        <div class="grid col-start-2 col-span-1 text-center">
                 {{sportCategory}}
         </div>
-        <div class="grid col-start-3 col-span-1">
+        <div class="grid col-start-3 col-span-1 text-center">
                 {{recruitmentCount}}
         </div>
-        <div class="grid col-start-4 col-span-2 ml-5">
+        <div class="grid col-start-4 col-span-2 ml-5 text-center">
                 {{team.name}}
         </div>
-        <div class="grid col-start-6 col-span-1">
+        <div class="grid col-start-6 col-span-1 text-center">
                 {{createAt}}        
         </div>
     </div>

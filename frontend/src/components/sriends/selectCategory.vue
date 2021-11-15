@@ -170,6 +170,7 @@ export default {
             selectSports(this.sportCategory)
             .then((res)=>{
                 console.log(res)
+                this.$store.commit('setMySportCategory',this.sportCategory)
                 Swal.fire('종목 선택이 완료되었습니다.')
                 this.$router.push('/main')
             }).catch((err)=>{
