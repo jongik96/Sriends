@@ -48,7 +48,8 @@ public class OpenApiConfig {
 
     @Bean
     public GroupedOpenApi userApi() {
-        String packagesToscan[] = {"com.project.autonomous.user.controller"};
+        String packagesToscan[] = {"com.project.autonomous.user.controller",
+            "com.project.autonomous.notification.controller"};
         return GroupedOpenApi.builder().group("Users").packagesToScan(packagesToscan)
             .build();
 //        return GroupedOpenApi.builder()
@@ -70,13 +71,6 @@ public class OpenApiConfig {
         String packagesToscan[] = {"com.project.autonomous.matchboard.comments.controller",
             "com.project.autonomous.matchboard.posts.controller"};
         return GroupedOpenApi.builder().group("MatchBoard").packagesToScan(packagesToscan)
-            .build();
-    }
-
-    @Bean
-    public GroupedOpenApi noticeApi() {
-        String packagesToscan[] = {"com.project.autonomous.notification.controller"};
-        return GroupedOpenApi.builder().group("Notification").packagesToScan(packagesToscan)
             .build();
     }
 
