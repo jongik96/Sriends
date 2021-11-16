@@ -28,8 +28,8 @@ public class ChatRoom extends BaseEntity {
     private User sub;
 
     private LocalDateTime latestMessageTime;
-    private boolean pubState;
-    private boolean subState;
+//    private boolean pubState;
+//    private boolean subState;
 
 //    public static ChatRoom create(String name) {
 //        ChatRoom chatRoom = new ChatRoom();

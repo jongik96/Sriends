@@ -118,7 +118,7 @@
 <script>
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
-import store from '@/store/index.js'
+// import store from '@/store/index.js'
 // import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
@@ -127,9 +127,9 @@ export default {
         return{
             reconnect:0,
             message:'',
-            roomId:1,
+            roomId:2,
             opponentId:3,
-            userName:store.state.userId,
+            userName:56,
             recvList:[],
             Myid:1,
             // items:[
@@ -163,12 +163,13 @@ export default {
         console.log("Send message:" + this.message);
         // ws = this.stompClient
         if (this.stompClient && this.stompClient.connected) {
+            let today = new Date(); 
             const msg = { 
             // userName: this.userName,
-            type: 'TALK',
-            roomId: '1',
+            roomId: this.roomId,
             message: this.message,
-            sender: this.userName
+            sender: this.userName,
+            time: today 
             };
             this.stompClient.send(`/pub/chat/message`, JSON.stringify(msg), {});
         }else{

@@ -1,8 +1,8 @@
 package com.project.autonomous.chat.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import static com.project.autonomous.common.exception.ValidatorMessage.EMPTY_MESSAGE;
 
 @Getter
-@AllArgsConstructor
+@Setter
 public class ChatMessageReq {
 
     //    // 메시지 타입 : 입장, 채팅

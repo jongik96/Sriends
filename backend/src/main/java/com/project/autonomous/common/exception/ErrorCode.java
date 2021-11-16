@@ -24,7 +24,6 @@ public enum ErrorCode {
     STILL_YOU_HAVE_SREINEDS(BAD_REQUEST, "아직 대표인 스렌즈가 존재합니다."),
     CANNOT_LEAVE_LEADER(BAD_REQUEST, "팀 대표는 탈퇴할 수 없습니다."),
     CANNOT_KICKOUT_MANAGER(BAD_REQUEST, "매니저는 강퇴할 수 없습니다."),
-    AlREADY_CHAT(BAD_REQUEST, "채팅방이 있습니다."),
 
 //    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
 //    EMAIL_MESSAGE(BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
@@ -60,6 +59,7 @@ public enum ErrorCode {
     LIST_NOT_FOUND(NOT_FOUND, "해당 리스트를 찾을 수 없습니다"),
     SPORT_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 종목을 찾을 수 없습니다"),
     BOARD_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 분류를 찾을 수 없습니다"),
+    CHATROOM_NOT_FOUND(NOT_FOUND,"해당 채팅방을 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),

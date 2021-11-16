@@ -11,5 +11,6 @@ public class ChatRoomListRes {
     Long roomId;
     String partnerName;
     String partnerEmail;
+    String partnerPicture;
     LocalDateTime latestMessageDate;
 }
