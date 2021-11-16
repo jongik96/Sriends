@@ -57,30 +57,24 @@ public class TeamBoardService {
         teamBoard.setCreateDate(LocalDateTime.now());
         teamBoard.setTeamId(teamId);
 
-        teamBoardRepository.save(teamBoard);
+        teamBoard = teamBoardRepository.save(teamBoard);
 
-        PostViewRes postViewRes = new PostViewRes();
-        postViewRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
-        postViewRes.setContent(teamBoard.getContent());
-        postViewRes.setTitle(teamBoard.getTitle());
-        postViewRes.setCreateDate(teamBoard.getCreateDate());
-
-        return postViewRes;
+        return PostViewRes.from(teamBoard, userRepository.findById(userId).get());
     }
 
-    public boolean postingModify(PostingReq postingReq, long teamId, long boardId) {
+    public PostViewRes postingModify(PostingReq postingReq, long teamId, long boardId) {
         long userId = SecurityUtil.getCurrentMemberId();
 
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
         if(teamBoard.getWriterId() != userId){//공지사항은 회원만 가능
-            return false;
+            throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
         teamBoard.setTitle(postingReq.getTitle());
         teamBoard.setContent(postingReq.getContent());
-        teamBoardRepository.save(teamBoard);
+        teamBoard = teamBoardRepository.save(teamBoard);
 
-        return true;
+        return PostViewRes.from(teamBoard, userRepository.findById(userId).get());
     }
 
     public boolean postingDelete(long teamId, long boardId) {
@@ -100,14 +94,7 @@ public class TeamBoardService {
 
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
 
-        PostViewRes postViewRes = new PostViewRes();
-        postViewRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
-//        postViewRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
-        postViewRes.setContent(teamBoard.getContent());
-        postViewRes.setTitle(teamBoard.getTitle());
-        postViewRes.setCreateDate(teamBoard.getCreateDate());
-
-        return postViewRes;
+        return PostViewRes.from(teamBoard, userRepository.findById(userId).get());
     }
 
     public Page<PostViewRes> postingViewList(long teamId, Pageable pageable) {

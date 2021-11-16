@@ -71,12 +71,9 @@ public class TeamController {
 
     @PutMapping(path ="/{teamId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "팀 정보 수정", description = "<strong>입력 받은 정보</strong>를 사용해 팀 정보를 변경한다.")
-    public ResponseEntity<Boolean> modifyTeam(@PathVariable("teamId") long teamId, @Valid @ModelAttribute TeamModifyPostReq teamInfo, BindingResult theBindingResult) throws IOException {
+    public ResponseEntity<TeamInfoRes> modifyTeam(@PathVariable("teamId") long teamId, @Valid @ModelAttribute TeamModifyPostReq teamInfo, BindingResult theBindingResult) throws IOException {
 
-        if(teamService.modify(teamInfo, teamId)){
-            return ResponseEntity.ok(true);
-        }
-        return ResponseEntity.status(400).body(false);
+        return ResponseEntity.ok(teamService.modify(teamInfo, teamId));
     }
 
     @DeleteMapping("/{teamId}")

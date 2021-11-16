@@ -37,7 +37,7 @@ public class TeamBoardController {
 
     @PutMapping("/{teamId}/{boardId}")
     @Operation(summary = "공지사항 수정", description = "팀 내 게시판 글 수정(본인만 가능)")
-    public ResponseEntity<Boolean> modifyPost(@PathVariable("teamId") long teamId, @PathVariable("boardId") long boardId, @RequestBody PostingReq postingReq){
+    public ResponseEntity<PostViewRes> modifyPost(@PathVariable("teamId") long teamId, @PathVariable("boardId") long boardId, @RequestBody PostingReq postingReq){
         return ResponseEntity.ok(teamBoardService.postingModify(postingReq, teamId, boardId));
 
     }

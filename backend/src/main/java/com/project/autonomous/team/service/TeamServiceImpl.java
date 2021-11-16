@@ -18,6 +18,7 @@ import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.team.repository.TeamRepository;
 import com.project.autonomous.team.repository.TeamRepositorySupport;
 import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
+import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
@@ -99,28 +100,7 @@ public class TeamServiceImpl implements TeamService{
         userTeam.setAuthority("대표");
         userTeamRepository.save(userTeam);
 
-
-        TeamInfoRes teamInfoRes = new TeamInfoRes();
-
-        teamInfoRes.setId(team.getId());
-        teamInfoRes.setCity(team.getCity());
-        teamInfoRes.setDescription(team.getDescription());
-        teamInfoRes.setCreateDate(team.getCreateDate());
-        teamInfoRes.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
-        teamInfoRes.setMaxCount(team.getMaxCount());
-        teamInfoRes.setMemberCount(team.getMemberCount());
-        teamInfoRes.setName(team.getName());
-        teamInfoRes.setMembershipFee(team.isMembershipFee());
-        teamInfoRes.setRecruitmentState(team.isRecruitmentState());
-        teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
-
-        if(team.getPicture() == null){
-            teamInfoRes.setPictureDownloadUrl(null);
-        }else{
-            teamInfoRes.setPictureDownloadUrl(team.getPicture().getImageUrl());
-        }
-
-        return teamInfoRes;
+        return TeamInfoRes.from(team, userRepository.findById(userId).get(), teamInfo.getSportCategory());
     }
 
 
@@ -165,7 +145,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     @Transactional
-    public boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
+    public TeamInfoRes modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
 
         long userId = SecurityUtil.getCurrentMemberId();
 
@@ -194,12 +174,12 @@ public class TeamServiceImpl implements TeamService{
             team.setPicture(picture);
 
 
-            teamRepository.save(team);
+            team = teamRepository.save(team);
 
-            return true;
+            return TeamInfoRes.from(team, userRepository.findById(team.getLeaderId()).get(), teamInfo.getSportCategory());
         }
 
-        return false;
+        throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
     }
 
     @Override
@@ -230,27 +210,10 @@ public class TeamServiceImpl implements TeamService{
     public TeamInfoRes getTeamInfo(long teamId) {
 
         Team team = teamRepository.findById(teamId).get();
-        TeamInfoRes teamInfoRes = new TeamInfoRes();
+        User leader = userRepository.findById(team.getLeaderId()).get();
+        String sportCategory = sportCategoryRepository.getById(team.getSportCategoryId()).getName();
 
-        teamInfoRes.setId(teamId);
-        teamInfoRes.setCity(team.getCity());
-        teamInfoRes.setDescription(team.getDescription());
-        teamInfoRes.setCreateDate(team.getCreateDate());
-        teamInfoRes.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
-        teamInfoRes.setMaxCount(team.getMaxCount());
-        teamInfoRes.setMemberCount(team.getMemberCount());
-        teamInfoRes.setName(team.getName());
-        teamInfoRes.setMembershipFee(team.isMembershipFee());
-        teamInfoRes.setRecruitmentState(team.isRecruitmentState());
-        teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
-
-        if(team.getPicture() == null){
-            teamInfoRes.setPictureDownloadUrl(null);
-        }else{
-            teamInfoRes.setPictureDownloadUrl(team.getPicture().getImageUrl());
-        }
-
-        return teamInfoRes;
+        return TeamInfoRes.from(team, leader, sportCategory);
     }
 
     @Override

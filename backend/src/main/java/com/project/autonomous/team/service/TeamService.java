@@ -19,7 +19,7 @@ public interface TeamService {
 
     Page<TeamListRes> getChooseList(String cityName, String sportCategory, Pageable pageable);
 
-    boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException;
+    TeamInfoRes modify(TeamModifyPostReq teamInfo, long teamId) throws IOException;
 
     boolean delete(long teamId);
 
