@@ -2,6 +2,7 @@ package com.project.autonomous.notification.entity;
 
 import com.project.autonomous.common.entity.BaseEntity;
 import com.project.autonomous.user.entity.User;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -34,6 +35,8 @@ public class Notification extends BaseEntity {
 
     private Boolean checked;
 
+    private LocalDateTime createAt;
+
     public static Notification of(User receiver, Long postId, NoticeType type, String content) {
         return Notification.builder()
             .receiver(receiver)
@@ -41,6 +44,7 @@ public class Notification extends BaseEntity {
             .type(type)
             .content(content)
             .checked(false)
+            .createAt(LocalDateTime.now())
             .build();
     }
 

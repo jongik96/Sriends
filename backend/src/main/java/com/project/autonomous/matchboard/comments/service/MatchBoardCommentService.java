@@ -49,19 +49,19 @@ public class MatchBoardCommentService {
         user.getComments().add(matchBoardComment);
         matchBoardCommentRepository.save(matchBoardComment);
 
-        sendNotification(user, matchBoardPost, matchBoardComment); // 알림
+        sendNotification(user, matchBoardPost, parentComment); // 알림
 
         return MatchBoardCommentRes.from(matchBoardComment);
     }
 
-    public void sendNotification(User writer, MatchBoardPost post, MatchBoardComment comment) {
+    public void sendNotification(User writer, MatchBoardPost post, MatchBoardComment parentComment) {
         if(!post.getUser().equals(writer)) { // 본인 게시글에 본인이 댓글을 남긴다면 알림 X
-            if(comment != null) { // 대댓글이라면
-                if(post.getUser().equals(comment.getUser())) { // 게시글의 주인과 댓글의 주인이 같다면
-                    notificationService.createNotification(comment.getUser(), NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
+            if(parentComment != null) { // 대댓글이라면
+                if(post.getUser().equals(parentComment.getUser())) { // 게시글의 주인과 댓글의 주인이 같다면
+                    notificationService.createNotification(parentComment.getUser(), NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
                 } else {
                     notificationService.createNotification(post.getUser(), NoticeType.MATCH, post.getId()); // 게시글 주인에게 알림
-                    notificationService.createNotification(comment.getUser(), NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
+                    notificationService.createNotification(parentComment.getUser(), NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
                 }
             } else {
                 notificationService.createNotification(post.getUser(), NoticeType.MATCH, post.getId()); // 게시글 주인에게 알림
@@ -107,7 +107,7 @@ public class MatchBoardCommentService {
         matchBoardCommentRepository.delete(matchBoardComment);
     }
 
-    public User findMember(long userId) {
+    public User findMember(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
@@ -122,7 +122,7 @@ public class MatchBoardCommentService {
             .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
-    public void checkAuthority(long userId, long writerId) {
+    public void checkAuthority(Long userId, Long writerId) {
         if(userId != writerId) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_CHANGE);
         }
