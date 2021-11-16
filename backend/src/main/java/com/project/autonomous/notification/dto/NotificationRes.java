@@ -11,6 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class NotificationRes {
 
+    private Long notificationId;
+
     private Long postId;
 
     private String type;
@@ -23,6 +25,7 @@ public class NotificationRes {
 
     public static NotificationRes from(Notification notification) {
         return NotificationRes.builder()
+            .notificationId(notification.getId())
             .postId(notification.getPostId())
             .type(notification.getType().toString())
             .content(notification.getContent())

@@ -37,6 +37,10 @@ public class Notification extends BaseEntity {
 
     private LocalDateTime createAt;
 
+    public void check() {
+        this.checked = true;
+    }
+
     public static Notification of(User receiver, Long postId, NoticeType type, String content) {
         return Notification.builder()
             .receiver(receiver)

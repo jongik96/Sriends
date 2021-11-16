@@ -58,17 +58,41 @@ public class NotificationService {
     }
 
     // 알림을 확인
-    public void checkNotice() {
-
+    @Transactional
+    public void checkNotification(Long notificationId) {
+        Notification notification = findNotification(notificationId);
+        notification.check();
     }
 
     // 알림 전체 확인
+    @Transactional
+    public List<NotificationRes> checkAllNotification() {
+        notificationRepository.checkAllByReceiver(findMember(SecurityUtil.getCurrentMemberId()));
+        return getNotification();
+    }
+
+    // 알림 제거
+    @Transactional
+    public List<NotificationRes> deleteNotification(Long notificationId) {
+        notificationRepository.delete(findNotification(notificationId));
+        return getNotification();
+    }
 
     // 알림 전체 제거
+    @Transactional
+    public List<NotificationRes> deleteAllNotification() {
+        notificationRepository.deleteAllByReceiver(findMember(SecurityUtil.getCurrentMemberId()));
+        return getNotification();
+    }
 
     public User findMember(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public Notification findNotification(Long notificationId) {
+        return notificationRepository.findById(notificationId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTIFICATION_NOT_FOUND));
     }
 
 }
