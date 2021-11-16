@@ -68,10 +68,8 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     @Transactional
-    public Team create(TeamCreatePostReq teamInfo) throws IOException {
-
+    public TeamInfoRes create(TeamCreatePostReq teamInfo) throws IOException {
         long userId = SecurityUtil.getCurrentMemberId();
-
 
         Team team = new Team();
         team.setName(teamInfo.getName());
@@ -100,7 +98,29 @@ public class TeamServiceImpl implements TeamService{
         userTeam.setRegisterDate(LocalDateTime.now());
         userTeam.setAuthority("대표");
         userTeamRepository.save(userTeam);
-        return team;
+
+
+        TeamInfoRes teamInfoRes = new TeamInfoRes();
+
+        teamInfoRes.setId(team.getId());
+        teamInfoRes.setCity(team.getCity());
+        teamInfoRes.setDescription(team.getDescription());
+        teamInfoRes.setCreateDate(team.getCreateDate());
+        teamInfoRes.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
+        teamInfoRes.setMaxCount(team.getMaxCount());
+        teamInfoRes.setMemberCount(team.getMemberCount());
+        teamInfoRes.setName(team.getName());
+        teamInfoRes.setMembershipFee(team.isMembershipFee());
+        teamInfoRes.setRecruitmentState(team.isRecruitmentState());
+        teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
+
+        if(team.getPicture() == null){
+            teamInfoRes.setPictureDownloadUrl(null);
+        }else{
+            teamInfoRes.setPictureDownloadUrl(team.getPicture().getImageUrl());
+        }
+
+        return teamInfoRes;
     }
 
 
@@ -212,6 +232,7 @@ public class TeamServiceImpl implements TeamService{
         Team team = teamRepository.findById(teamId).get();
         TeamInfoRes teamInfoRes = new TeamInfoRes();
 
+        teamInfoRes.setId(teamId);
         teamInfoRes.setCity(team.getCity());
         teamInfoRes.setDescription(team.getDescription());
         teamInfoRes.setCreateDate(team.getCreateDate());

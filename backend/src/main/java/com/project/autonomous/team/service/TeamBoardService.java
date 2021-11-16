@@ -13,10 +13,13 @@ import com.project.autonomous.team.entity.TeamBoard;
 import com.project.autonomous.team.entity.TeamBoardComment;
 import com.project.autonomous.team.repository.TeamBoardCommentRepository;
 import com.project.autonomous.team.repository.TeamBoardRepository;
+import com.project.autonomous.team.repository.TeamBoardRepositorySupport;
 import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,10 +41,13 @@ public class TeamBoardService {
     @Autowired
     TeamBoardCommentRepository teamBoardCommentRepository;
 
-    public boolean posting(PostingReq postingReq, long teamId) {
+    @Autowired
+    TeamBoardRepositorySupport teamBoardRepositorySupport;
+
+    public PostViewRes posting(PostingReq postingReq, long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
         if(!userTeamRepository.findByUserIdAndTeamId(userId, teamId).isPresent()){//공지사항은 회원만 가능
-            return false;
+            throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
         TeamBoard teamBoard = new TeamBoard();
@@ -53,7 +59,13 @@ public class TeamBoardService {
 
         teamBoardRepository.save(teamBoard);
 
-        return true;
+        PostViewRes postViewRes = new PostViewRes();
+        postViewRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
+        postViewRes.setContent(teamBoard.getContent());
+        postViewRes.setTitle(teamBoard.getTitle());
+        postViewRes.setCreateDate(teamBoard.getCreateDate());
+
+        return postViewRes;
     }
 
     public boolean postingModify(PostingReq postingReq, long teamId, long boardId) {
@@ -98,25 +110,14 @@ public class TeamBoardService {
         return postViewRes;
     }
 
-    public ArrayList<PostViewRes> postingViewList(long teamId) {
+    public Page<PostViewRes> postingViewList(long teamId, Pageable pageable) {
         long userId = SecurityUtil.getCurrentMemberId();
-        ArrayList<PostViewRes> ret = new ArrayList<>();
-        System.out.println("서비스");
 
+        Page<PostViewRes> ret = teamBoardRepositorySupport.getList(teamId, pageable);
 
-        for(TeamBoard teamBoard : teamBoardRepository.findAllByTeamId(teamId)){
-            System.out.println("조회중");
-            PostViewRes postViewListRes = new PostViewRes();
-            postViewListRes.setId(teamBoard.getId());
-            postViewListRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
-//            postViewListRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
-            postViewListRes.setContent(teamBoard.getContent());
-            postViewListRes.setTitle(teamBoard.getTitle());
-            postViewListRes.setCreateDate(teamBoard.getCreateDate());
+        if(ret.isEmpty())
+            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
 
-            ret.add(postViewListRes);
-        }
-        System.out.println(ret.size());
         return ret;
     }
 

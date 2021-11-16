@@ -1,6 +1,8 @@
 package com.project.autonomous.team.dto.response;
 
+import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TeamInfoRes {
+    long id;
     String name;
     LocalDateTime createDate;
     UserSimpleInfoRes leader;
@@ -22,4 +25,5 @@ public class TeamInfoRes {
     Boolean membershipFee;
     String city;
     String sportCategory;
+
 }
