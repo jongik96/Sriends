@@ -63,6 +63,7 @@ public enum ErrorCode {
     LIST_NOT_FOUND(NOT_FOUND, "해당 리스트를 찾을 수 없습니다"),
     SPORT_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 종목을 찾을 수 없습니다"),
     BOARD_CATEGORY_NOT_FOUND(NOT_FOUND, "해당 분류를 찾을 수 없습니다"),
+    NOTIFICATION_NOT_FOUND(NOT_FOUND, "해당 알림을 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),
