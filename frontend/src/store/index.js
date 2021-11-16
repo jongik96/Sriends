@@ -25,8 +25,12 @@ export default new Vuex.Store({
     myCity:'',
     mySportCategory:'',
     chatOppenent:'',
+    roomId:'',
   },
   mutations: {
+    setRoomId(state,roomId){
+      state.roomId = roomId
+    },
     setChatOppenent(state,chatOppenent){
       state.chatOppenent = chatOppenent
     },

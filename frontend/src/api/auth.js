@@ -70,6 +70,22 @@ function getNotice(){
     return instance.get('notice')
 }
 
+function putAllNotice(){
+    return instance.put('notice')
+}
+
+function putNotice(notificationId){
+    return instance.put(`notice/${notificationId}`)
+}
+
+function deleteAllNotice(){
+    return instance.delete('notice')
+}
+
+function deleteNotice(notificationId){
+    return instance.delete(`notice/${notificationId}`)
+}
+
 export {
         // 회원관련 api
         getProfileInfo, 
@@ -83,5 +99,10 @@ export {
         selectSports,
         getInterest,
         getTempProfileInfo,
-        getNotice
+        getNotice,
+        putAllNotice,
+        putNotice,
+        deleteAllNotice,
+        deleteNotice
+
 }

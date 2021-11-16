@@ -80,12 +80,11 @@
             </p>
           </router-link>
           <router-link to="/chatList">
-            <font-awesome-icon size="lg" :style="{ color: 'orange' }" icon="comments"/>
+            <font-awesome-icon icon="comments"/>
           </router-link>
           <span class="">
             <a @mouseover="smallList = true" @click="clickInfo" @mouseleave="smallList = false" class="cursor-pointer ml-3 border rounded text-teal-200 border-teal-400 ">
-              <font-awesome-icon size="lg" :style="{ color: 'orange' }" icon="bell" class=""/><span class="text-yellow-600"
-               v-if="countNotice>0">{{countNotice}}</span>
+              <font-awesome-icon icon="bell" class=""/>
           
               <transition name="fade">
                   
@@ -160,8 +159,7 @@ export default {
       smallList: false,
       recvlist:[],
       status:'',
-      connected:'',
-      noticeCount:'',
+      connected:''
     }
   },
   created(){
@@ -170,21 +168,12 @@ export default {
     .then((res)=>{
       console.log(res)
       this.recvlist = res.data
-      this.noticeCount = res.data.length
     }).catch((err)=>{
       console.log(err)
     })
   },
   computed:{
-    countNotice(){
-      let unRead = 0
-      for(let i=0; i<this.noticeCount;i++){
-        if(this.recvlist[i].checked == false){
-          unRead++
-        }
-      }
-      return unRead
-    }
+
   },
   methods:{
     clickDeleteAll:function(){
@@ -192,7 +181,6 @@ export default {
       .then((res)=>{
         console.log(res.data)
         this.recvlist = res.data
-        this.$router.go();
       }).catch((err)=>{
         console.log(err)
       })
@@ -202,7 +190,6 @@ export default {
       .then((res)=>{
         console.log(res.data)
         this.recvlist = res.data
-        // this.$router.go();
       }).catch((err)=>{
         console.log(err)
       })
@@ -241,19 +228,11 @@ export default {
               // 서버의 메시지 전송 endpoint를 구독합니다.
               // 이런형태를 pub sub 구조라고 합니다.
                   this.stompClient.subscribe(`/topic/${userId}`, res => {
-                    console.log(res)
                       console.log('subscribe 로 받은 메시지 입니다.', res.body);
 
                       // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-                      // this.recvlist.push(JSON.parse(res.body))
-                      // console.log(this.recvList)
-                      getNotice()
-                      .then((res)=>{
-                        console.log(res)
-                        this.recvlist = res.data
-                      }).catch((err)=>{
-                        console.log(err)
-                      })
+                      this.recvlist.push(JSON.parse(res.body))
+                      console.log(this.recvList)
                   });
               },
               error => {

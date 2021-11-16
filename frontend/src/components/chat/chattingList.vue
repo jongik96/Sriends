@@ -34,7 +34,9 @@
 </template>
 
 <script>
-
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import axios from 'axios'
+import store from '@/store/index.js'
 export default {
     data(){
         return{
@@ -51,6 +53,20 @@ export default {
                 }
             ]
         }
+    },
+    created(){
+      const token = store.state.accessToken
+      axios({
+        method: 'get',
+        url: `${SERVER_URL}/chat/list`,
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+      }).then((res)=>{
+        console.log(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
     }
 
 
