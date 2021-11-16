@@ -1,0 +1,40 @@
+package com.project.autonomous.notification.controller;
+
+import com.project.autonomous.common.exception.ErrorResponse;
+import com.project.autonomous.matchboard.comments.dto.response.MatchBoardCommentRes;
+import com.project.autonomous.notification.dto.NotificationRes;
+import com.project.autonomous.notification.service.NotificationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/notice")
+@RequiredArgsConstructor
+public class NotificationController {
+
+    private final NotificationService notificationService;
+
+    @GetMapping
+    @Operation(summary = "알림 리스트 조회", description = "type을 이용해 해당 postId의 게시글로 이동할 수 있게 한다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "알림 리스트 조회",
+            content = @Content(schema = @Schema(implementation = NotificationRes.class))),
+        @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public ResponseEntity<List<NotificationRes>> getNotification() {
+        return ResponseEntity.ok(notificationService.getNotification());
+    }
+
+}

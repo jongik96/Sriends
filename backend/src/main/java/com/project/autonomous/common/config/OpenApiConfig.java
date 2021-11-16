@@ -74,6 +74,13 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi noticeApi() {
+        String packagesToscan[] = {"com.project.autonomous.notification.controller"};
+        return GroupedOpenApi.builder().group("Notification").packagesToScan(packagesToscan)
+            .build();
+    }
+
+    @Bean
     public GroupedOpenApi pictureApi() {
         return GroupedOpenApi.builder()
             .group("Pictures")

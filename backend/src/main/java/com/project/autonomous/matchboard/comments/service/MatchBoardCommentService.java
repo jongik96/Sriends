@@ -10,7 +10,7 @@ import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
 import com.project.autonomous.matchboard.comments.repository.MatchBoardCommentRepository;
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.matchboard.posts.repository.MatchBoardPostRepository;
-import com.project.autonomous.notification.dto.MatchNotification;
+import com.project.autonomous.notification.entity.NoticeType;
 import com.project.autonomous.notification.service.NotificationService;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
@@ -34,10 +34,12 @@ public class MatchBoardCommentService {
     // 댓글 생성
     @Transactional
     public MatchBoardCommentRes createComment(Long postId, MatchBoardCreateCommentReq matchBoardCreateCommentReq) {
+        MatchBoardComment parentComment = null;
         if(matchBoardCreateCommentReq.getParentId() > 0) { // 부모 댓글이 존재한다면
-            MatchBoardComment parentComment = findMatchBoardComment(matchBoardCreateCommentReq.getParentId());
+            parentComment = findMatchBoardComment(matchBoardCreateCommentReq.getParentId());
             parentComment.addReplyCount();
         }
+
         MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
@@ -47,9 +49,25 @@ public class MatchBoardCommentService {
         user.getComments().add(matchBoardComment);
         matchBoardCommentRepository.save(matchBoardComment);
 
-        notificationService.sendNotification(new MatchNotification(user, matchBoardPost.getUser(), matchBoardPost));
+        sendNotification(user, matchBoardPost, parentComment); // 알림
 
         return MatchBoardCommentRes.from(matchBoardComment);
+    }
+
+    public void sendNotification(User writer, MatchBoardPost post, MatchBoardComment parentComment) {
+        if(!post.getUser().equals(writer)) { // 본인 게시글에 본인이 댓글을 남긴다면 알림 X
+            if(parentComment != null) { // 대댓글이라면
+                if(post.getUser().equals(parentComment.getUser())) { // 게시글의 주인과 댓글의 주인이 같다면
+                    notificationService.createNotification(parentComment.getUser(), NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
+                } else {
+                    notificationService.createNotification(post.getUser(), NoticeType.MATCH, post.getId()); // 게시글 주인에게 알림
+                    notificationService.createNotification(parentComment.getUser(), NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
+                }
+            } else {
+                notificationService.createNotification(post.getUser(), NoticeType.MATCH, post.getId()); // 게시글 주인에게 알림
+            }
+
+        }
     }
 
     // 댓글 조회
@@ -89,7 +107,7 @@ public class MatchBoardCommentService {
         matchBoardCommentRepository.delete(matchBoardComment);
     }
 
-    public User findMember(long userId) {
+    public User findMember(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
@@ -104,7 +122,7 @@ public class MatchBoardCommentService {
             .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
-    public void checkAuthority(long userId, long writerId) {
+    public void checkAuthority(Long userId, Long writerId) {
         if(userId != writerId) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_CHANGE);
         }
