@@ -62,6 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //OPTIONS 메소드 허락 cors preflight 에러 방지
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/picture/**").permitAll()
+                .antMatchers("/chat/**").permitAll()
+                .antMatchers("/ws/**").permitAll()
+                .antMatchers("/ws-chat/**").permitAll()
             // 나머지 API 모두 인증 필요
             .anyRequest().authenticated()
             // TokenProvider, JwtFilter를 SecurityConfig에 적용

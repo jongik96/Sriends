@@ -22,13 +22,11 @@ import com.project.autonomous.user.entity.UserInterestId;
 import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
 import com.project.autonomous.user.repository.UserRepository;
-import com.project.autonomous.user.repository.UserRepositorySupport;
 import com.project.autonomous.user.repository.UserTeamRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,23 +38,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    UserRepositorySupport userRepositorySupport;
-
-    @Autowired
-    UserTeamRepository userTeamRepository;
-
-    @Autowired
-    PictureRepository pictureRepository;
-
-    @Autowired
-    SportCategoryRepository sportCategoryRepository;
-
-    @Autowired
-    UserInterestRepository userInterestRepository;
+    private final UserRepository userRepository;
+    private final UserTeamRepository userTeamRepository;
+    private final PictureRepository pictureRepository;
+    private final SportCategoryRepository sportCategoryRepository;
+    private final UserInterestRepository userInterestRepository;
     private final PasswordEncoder passwordEncoder;
     private final DBFileStorageService dbFileStorageService;
 
@@ -155,11 +141,11 @@ public class UserServiceImpl implements UserService {
     }
 
     // 다른 유저 조회
-    public UserInfoRes getUserInfo(long userId) {
+    public UserInfoRes getUserInfo(Long userId) {
         return UserInfoRes.from(findMember(userId));
     }
 
-    public User findMember(long userId) {
+    public User findMember(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
