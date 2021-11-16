@@ -48,7 +48,7 @@
                         </p>
                         <select class="border-2 border-solid border-yellow-500 rounded-md" v-model="form.sportCategory">
                             <option disabled value="">종목</option>
-                            <option value="축구/풋살">축구/풋살</option>
+                            <option value="풋살">축구/풋살</option>
                             <option value="배구">배구</option>
                             <option value="농구">농구</option>
                             <option value="배드민턴">배드민턴</option>

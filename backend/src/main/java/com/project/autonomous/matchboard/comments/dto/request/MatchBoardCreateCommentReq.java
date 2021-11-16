@@ -17,7 +17,7 @@ public class MatchBoardCreateCommentReq {
 
     @Schema(description = "부모 아이디", example = "0 부모 댓글, 이외 대댓글")
     @NotNull(message = EMPTY_MESSAGE)
-    private long parnetId;
+    private Long parentId;
 
     @Schema(description = "댓글 내용", example = "용병 신청합니다.")
     @NotBlank(message = EMPTY_MESSAGE)
@@ -30,7 +30,7 @@ public class MatchBoardCreateCommentReq {
             .user(user)
             .content(content)
             .createdAt(LocalDateTime.now())
-            .parentId(parnetId)
+            .parentId(parentId)
             .replyCount(0)
             .modified(false)
             .build();

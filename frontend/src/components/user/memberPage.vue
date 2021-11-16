@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-6">
-      <div class="col-start-2 col-span-4 ">
+      <div class="col-start-1 col-span-6 sm:col-start-2 sm:col-span-4">
           <profile></profile>
       </div>
       

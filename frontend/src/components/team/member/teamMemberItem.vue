@@ -1,27 +1,34 @@
 <template>
   <div class="shadow-md rounded-xl p-4 mt-5 mx-6 mb-4 min-w-300">
     <div class="grid grid-cols-7">
-      <div class="col-start-1 col-span-1">
+      <div class="col-start-1 col-span-3 sm:col-start-1 sm:col-span-1">
           <img :src=pictureUrl class="h-10 w-10 rounded-2xl md:h-20 md:w-20" @error="imgError">
       </div>
-      <div class="ml-1 md:ml-0 col-start-2 col-span-1 grid sm:place-items-center">
-          <button class="h-1" @click="clickName" :disabled="id==myId">
-          {{name}}
-          </button>
-          <br>
-          {{age}}세
-          
-          <br>
+      <div class="ml-1 md:ml-0 col-start-4 col-span-4 sm:col-start-2 sm:col-span-1 grid sm:place-items-center">
+          <div>
+            <button class="h-1" @click="clickName" :disabled="id==myId">
+            {{name}}
+            </button>
+          </div>
+          <div>
+            <p>
+            {{age}}세
+            </p>
+          </div>
       </div>
-      <div class=" sm:visible col-start-3 col-span-1 grid sm:place-items-center ml-1 sm:ml-0">
+      <div class=" sm:visible col-start-1 col-span-7 sm:col-start-3 sm:col-span-1 grid sm:place-items-center ml-1 sm:ml-0">
+        <div>
         {{city}}
-        <br/>
+        </div>
+        <div>
         {{gender}}
-        <br/>
-        <button disabled  class="border-2 border-yellow-600 rounded-md w-12 sm:w-20">{{authority}}</button>
+        </div>
+        <div>
+        <button class="border-2 cursor-default border-yellow-600 rounded-md w-12 sm:w-20">{{authority}}</button>
+        </div>
       </div>
       <div v-if="id!=myId" 
-       class=" sm:visible col-start-4 col-span-2 grid sm:place-items-center">
+       class="ml-1 sm:visible col-start-1 col-span-4 sm:col-start-4 sm:col-span-3 grid sm:place-items-center">
           <div v-if="Myauth">
             <select class="border-2 border-solid w-16 h-6 border-yellow-500 rounded-md" v-model="modifyAuth">
                             <option disabled value="">권한</option>
@@ -37,21 +44,14 @@
           </div>
           
       </div>
-      <!-- <div  
-       class=" sm:visible col-start-5 col-span-1 grid sm:place-items-center">
-          
-      </div> -->
-      <div v-if="myId!==id" class="col-start-6 col-span-2">
+      <div v-if="myId!==id" class="col-start-5 col-span-3 sm:col-start-7 sm:col-span-1">
           <div class="flex justify-end">
-          <button><font-awesome-icon icon="comments"/></button>
+            <router-link to="/chatList"><font-awesome-icon icon="comments"/></router-link>
           </div>
           <div v-if="!noGrade" class="flex justify-end mt-5">
-          <button @click="clickBan"><font-awesome-icon icon="ban"/></button>
+            <button @click="clickBan"><font-awesome-icon icon="ban"/></button>
           </div>
       </div>
-      <!-- <div v-if="myId!==id" class="col-start-7 col-span-1 flex justify-center">
-          
-      </div> -->
     </div>
   </div>
 </template>

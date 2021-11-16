@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     accessToken: '',
     userId: '',
+    userName:'',
     tempUserId:'',
     teamId: '',
     boardId: '',
@@ -22,9 +23,12 @@ export default new Vuex.Store({
     auth:'',
     category:'',
     myCity:'',
+    mySportCategory:'',
   },
   mutations: {
-
+    setMySportCategory(state,mySportCategory){
+      state.mySportCategory = mySportCategory
+    },
     setMyCity(state,myCity){
       state.myCity = myCity
     },
@@ -45,6 +49,9 @@ export default new Vuex.Store({
     },
     setUserId(state, userId){
         state.userId = userId
+    },
+    setUserName(state, userName){
+        state.userName = userName
     },
     setTempUserId(state, tempUserId){
         state.tempUserId = tempUserId

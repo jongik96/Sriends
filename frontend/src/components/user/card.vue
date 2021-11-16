@@ -14,7 +14,7 @@
                     </router-link>
                 </div>
                 <div class="px-3 py-4 flex items-center justify-center">
-                        <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="hi">                         
+                        <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg">                         
                             새 스렌즈 만들기
                         </a>
                 </div>
@@ -27,6 +27,7 @@
             </cardItem>
             <infinite-loading @infinite="infiniteHandler" spinner="sprial">
                 <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+                <div slot="no-results" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">가입된 팀이 없습니다 :)</div>
             </infinite-loading>
 
             
@@ -38,6 +39,7 @@
 
 <script>
 // import {getProfileInfo} from '@/api/index.js'
+import img from '@/assets/sideImg.png'
 import cardItem from '@/components/user/cardItem.vue'
 import axios from 'axios'
 import InfiniteLoading from 'vue-infinite-loading'
@@ -89,6 +91,9 @@ export default {
                 console.error(err);
             })
         },
+        imgError:function(e){
+            e.target.src = img
+        }
     },
     computed:{
         getToken(){

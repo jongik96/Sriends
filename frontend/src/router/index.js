@@ -181,6 +181,18 @@ export default new VueRouter({
         {
             path:'/matchingCategory',
             component:() => import('@/views/matching/selectCategoryPage.vue')
+        },
+
+        // 채팅창페이지
+        {
+            path:'/chat',
+            component:()=> import('@/views/chatting/chattingPage.vue')
+        },
+
+        // 채팅목록
+        {
+            path:'/chatList',
+            component:()=> import('@/views/chatting/chattingListPage.vue')
         }
     ]
 })

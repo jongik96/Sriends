@@ -3,6 +3,11 @@
       <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-4 mt-12 mb-12">
         <article>
             <h2 class="text-2xl font-extrabold text-gray-900">종목 선택</h2>
+            <p class="flex">현재 관심종목 : 
+                <ul class="flex">
+                    <li class="mr-1" v-for="item in sports" :key="item.id"> {{item.interest}} </li>
+                </ul>
+            </p>
             <section class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
                 <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
                     <div class="relative w-full h-80 md:h-64 lg:h-44">
@@ -133,13 +138,24 @@
 <script>
 // import axios from 'axios'
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import { getInterest } from '@/api/auth.js'
 import Swal from 'sweetalert2'
 import { selectSports } from '@/api/auth.js'
 export default {
     data(){
         return{
             sportCategory: [],
+            sports:[]
         }
+    },
+    created(){
+        getInterest()
+        .then((res)=>{
+        console.log(res)  
+        this.sports = res.data    
+        }).catch((err)=>{
+        console.log(err)
+        })
     },
     methods: {
         selectCategory(){
@@ -154,6 +170,7 @@ export default {
             selectSports(this.sportCategory)
             .then((res)=>{
                 console.log(res)
+                this.$store.commit('setMySportCategory',this.sportCategory)
                 Swal.fire('종목 선택이 완료되었습니다.')
                 this.$router.push('/main')
             }).catch((err)=>{

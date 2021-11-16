@@ -5,12 +5,12 @@
                         <img v-if="this.pictureUrl!=null" :src=pictureUrl class="h-10 w-10 rounded-md md:h-20 md:w-20" alt="">
                         <img v-if="this.pictureUrl==null" src="@/assets/profile.png" class="h-10 w-10 rounded-md md:h-20 md:w-20" alt="">
                     </div>
-                    <div class="ml-1 md:ml-0 col-start-2 col-span-1 grid text-sm md:text-base sm:place-items-center">
+                    <div class="ml-5 md:ml-10 col-start-2 col-span-2 grid text-lg  sm:place-items-center">
                          {{name}}
                         <br>
                         <!-- {{item.level}} -->
                     </div>
-                    <div class="invisible sm:visible col-start-3 col-span-3 text-sm md:text-base md:grid sm:place-items-center">
+                    <div class=" sm:visible col-start-4 col-span-2 text-sm md:text-base md:grid sm:place-items-center">
                         {{calcDate}}
                     </div>
                     <div class="col-start-6 col-span-1 text-sm md:text-base grid justify-center">

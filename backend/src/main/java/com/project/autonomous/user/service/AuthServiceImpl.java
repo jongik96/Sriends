@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService{
     private final DBFileStorageService dbFileStorageService;
 
     @Transactional
-    public void signup(UserRegisterReq userRegisterReq) throws IOException {
+    public TokenDto signup(UserRegisterReq userRegisterReq) throws IOException {
         // 가입되어있는지 확인 (회원을 삭제해도 DB에 회원 정보가 남아있어서 가입 안됨 고민해야할 일)
         if (userRepository.existsByEmail(userRegisterReq.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_JOIN);
@@ -43,6 +43,8 @@ public class AuthServiceImpl implements AuthService{
         if(userRegisterReq.getFile() == null) picture = null;
         else picture = dbFileStorageService.storeFile(userRegisterReq.getFile());
         userRepository.save(userRegisterReq.toUser(passwordEncoder, picture));
+
+        return login(new LoginReq(userRegisterReq.getEmail(), userRegisterReq.getPassword()));
     }
 
     public boolean checkEmail(String email) {

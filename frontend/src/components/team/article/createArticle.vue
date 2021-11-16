@@ -14,6 +14,7 @@
                         <div class="md:pt-5 md:pl-20  pt-5 pl-10">
                             <p class="text-xl font-bold">내용</p>
                             <textarea v-model="form.content" class=" text-xl w-3/4 h-60  rounded-md border-2 border-yellow-400"/>
+                            <p v-if="form.content.length>400" class="text-yellow-600">400자 이내로 입력해주세요</p>
                         </div>
                         <div class="flex justify-center p-2 mt-10">
                             <button type="submit" :disabled="!btnDisabled"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">작성</button>
@@ -45,7 +46,7 @@ export default {
     },
     computed: {
         btnDisabled(){
-            if(!this.form.title || !this.form.content ){
+            if(!this.form.title || (this.form.content.length>400) || (this.form.content.length ==0) ){
                 return false
             }
             return true
@@ -64,7 +65,7 @@ export default {
                 console.log(err)
             })
         }        
-    }
+    },
 
 }
 </script>

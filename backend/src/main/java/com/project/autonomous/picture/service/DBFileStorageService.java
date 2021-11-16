@@ -47,6 +47,7 @@ public class DBFileStorageService {
 //        return s3Uploader.download(uuid);
 //    }
 
+    @Transactional
     public void deleteFile(String fileName) {
         s3Uploader.delete(fileName);
     }

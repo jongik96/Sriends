@@ -18,20 +18,20 @@
                 <span class="float-right">By: <a class="text-purple-500" href="#">{{ item.postedBy }}</a></span>
                 </div>
             </div> -->
-            <div class="grid grid-cols-6 mt-10">
-                <div class="grid col-start-1 col-span-1">
+            <div class="grid grid-cols-6 mt-10 border-b border-yellow-500 text-center">
+                <div class="grid col-start-1 col-span-1 text-center">
                     글 분류
                 </div>
-                <div class="grid col-start-2 col-span-1">
+                <div class="grid col-start-2 col-span-1 text-center">
                     종목
                 </div>
-                <div class="grid col-start-3 col-span-1">
+                <div class="grid col-start-3 col-span-1 text-center">
                     모집인원
                 </div>
-                <div class="grid col-start-4 col-span-1">
+                <div class="grid col-start-4 col-span-2 ml-5 text-center">
                     작성팀
                 </div>
-                <div class="grid col-start-5 col-span-2">
+                <div class="grid col-start-6 col-span-1 text-center">
                     작성일시
                 </div>
             </div>
@@ -56,6 +56,7 @@
             </matchingListItem>
             <infinite-loading @infinite="infiniteHandler" spinner="sprial">
                 <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+                <div slot="no-results" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">해당결과가 없습니다 :)</div>
             </infinite-loading>
       </div>
   </div>

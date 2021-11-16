@@ -11,7 +11,8 @@
       <div class="w-7/12 md:w-7/12 = md:ml-5 ml-4 2xl:ml-20">
         <div class="md:flex md:flex-wrap md:items-center mb-4">
           <div class="text-3xl font-semibold inline-block md:mr-2 mb-2 sm:mb-0">
-            {{this.name}}
+            {{this.name}} 
+            <span><router-link to="/chatList" class="text-base font-medium ml-3 border-2 border-yellow-500 rounded-lg">메시지 보내기</router-link></span>
           </div>
          
         </div>

@@ -10,10 +10,6 @@ import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
 import com.project.autonomous.matchboard.comments.repository.MatchBoardCommentRepository;
 import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
 import com.project.autonomous.matchboard.posts.repository.MatchBoardPostRepository;
-import com.project.autonomous.team.entity.SportCategory;
-import com.project.autonomous.team.entity.Team;
-import com.project.autonomous.team.repository.SportCategoryRepository;
-import com.project.autonomous.team.repository.TeamRepository;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import java.util.List;
@@ -26,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MatchBoardCommentServiceImpl {
+public class MatchBoardCommentService {
 
     private final UserRepository userRepository;
     private final MatchBoardPostRepository matchBoardPostRepository;
@@ -35,28 +31,25 @@ public class MatchBoardCommentServiceImpl {
     // 댓글 생성
     @Transactional
     public MatchBoardCommentRes createComment(Long postId, MatchBoardCreateCommentReq matchBoardCreateCommentReq) {
-        if(matchBoardCreateCommentReq.getParnetId() > 0) { // 부모 댓글이 존재한다면
-            MatchBoardComment parentComment = findMatchBoardComment(matchBoardCreateCommentReq.getParnetId());
+        if(matchBoardCreateCommentReq.getParentId() > 0) { // 부모 댓글이 존재한다면
+            MatchBoardComment parentComment = findMatchBoardComment(matchBoardCreateCommentReq.getParentId());
             parentComment.addReplyCount();
         }
         MatchBoardPost matchBoardPost = findMatchBoardPost(postId);
         User user = findMember(SecurityUtil.getCurrentMemberId());
 
         MatchBoardComment matchBoardComment = matchBoardCreateCommentReq.toMatchBoardComment(matchBoardPost, user);
-        matchBoardComment.setDepth(matchBoardCreateCommentReq.getParnetId());
+        matchBoardComment.setDepth(matchBoardCreateCommentReq.getParentId());
         matchBoardPost.getComments().add(matchBoardComment);
         user.getComments().add(matchBoardComment);
         matchBoardCommentRepository.save(matchBoardComment);
 
-        if(matchBoardCreateCommentReq.getParnetId() == 0) {
-            matchBoardComment.setParentId(matchBoardComment.getId());
-        }
         return MatchBoardCommentRes.from(matchBoardComment);
     }
 
     // 댓글 조회
-    public List<MatchBoardCommentRes> getAllComment(Long postId) {
-        return matchBoardCommentRepository.findAllComment(findMatchBoardPost(postId))
+    public List<MatchBoardCommentRes> getAllComment(Long postId, Long parentId) {
+        return matchBoardCommentRepository.findAllComment(findMatchBoardPost(postId), parentId)
             .stream().map(MatchBoardCommentRes::from).collect(Collectors.toList());
     }
 
