@@ -29,7 +29,7 @@
                 </div>
             </div> -->
             <div class="grid grid-cols-6 mt-10 text-center">
-                <div class="grid col-start-1 col-span-1 text-center">
+                <div class="grid col-start-1 col-span-1 text-center text-gray-600">
                     글 분류
                 </div>
                 <div class="grid col-start-2 col-span-1 text-center">

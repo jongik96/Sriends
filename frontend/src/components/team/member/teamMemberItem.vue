@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow-md rounded-xl p-4 mt-5 mx-6 mb-4 min-w-300">
+  <div class="shadow-md rounded-xl p-4 h-36 sm:h-24 mt-5 mx-6 mb-4 min-w-300">
     <div class="grid grid-cols-7">
       <div class="col-start-1 col-span-3 sm:col-start-1 sm:col-span-1">
           <img :src=pictureUrl class="h-10 w-10 rounded-2xl md:h-20 md:w-20" @error="imgError">
@@ -16,7 +16,7 @@
             </p>
           </div>
       </div>
-      <div class=" sm:visible col-start-1 col-span-7 sm:col-start-3 sm:col-span-1 grid sm:place-items-center ml-1 sm:ml-0">
+      <div class=" sm:visible col-start-1 col-span-2 sm:col-start-3 sm:col-span-1 grid sm:place-items-center ml-1 sm:ml-0">
         <div>
         {{city}}
         </div>
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div v-if="id!=myId" 
-       class="ml-1 sm:visible col-start-1 col-span-4 sm:col-start-4 sm:col-span-3 grid sm:place-items-center">
+       class="ml-1 sm:visible col-start-3 col-span-3 sm:col-start-4 sm:col-span-3 grid sm:place-items-center">
           <div v-if="Myauth">
             <select class="border-2 border-solid w-16 h-6 border-yellow-500 rounded-md" v-model="modifyAuth">
                             <option disabled value="">권한</option>
@@ -36,7 +36,7 @@
                             <option value="매니저">매니저</option>
                             <option value="대표">대표</option>
             </select>  
-            <span class="border-2 ml-2 border-solid h-6 border-yellow-500 w-18 rounded-md">
+            <span class="border-2 ml-2 mt-20 border-solid h-6 border-yellow-500 w-18 rounded-md">
               <button @click="giveManage">
               부여하기
               </button>
@@ -44,9 +44,9 @@
           </div>
           
       </div>
-      <div v-if="myId!==id" class="col-start-5 col-span-3 sm:col-start-7 sm:col-span-1">
+      <div v-if="myId!==id" class="col-start-6 col-span-2 md-36 sm:md-0 sm:col-start-7 sm:col-span-1">
           <div class="flex justify-end">
-            <router-link to="/chatList"><font-awesome-icon icon="comments"/></router-link>
+            <button @click="clickDm"><font-awesome-icon icon="comments"/></button>
           </div>
           <div v-if="!noGrade" class="flex justify-end mt-5">
             <button @click="clickBan"><font-awesome-icon icon="ban"/></button>
@@ -120,6 +120,10 @@ export default {
       })
   },
   methods:{
+    clickDm:function(){
+      this.$store.commit('setChatOppenent', this.tempId)
+      this.$router.push('/chat')
+    },
     imgError:function(e){
             e.target.src = img
         },

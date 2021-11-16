@@ -1,6 +1,6 @@
 <template>
     <div @click="clickMatch" class="grid grid-cols-6 mt-10 cursor-pointer text-center">
-        <div class="grid col-start-1 col-span-1 text-center">
+        <div class="grid col-start-1 col-span-1 text-center text-gray-600">
                 {{matchBoardCategory}}
         </div>
         <div class="grid col-start-2 col-span-1 text-center">
@@ -52,6 +52,9 @@ export default {
             this.content = res.data.content
             this.createAt = getDate(res.data.createAt)
             this.matchBoardCategory = res.data.matchBoardCategory
+            if(res.data.matchBoardCategory=='용병'){
+                this.matchBoardCategory = '게스트'
+            }
             this.place = res.data.place
             this.playingTime = res.data.playingTime
             this.recruited = res.data.recruited

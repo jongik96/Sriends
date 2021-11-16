@@ -137,6 +137,7 @@ import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import store from '@/store/index.js'
+import { getNotice } from '@/api/auth.js'
 export default {
   data(){
     return{
@@ -144,10 +145,18 @@ export default {
       listOne: false,
       smallList: false,
       recvlist:[],
+      status:'',
+      connected:''
     }
   },
   created(){
     this.connect();
+    getNotice()
+    .then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
   },
   methods:{
     clickInfo: function(){
@@ -166,7 +175,9 @@ export default {
     // },
     logout: function(){
       localStorage.removeItem('vuex')
+      this.disconnect()
       this.$router.push('/')
+      
     },
     connect() {
           const userId = store.state.userId
@@ -182,7 +193,6 @@ export default {
               // 서버의 메시지 전송 endpoint를 구독합니다.
               // 이런형태를 pub sub 구조라고 합니다.
                   this.stompClient.subscribe(`/topic/${userId}`, res => {
-                      console.log('res=>'+res)
                       console.log('subscribe 로 받은 메시지 입니다.', res.body);
 
                       // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
@@ -196,7 +206,14 @@ export default {
               this.connected = false;
               }
           );        
-        }
+        },
+    disconnect(){
+      let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
+      socket.close();
+      this.connected=false;
+      this.recvlist=[];
+      console.log('소켓연결해제')
+    }
   }
 
 }

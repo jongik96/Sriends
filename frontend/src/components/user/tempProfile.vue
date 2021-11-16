@@ -12,7 +12,7 @@
         <div class="md:flex md:flex-wrap md:items-center mb-4">
           <div class="text-3xl font-semibold inline-block md:mr-2 mb-2 sm:mb-0">
             {{this.name}} 
-            <span><router-link to="/chatList" class="text-base font-medium ml-3 border-2 border-yellow-500 rounded-lg">메시지 보내기</router-link></span>
+            <span><button @click="clickDm" class="text-base font-medium ml-3 border-2 border-yellow-500 rounded-lg">메시지 보내기</button></span>
           </div>
          
         </div>
@@ -126,7 +126,12 @@ export default {
   methods:{
     imgError:function(e){
             e.target.src = img
+        },
+        clickDm:function(){
+          this.$store.commit('setChatOppenent', this.id)
+          this.$router.push('/chat')
         }
+
   },
   computed:{
 

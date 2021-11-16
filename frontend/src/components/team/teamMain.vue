@@ -9,56 +9,49 @@
                         border-2 border-yellow-500 p-1" :src="pictureDownloadUrl" @error="imgError">
         </div>
         <!-- profile meta -->
-        <div class="w-6/12 md:w-6/12 = md:ml-5 ml-4 2xl:ml-20">
-            <div class="md:flex md:flex-wrap md:items-center mb-4">
-            <h2 class="text-3xl font-semibold inline-block md:mr-2 mb-2 sm:mb-0">
-                {{this.name}}
-            </h2>
+        <div class="w-full md:w-6/12 lg:mb-12 md:ml-5 ml-4 2xl:ml-20">
+            <div class="flex md:flex-wrap md:items-center mb-4">
+                <h2 class="text-3xl lg:text-4xl font-semibold inline-block md:mr-2 mb-2 sm:mb-0">
+                    {{this.name}}
+                </h2>
 
-            <!-- badge -->
-            <span class="inline-block fas fa-certificate fa-lg text-blue-500 
-                                relative mr-6 text-xl transform -translate-y-2" aria-hidden="true">
-                <i class="fas fa-check text-white text-xs absolute inset-x-0
-                                ml-1 mt-px"></i>
-            </span>
 
-            <!-- follow button -->
-            <div v-if="authority">
-            <router-link v-if="(authority=='대표') || (authority='매니저')" to="/teamModify" class="bg-yellow-500 px-2 py-1 
-                            text-white font-semibold text-sm rounded block text-center 
-                            sm:inline-block"
-            >정보수정
-            </router-link>
+                <div v-if="authority">
+                    <router-link v-if="(authority=='대표') || (authority='매니저')" to="/teamModify" class="bg-yellow-500 px-2 py-1 
+                                    text-white font-semibold text-sm rounded block text-center lg:text-base ml-5 md:ml-0 mt-1 md:mt-0
+                                    sm:inline-block"
+                    >정보수정
+                </router-link>
+                </div>
             </div>
-        </div>
 
             <!-- post, following, followers list for medium screens -->
-            <ul class=" md:inline-block  mb-4">
-            <li>
-                대표자
-                <span class="font-semibold"><button @click="clickUser">{{this.leader.name}}</button></span>
-                종목
-                <span class="font-semibold">{{this.sportCategory}}</span>
-            </li>
-            <li>
-                총 인원
-                <span class="font-semibold">{{this.memberCount}}</span>
-                회비
-                <span class="font-semibold">{{this.membershipFee}}</span>
-            </li>
-            <li>
-                지역
-                <span class="font-semibold">{{this.city}}</span>
-            </li>
-            <li>
-                모집여부
-                <span v-if="!recruitmentState" class="font-semibold">모집 중</span>
-                <span v-if="recruitmentState" class="font-semibold">모집 완료</span>
-            </li>
-            <li>
-                소개
-               <p>{{this.description}}</p>
-            </li>
+            <ul class=" md:inline-block lg:text-xl">
+                <li class="">
+                    대표자
+                    <span class="font-semibold"><button @click="clickUser">{{this.leader.name}}</button></span>
+                    종목
+                    <span class="font-semibold">{{this.sportCategory}}</span>
+                </li>
+                <li>
+                    총 인원
+                    <span class="font-semibold">{{this.memberCount}}</span>
+                    회비
+                    <span class="font-semibold">{{this.membershipFee}}</span>
+                </li>
+                <li>
+                    지역
+                    <span class="font-semibold">{{this.city}}</span>
+                </li>
+                <li>
+                    모집여부
+                    <span v-if="recruitmentState" class="font-semibold">모집 중</span>
+                    <span v-if="!recruitmentState" class="font-semibold">모집 완료</span>
+                </li>
+                <li>
+                    소개
+                    <p>{{this.description}}</p>
+                </li>
             </ul>
 
 
@@ -71,9 +64,12 @@
         </div> -->
 
         </header>
-        <div v-if="this.authState" class="grid justify-end text-xl">회원님은 {{this.authority}}입니다!</div>
-        <div v-if="!this.authState" class="grid justify-end text-xl">회원님은 손님입니다</div>
-        <div v-if="this.authState" class="grid justify-end"><button @click="outofTeam">탈퇴하기</button></div>
+        <!-- <div>
+            <p class="ml-8 md:ml-20">{{this.description}}</p>
+        </div> -->
+        <div v-if="this.authState" class="grid justify-end text-xl mr-3">회원님은 {{this.authority}}입니다!</div>
+        <div v-if="!this.authState" class="grid justify-end text-xl mr-3">회원님은 손님입니다</div>
+        <div v-if="this.authState" class="grid justify-end mr-3"><button @click="outofTeam">탈퇴하기</button></div>
         <div v-if="!this.authState" class="grid justify-center">
             <div class="mt-7">
                 <router-link to='/joinTeam'>

@@ -2,13 +2,13 @@
   <div class="grid grid-cols-6">
         <div class="col-start-1 col-span-6 md:col-start-2 md:col-span-4 border-b px-4 py-2 bg-white mt-10">
             <div>
-                <p class="text-3xl font-extrabold text-gray-900">종류 / 지역 / 종목 선택</p>
+                <p class="sm:text-3xl text-xl font-extrabold text-gray-900">경기/게스트 찾기</p>
             </div>
-            <div class="mt-10">
+            <div class="mt-3 sm:mt-10">
                 <form>
                     <div class="grid grid-cols-6">
                         <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-6 mb-3">
-                            <p class="text-2xl">글 분류를 선택해주세요</p>
+                            <p class="text-base sm:text-2xl">글 분류를 선택해주세요</p>
                             <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.category">
                                 <option disabled value="">분류</option>
                                 <option value="매칭">경기 매칭</option>
@@ -16,8 +16,8 @@
                             </select>
 
                         </div>
-                        <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-6 border-r border-yellow-300">
-                            <p class="text-2xl">지역을 선택해주세요</p>
+                        <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-3 sm:border-r border-yellow-300">
+                            <p class="text-base sm:text-2xl">지역을 선택해주세요</p>
                             <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="selectDo">
                             <option disabled value="">지역</option>
                             <option value="1">서울/인천/경기</option>
@@ -211,8 +211,8 @@
                             <br/>
                             <p v-if="this.form.city" class="mt-2 text-base md:text-xl font-medium">선택 : {{ this.form.city }} </p>
                         </div>
-                        <div class="md:col-start-4 md:col-span-3 col-start-1 col-span-6 mt-3 md:mt-0 ml-0 md:ml-3">
-                            <p class="text-2xl">종목을 선택해주세요</p>
+                        <div class="md:col-start-4 md:col-span-3 col-start-4 col-span-3  ml-0 md:ml-3">
+                            <p class="text-base sm:text-2xl">종목을 선택해주세요</p>
                             <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
                             <option disabled value="">종목</option>
                             <option value="풋살">축구/풋살</option>
@@ -229,7 +229,7 @@
                     </div>
                 </form>
             </div>
-            <div class="mt-10 flex justify-end">
+            <div class="mt-3 sm:mt-10 flex justify-end">
                 <!-- <router-link :to="{'name':'searchTeamList', props:{'city':this.form.city, 'sportCategory': this.form.sportCategory}}">
                 <button class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">조회하기</button>
                 </router-link> -->

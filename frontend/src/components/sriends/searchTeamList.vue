@@ -231,6 +231,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
     data(){
         return{
@@ -243,11 +244,15 @@ export default {
     },
     methods:{
         clickBtn(){
+            if(!this.form.city || !this.form.sportCategory){
+                Swal.fire('지역과 종목을 선택해주세요')
+            }else{
             this.$store.commit("setCity",this.form.city)
             this.$store.commit("setSportCategory",this.form.sportCategory)
             this.$router.push('/searchTeamList')
+            }
         }
-    }
+    },
 }
 </script>
 

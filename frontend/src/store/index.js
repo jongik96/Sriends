@@ -24,8 +24,12 @@ export default new Vuex.Store({
     category:'',
     myCity:'',
     mySportCategory:'',
+    chatOppenent:'',
   },
   mutations: {
+    setChatOppenent(state,chatOppenent){
+      state.chatOppenent = chatOppenent
+    },
     setMySportCategory(state,mySportCategory){
       state.mySportCategory = mySportCategory
     },

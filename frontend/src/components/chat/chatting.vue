@@ -6,7 +6,8 @@
           class="flex flex-col flex-auto flex-shrink-0 rounded-2xl  bg-gray-100 h-full p-4"
         >
           <div class="flex flex-col h-120 overflow-x-auto mb-4">
-            <div class="flex flex-col  h-full">
+            <div class="flex flex-col h-screen max-h-96">
+              <div class="text-2xl">???님과의 대화</div>
               <div class="grid grid-cols-12 gap-y-2">
                 <!-- <div class="col-start-1 col-end-8 p-3 rounded-lg">
                   <div class="flex flex-row items-center">
@@ -37,8 +38,8 @@
                     </div>
                   </div>
                 </div> -->
-                <div v-for="item in recvList" :key="item.id" class="col-start-1 col-end-8 p-3 rounded-lg">
-                  <div v-if="item.sender==56" class="flex flex-row items-center">
+                <div v-for="item in recvList" :key="item.id" class="col-start-1 col-end-12 p-3 rounded-lg">
+                  <div v-if="item.sender==oppenentId" class="flex flex-row items-center">
                     <div
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-200 flex-shrink-0"
                     >
@@ -50,9 +51,7 @@
                       <div>{{item.message}}</div>
                     </div>
                   </div>
-                </div>
-                <div v-for="item in recvList" :key="item.id" class="col-start-6 col-end-13 p-3 rounded-lg">
-                  <div v-if="item.sender==58" class="flex items-center justify-start flex-row-reverse">
+                  <div v-if="item.sender==Myid" class="flex items-end justify-start flex-row-reverse">
                     <div
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-500 flex-shrink-0"
                     >
@@ -65,6 +64,20 @@
                     </div>
                   </div>
                 </div>
+                <!-- <div v-for="item in recvList" :key="item.id" class="col-start-6 col-end-13 p-3 rounded-lg">
+                  <div v-if="item.sender==58" class="flex items-center justify-start flex-row-reverse">
+                    <div
+                      class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-500 flex-shrink-0"
+                    >
+                      {{item.name}}
+                    </div>
+                    <div
+                      class="relative mr-3 text-sm bg-yellow-300 py-2 px-4 shadow rounded-xl"
+                    >
+                      <div>{{item.message}}</div>
+                    </div>
+                  </div>
+                </div> -->
 
 
 
@@ -128,10 +141,10 @@ export default {
             reconnect:0,
             message:'',
             roomId:1,
-            opponentId:3,
+            oppenentId:store.state.chatOppenent,
             userName:store.state.userId,
             recvList:[],
-            Myid:1,
+            Myid:store.state.userId,
             // items:[
             //     {
             //         name:'testA',

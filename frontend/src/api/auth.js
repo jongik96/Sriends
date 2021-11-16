@@ -66,6 +66,10 @@ function getInterest(){
     return instance.get('users/interest')
 }
 
+function getNotice(){
+    return instance.get('notice')
+}
+
 export {
         // 회원관련 api
         getProfileInfo, 
@@ -78,5 +82,6 @@ export {
         deleteUser,
         selectSports,
         getInterest,
-        getTempProfileInfo
+        getTempProfileInfo,
+        getNotice
 }

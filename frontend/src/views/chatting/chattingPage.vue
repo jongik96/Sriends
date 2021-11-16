@@ -2,7 +2,7 @@
   <div>
     <topMenu></topMenu>
       <div class="grid grid-cols-6">
-        <chatting class="col-start-2 col-span-4"></chatting>
+        <chatting class="col-start-1 col-span-6 md:col-start-2 md:col-span-4"></chatting>
       </div>
   </div>
 </template>
