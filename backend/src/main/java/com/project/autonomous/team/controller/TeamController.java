@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -53,17 +56,16 @@ public class TeamController {
     }
     @GetMapping("/list")
     @Operation(summary = "팀 리스트 조회 (회원 정보를 바탕으로 가입할 팀을 찾을때)", description = "<strong>회원가입할때 입력한 city와 관심 종목</strong>을 사용해 팀 목록을 조회한다.")
-    public ResponseEntity<ArrayList<TeamListRes>> getTeamList(){
+    public ResponseEntity<Page<TeamListRes>> getTeamList(@PageableDefault(size = 10) Pageable pageable){
 
-        ArrayList<TeamListRes> list = teamService.getList();
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(teamService.getList(pageable));
     }
 
     @GetMapping("/list/{city}/{sportCategory}")
     @Operation(summary = "팀 리스트 조회 (입력을 바탕으로 가입할 팀을 찾을때)", description = "<strong>city와 관심 종목을 선택해서</strong> 사용해 팀 목록을 조회한다.")
-    public ResponseEntity<ArrayList<TeamListRes>> getTeamListChoose(@PathVariable("city") String city, @PathVariable("sportCategory") String sportCategory){
+    public ResponseEntity<Page<TeamListRes>> getTeamListChoose(@PathVariable("city") String city, @PathVariable("sportCategory") String sportCategory, @PageableDefault(size = 10) Pageable pageable){
 
-        ArrayList<TeamListRes> list = teamService.getChooseList(city, sportCategory);
+        Page<TeamListRes> list = teamService.getChooseList(city, sportCategory, pageable);
         if(list.isEmpty()){
             return ResponseEntity.status(400).body(list);
         }
