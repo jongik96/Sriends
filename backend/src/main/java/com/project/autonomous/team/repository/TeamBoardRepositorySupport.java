@@ -40,15 +40,7 @@ public class TeamBoardRepositorySupport {
         List<PostViewRes> content = new ArrayList<>();
 
         for(TeamBoard teamBoard : results.getResults()){
-
-            PostViewRes postViewListRes = new PostViewRes();
-            postViewListRes.setId(teamBoard.getId());
-            postViewListRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
-            postViewListRes.setContent(teamBoard.getContent());
-            postViewListRes.setTitle(teamBoard.getTitle());
-            postViewListRes.setCreateDate(teamBoard.getCreateDate());
-
-            content.add(postViewListRes);
+            content.add(PostViewRes.from(teamBoard, userRepository.findById(teamBoard.getWriterId()).get()));
         }
 
         long total = results.getTotal();
