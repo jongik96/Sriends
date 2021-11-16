@@ -1,6 +1,7 @@
 package com.project.autonomous.chat.controller;
 
 import com.project.autonomous.chat.dto.response.ChatRoomListRes;
+import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRes;
 import com.project.autonomous.chat.entity.ChatMessage;
 import com.project.autonomous.chat.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +36,7 @@ public class ChatRoomController {
     //채팅방 채팅내역 조회 by 유저상세정보에서
     @GetMapping("/room/by-user/{partnerId}")
     @Operation(summary = "채팅방 채팅내역 조회, 유저상세정보", description = "유저상세정보에서 채팅방의 채팅내역 조회시")
-    public ResponseEntity<List<ChatMessage>> getMessageByUserInfo(@PathVariable Long partnerId){
+    public ResponseEntity<GetMSGByPartnerIdRes> getMessageByUserInfo(@PathVariable Long partnerId){
         return ResponseEntity.ok(chatRoomservice.getMessageByPartnerId(partnerId));
     }
 

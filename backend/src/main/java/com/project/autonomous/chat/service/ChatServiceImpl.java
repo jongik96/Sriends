@@ -2,6 +2,7 @@ package com.project.autonomous.chat.service;
 
 import com.project.autonomous.chat.dto.request.ChatMessageReq;
 import com.project.autonomous.chat.dto.response.ChatRoomListRes;
+import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRes;
 import com.project.autonomous.chat.entity.ChatMessage;
 import com.project.autonomous.chat.entity.ChatRoom;
 import com.project.autonomous.chat.entity.UserChatRoom;
@@ -76,7 +77,7 @@ public class ChatServiceImpl implements ChatService {
     //채팅방 접속 - 채팅목록에서
     @Override
     @Transactional
-    public List<ChatMessage> getMessageByPartnerId(Long partnerId) {
+    public GetMSGByPartnerIdRes getMessageByPartnerId(Long partnerId) {
 
         //user체크
 
@@ -96,7 +97,12 @@ public class ChatServiceImpl implements ChatService {
 
         //채팅 불러오기
 
-        return chatRepository.findAllByChatRoom(chatRoom);
+        List<ChatMessage> chatMessageList = chatRepository.findAllByChatRoom(chatRoom);
+        GetMSGByPartnerIdRes getMSGByPartnerIdRes = new GetMSGByPartnerIdRes();
+        getMSGByPartnerIdRes.setChatMessageList(chatMessageList);
+        getMSGByPartnerIdRes.setRoomId(chatRoom.getId());
+
+        return getMSGByPartnerIdRes;
     }
 
     //채팅방접속 - 유저상세보기에서
