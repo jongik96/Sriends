@@ -1,13 +1,10 @@
 package com.project.autonomous.common.exception;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
@@ -27,7 +24,7 @@ public enum ErrorCode {
     STILL_YOU_HAVE_SREINEDS(BAD_REQUEST, "아직 대표인 스렌즈가 존재합니다."),
     CANNOT_LEAVE_LEADER(BAD_REQUEST, "팀 대표는 탈퇴할 수 없습니다."),
     CANNOT_KICKOUT_MANAGER(BAD_REQUEST, "매니저는 강퇴할 수 없습니다."),
-
+    AlREADY_CHAT(BAD_REQUEST, "채팅방이 있습니다."),
 
 //    EMPTY_MESSAGE(BAD_REQUEST, "비어있는 항목을 입력해주세요."),
 //    EMAIL_MESSAGE(BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),

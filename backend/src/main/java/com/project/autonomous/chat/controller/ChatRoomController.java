@@ -1,53 +1,40 @@
 package com.project.autonomous.chat.controller;
 
-import com.project.autonomous.chat.dto.ChatRoom;
-import com.project.autonomous.chat.repository.ChatRoomRepository;
+import com.project.autonomous.chat.dto.request.ChatRoomMessageReq;
+import com.project.autonomous.chat.dto.response.ChatRoomListRes;
+import com.project.autonomous.chat.entity.ChatMessage;
+import com.project.autonomous.chat.service.ChatRoomService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/chat")
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
+   private final ChatRoomService chatRoomservice;
 
-    // 채팅 리스트 화면
+//    @Autowired
+//    ChatRoomService chatRoomservice;
+
+    //채팅방 전체 조회
+    @GetMapping("/list/{userId}")
+    @Operation(summary = "본인 채팅 조회", description = "본인 채팅목록 조회")
+    public ResponseEntity<List<ChatRoomListRes>> getTeamList(@PathVariable Long userId){
+
+        List<ChatRoomListRes> list = chatRoomservice.getChatRoomList(userId);
+        return ResponseEntity.ok(list);
+    }
+
+    //채팅방 조회
     @GetMapping("/room")
-    public String rooms(Model model) {
-        return "/chat/room";
+    public ResponseEntity<List<ChatMessage>> getMessage(@RequestBody ChatRoomMessageReq chatRoomMessageReq){
+        return ResponseEntity.ok(chatRoomservice.getMessage(chatRoomMessageReq));
     }
 
-    // 모든 채팅방 목록 반환
-    @GetMapping("/rooms")
-    @ResponseBody
-    public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
-    }
-
-    // 채팅방 생성
-    @PostMapping("/room")
-    @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomRepository.createChatRoom(name);
-    }
-
-    // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId) {
-        model.addAttribute("roomId", roomId);
-        return "/chat/roomdetail";
-    }
-
-    // 특정 채팅방 조회
-    @GetMapping("/room/{roomId}")
-    @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
-    }
 
 }

@@ -7,15 +7,15 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import java.util.Arrays;
-import java.util.Properties;
-
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.Properties;
 
 @Component
 public class OpenApiConfig {
@@ -81,6 +81,13 @@ public class OpenApiConfig {
             .build();
     }
 
+    @Bean
+    public GroupedOpenApi chat(){
+        return GroupedOpenApi.builder()
+                .group("Chat")
+                .pathsToMatch("/chat/**")
+                .build();
+    }
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
