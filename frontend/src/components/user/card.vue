@@ -14,7 +14,7 @@
                     </router-link>
                 </div>
                 <div class="px-3 py-4 flex items-center justify-center">
-                        <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="#">                         
+                        <a class="bg-yellow-400 py-1 px-2 font-semibold text-black rounded-lg" href="hi">                         
                             새 스렌즈 만들기
                         </a>
                 </div>
