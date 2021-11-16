@@ -13,6 +13,9 @@ import com.project.autonomous.team.service.TeamBoardService;
 import com.project.autonomous.team.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,9 +58,8 @@ public class TeamBoardController {
 
     @GetMapping("/{teamId}")
     @Operation(summary = "공지사항 목록 조회", description = "팀 내 게시판 글 목록 조회(여러개)")
-    public ResponseEntity<ArrayList<PostViewRes>> getPostList(@PathVariable("teamId") long teamId){
-        return ResponseEntity.ok(teamBoardService.postingViewList(teamId));
-
+    public ResponseEntity<Page<PostViewRes>> getPostList(@PathVariable("teamId") long teamId, @PageableDefault(size = 10) Pageable pageable){
+        return ResponseEntity.ok(teamBoardService.postingViewList(teamId, pageable));
     }
 
     @PostMapping("/{boardId}/comments")
