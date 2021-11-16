@@ -7,6 +7,7 @@ import com.project.autonomous.notification.dto.NotificationRes;
 import com.project.autonomous.notification.entity.NoticeType;
 import com.project.autonomous.notification.entity.Notification;
 import com.project.autonomous.notification.repository.NotificationRepository;
+import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import java.util.List;
@@ -31,7 +32,7 @@ public class NotificationService {
             message = "내 매칭 게시글에 답글이 달렸습니다.";
         }
 
-        if (type.equals(NoticeType.TEAM)) {
+        if (type.equals(NoticeType.TEAMBOARD)) {
             message = "내 스렌즈 게시글에 답글이 달렸습니다.";
         }
 
@@ -40,6 +41,18 @@ public class NotificationService {
         }
 
         notificationRepository.save(Notification.of(receiver, postId, type, message));
+        simpMessagingTemplate.convertAndSend("/topic/" + receiver.getId(), message);
+    }
+
+    @Transactional
+    public void createJoinNotification(User receiver, NoticeType type, Team team) {
+        String message = null;
+
+        if (type.equals(NoticeType.TEAMJOIN)) {
+            message = "\"" + team.getName() + "\"의 가입이 승인되었습니다.";
+        }
+
+        notificationRepository.save(Notification.of(receiver, team.getId(), type, message));
         simpMessagingTemplate.convertAndSend("/topic/" + receiver.getId(), message);
     }
 
