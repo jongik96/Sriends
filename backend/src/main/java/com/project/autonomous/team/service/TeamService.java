@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public interface TeamService {
-    Team create(TeamCreatePostReq teamInfo) throws IOException;
+    TeamInfoRes create(TeamCreatePostReq teamInfo) throws IOException;
 
     Page<TeamListRes> getList(Pageable pageable);
 
     Page<TeamListRes> getChooseList(String cityName, String sportCategory, Pageable pageable);
 
-    boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException;
+    TeamInfoRes modify(TeamModifyPostReq teamInfo, long teamId) throws IOException;
 
     boolean delete(long teamId);
 

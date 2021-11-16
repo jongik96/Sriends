@@ -44,16 +44,12 @@ public class TeamController {
         dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
 
-
     @PostMapping(path ="/", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "팀 생성", description = "<strong>입력 받은 정보</strong>를 사용해 팀을 생성한다.")
-    public ResponseEntity<Boolean> createTeam(@Valid @ModelAttribute TeamCreatePostReq teamInfo, BindingResult theBindingResult) throws IOException {
-
-        Team team = teamService.create(teamInfo);
-
-        return ResponseEntity.ok(true);
-
+    public ResponseEntity<TeamInfoRes> createTeam(@Valid @ModelAttribute TeamCreatePostReq teamInfo, BindingResult theBindingResult) throws IOException {
+        return ResponseEntity.ok(teamService.create(teamInfo));
     }
+
     @GetMapping("/list")
     @Operation(summary = "팀 리스트 조회 (회원 정보를 바탕으로 가입할 팀을 찾을때)", description = "<strong>회원가입할때 입력한 city와 관심 종목</strong>을 사용해 팀 목록을 조회한다.")
     public ResponseEntity<Page<TeamListRes>> getTeamList(@PageableDefault(size = 10) Pageable pageable){
@@ -75,12 +71,9 @@ public class TeamController {
 
     @PutMapping(path ="/{teamId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "팀 정보 수정", description = "<strong>입력 받은 정보</strong>를 사용해 팀 정보를 변경한다.")
-    public ResponseEntity<Boolean> modifyTeam(@PathVariable("teamId") long teamId, @Valid @ModelAttribute TeamModifyPostReq teamInfo, BindingResult theBindingResult) throws IOException {
+    public ResponseEntity<TeamInfoRes> modifyTeam(@PathVariable("teamId") long teamId, @Valid @ModelAttribute TeamModifyPostReq teamInfo, BindingResult theBindingResult) throws IOException {
 
-        if(teamService.modify(teamInfo, teamId)){
-            return ResponseEntity.ok(true);
-        }
-        return ResponseEntity.status(400).body(false);
+        return ResponseEntity.ok(teamService.modify(teamInfo, teamId));
     }
 
     @DeleteMapping("/{teamId}")

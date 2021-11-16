@@ -3,6 +3,10 @@ package com.project.autonomous.team.service;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
+import com.project.autonomous.notification.entity.NoticeType;
+import com.project.autonomous.notification.service.NotificationService;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.picture.service.DBFileStorageService;
@@ -18,6 +22,7 @@ import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.team.repository.TeamRepository;
 import com.project.autonomous.team.repository.TeamRepositorySupport;
 import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
+import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
@@ -65,13 +70,13 @@ public class TeamServiceImpl implements TeamService{
 
     private final DBFileStorageService dbFileStorageService;
 
+    private final NotificationService notificationService;
+
 
     @Override
     @Transactional
-    public Team create(TeamCreatePostReq teamInfo) throws IOException {
-
+    public TeamInfoRes create(TeamCreatePostReq teamInfo) throws IOException {
         long userId = SecurityUtil.getCurrentMemberId();
-
 
         Team team = new Team();
         team.setName(teamInfo.getName());
@@ -100,7 +105,8 @@ public class TeamServiceImpl implements TeamService{
         userTeam.setRegisterDate(LocalDateTime.now());
         userTeam.setAuthority("대표");
         userTeamRepository.save(userTeam);
-        return team;
+
+        return TeamInfoRes.from(team, userRepository.findById(userId).get(), teamInfo.getSportCategory());
     }
 
 
@@ -145,7 +151,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     @Transactional
-    public boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
+    public TeamInfoRes modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
 
         long userId = SecurityUtil.getCurrentMemberId();
 
@@ -174,12 +180,12 @@ public class TeamServiceImpl implements TeamService{
             team.setPicture(picture);
 
 
-            teamRepository.save(team);
+            team = teamRepository.save(team);
 
-            return true;
+            return TeamInfoRes.from(team, userRepository.findById(team.getLeaderId()).get(), teamInfo.getSportCategory());
         }
 
-        return false;
+        throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
     }
 
     @Override
@@ -210,26 +216,10 @@ public class TeamServiceImpl implements TeamService{
     public TeamInfoRes getTeamInfo(long teamId) {
 
         Team team = teamRepository.findById(teamId).get();
-        TeamInfoRes teamInfoRes = new TeamInfoRes();
+        User leader = userRepository.findById(team.getLeaderId()).get();
+        String sportCategory = sportCategoryRepository.getById(team.getSportCategoryId()).getName();
 
-        teamInfoRes.setCity(team.getCity());
-        teamInfoRes.setDescription(team.getDescription());
-        teamInfoRes.setCreateDate(team.getCreateDate());
-        teamInfoRes.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
-        teamInfoRes.setMaxCount(team.getMaxCount());
-        teamInfoRes.setMemberCount(team.getMemberCount());
-        teamInfoRes.setName(team.getName());
-        teamInfoRes.setMembershipFee(team.isMembershipFee());
-        teamInfoRes.setRecruitmentState(team.isRecruitmentState());
-        teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
-
-        if(team.getPicture() == null){
-            teamInfoRes.setPictureDownloadUrl(null);
-        }else{
-            teamInfoRes.setPictureDownloadUrl(team.getPicture().getImageUrl());
-        }
-
-        return teamInfoRes;
+        return TeamInfoRes.from(team, leader, sportCategory);
     }
 
     @Override
@@ -318,6 +308,8 @@ public class TeamServiceImpl implements TeamService{
                 applyUser.setRegisterDate(LocalDateTime.now());
                 userTeamRepository.save(applyUser);
 
+                sendNotification(findMember(userId), team);
+
                 requestJoinRepository.delete(requestJoin);
             }
             return true;
@@ -325,6 +317,10 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
+    }
+
+    public void sendNotification(User applier, Team team) {
+        notificationService.createJoinNotification(applier, NoticeType.TEAMJOIN, team);
     }
 
     @Override
@@ -412,5 +408,9 @@ public class TeamServiceImpl implements TeamService{
 
     }
 
+    public User findMember(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 
 }
