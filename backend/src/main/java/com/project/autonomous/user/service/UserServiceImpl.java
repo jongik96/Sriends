@@ -141,11 +141,11 @@ public class UserServiceImpl implements UserService {
     }
 
     // 다른 유저 조회
-    public UserInfoRes getUserInfo(long userId) {
+    public UserInfoRes getUserInfo(Long userId) {
         return UserInfoRes.from(findMember(userId));
     }
 
-    public User findMember(long userId) {
+    public User findMember(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
