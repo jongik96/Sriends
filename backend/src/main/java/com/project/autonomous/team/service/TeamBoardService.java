@@ -44,10 +44,10 @@ public class TeamBoardService {
     @Autowired
     TeamBoardRepositorySupport teamBoardRepositorySupport;
 
-    public boolean posting(PostingReq postingReq, long teamId) {
+    public PostViewRes posting(PostingReq postingReq, long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
         if(!userTeamRepository.findByUserIdAndTeamId(userId, teamId).isPresent()){//공지사항은 회원만 가능
-            return false;
+            throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
         TeamBoard teamBoard = new TeamBoard();
@@ -59,7 +59,13 @@ public class TeamBoardService {
 
         teamBoardRepository.save(teamBoard);
 
-        return true;
+        PostViewRes postViewRes = new PostViewRes();
+        postViewRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
+        postViewRes.setContent(teamBoard.getContent());
+        postViewRes.setTitle(teamBoard.getTitle());
+        postViewRes.setCreateDate(teamBoard.getCreateDate());
+
+        return postViewRes;
     }
 
     public boolean postingModify(PostingReq postingReq, long teamId, long boardId) {

@@ -30,7 +30,7 @@ public class TeamBoardController {
 
     @PostMapping("/{teamId}")
     @Operation(summary = "공지사항 등록", description = "팀 내 게시판 글 쓰기")
-    public ResponseEntity<Boolean> createPost(@PathVariable("teamId") long teamId, @RequestBody PostingReq postingReq){
+    public ResponseEntity<PostViewRes> createPost(@PathVariable("teamId") long teamId, @RequestBody PostingReq postingReq){
         return ResponseEntity.ok(teamBoardService.posting(postingReq, teamId));
 
     }
