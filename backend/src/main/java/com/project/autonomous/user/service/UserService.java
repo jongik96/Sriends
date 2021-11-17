@@ -29,7 +29,7 @@ public interface UserService {
 
     void deleteUser();
 
-    UserInfoRes getUserInfo(long userId);
+    UserInfoRes getUserInfo(Long userId);
 
     List<UserInterestRes> updateInterest(InterestReq interestReq);
 }
