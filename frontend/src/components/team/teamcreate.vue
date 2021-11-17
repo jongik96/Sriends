@@ -358,8 +358,9 @@ export default {
 
                 }).then((res)=>{
                     console.log(res.data)
+                    this.$store.commit('setTeamId', res.data.id)
                     Swal.fire('팀 등록이 완료되었습니다.')
-                    this.$router.push('/main')
+                    this.$router.push('/team')
                 }).catch((err)=>{
                     console.log(err)
                 })

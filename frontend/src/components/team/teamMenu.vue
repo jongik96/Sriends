@@ -5,7 +5,7 @@
     <div class="flex justify-between flex-wrap items-center  md:justify-around">
         <!-- logo -->
         <router-link to="/team">
-            <p class="text-xl md:text-2xl text-yellow-700">My Team</p>
+            <p class="text-xl md:text-2xl text-yellow-700">Home</p>
         </router-link>
         <div v-if="authority!=''" class="space-x-4">
             <router-link to="/team/articleList">

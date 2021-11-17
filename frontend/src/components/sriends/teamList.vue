@@ -10,27 +10,35 @@
                     </button>
                 </router-link>
             </div>
-            <div class="text-xl">{{this.myCity}} 의 <span class="mr-3" v-for="item in mySportCategory" :key="item.id">{{item.interest}}</span>에 해당하는 스렌즈 리스트입니다~</div>
-            <div v-if="!state" class="text-2xl">회원정보수정에서 관심종목을 등록해주세요!</div>
+            <div class="text-base sm:text-xl">{{this.myCity}} 의 <span class="mr-3" v-for="item in mySportCategory" :key="item.id">{{item.interest}}</span>에 해당하는 스렌즈 리스트입니다~</div>
+            <div v-if="!state" class="text-xl sm:text-2xl mt-3 md:mt-10">해당 스렌즈가 없습니다.</div>
             <div v-if="teams.length==0">{{this.myCity}}의 <span v-for="item in mySportCategory" :key="item.id">{{item.interest}}</span>에 해당하는 팀이 없습니다.</div>
             <teamListItem v-for="item in teams" :key="item.id"
                 :id="item.id"
                 :leaderId="item.leaderId"
              >
             </teamListItem>
+            <infinite-loading @infinite="infiniteHandler" spinner="sprial">
+                <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+                <div slot="no-results" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">가입된 팀이 없습니다 :)</div>
+            </infinite-loading>
         </div>
   </div>
 </template>
 
 <script>
 import teamListItem from '@/components/sriends/teamListItem.vue'
-import { getInterestTeam } from '@/api/team.js'
+// import { getInterestTeam } from '@/api/team.js'
 import { getInterest } from '@/api/auth.js'
 import store from '@/store/index.js'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import axios from 'axios'
+import InfiniteLoading from 'vue-infinite-loading'
 // import Swal from 'sweetalert2'
 export default {
     components:{
-        teamListItem
+        teamListItem,
+        InfiniteLoading
     },
     data() {
         return{
@@ -49,19 +57,20 @@ export default {
                     sportsCategory : '',
                 }
             ],
+            page:0,
             state:true
         }
   },
   created(){
-        getInterestTeam()
-        .then((res)=>{
-            console.log(res.data)
-            this.teams = res.data
-        }).catch((err)=>{
-            console.log(err)
-            this.state=false
+        // getInterestTeam()
+        // .then((res)=>{
+        //     console.log(res.data)
+        //     this.teams = res.data
+        // }).catch((err)=>{
+        //     console.log(err)
+        //     this.state=false
             
-        }),
+        // }),
         getInterest()
         .then((res)=>{
         console.log(res)  
@@ -71,6 +80,37 @@ export default {
         })
       
   },
+  methods:{
+      infiniteHandler($state) {
+            const token = store.state.accessToken
+            axios({
+                method: 'get',
+                url: `${SERVER_URL}/teams/list?page=` + (this.page),
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
+                console.log(res.data)
+                setTimeout(() => {
+                    if(res.data.content.length) {
+                    this.teams = this.teams.concat(res.data.content)
+                    $state.loaded()
+                    this.page += 1
+                    // 끝인지 판별
+                    if(res.data.content.length / 10 < 1) {
+                        $state.complete()
+                    }
+                    } else {
+                    // 끝 지정(No more data)
+                    $state.complete()
+                    }
+                }, 1000)
+            }).catch(err => {
+                console.error(err);
+                this.state=false
+            })
+        },
+  }
 
 }
 </script>

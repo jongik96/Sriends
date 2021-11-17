@@ -12,7 +12,7 @@
         <div class="md:flex md:flex-wrap md:items-center mb-4">
           <div class="text-3xl font-semibold inline-block md:mr-2 mb-2 sm:mb-0">
             {{this.name}} 
-            <span><router-link to="/chatList" class="text-base font-medium ml-3 border-2 border-yellow-500 rounded-lg">메시지 보내기</router-link></span>
+            <span><button @click="clickDm" class="text-base font-medium ml-3 border-2 border-yellow-500 rounded-lg">메시지 보내기</button></span>
           </div>
          
         </div>
@@ -95,7 +95,6 @@ export default {
     const userId = store.state.tempUserId
     getTempProfileInfo(userId)
     .then((res)=>{
-      console.log(res.data)
       this.id = res.data.id
       this.name = res.data.name
       this.phone = res.data.phone
@@ -109,7 +108,6 @@ export default {
       this.birth = new Date(res.data.birth)
       let today = new Date();
       this.age = today.getFullYear() - new Date(res.data.birth).getFullYear()+1;
-      console.log(new Date(res.data.birth))
       // localStorage.setItem('userid',res.data.id)
       this.$store.commit("setTempUserId", res.data.id)
     }).catch((err)=>{
@@ -117,7 +115,6 @@ export default {
     }),
     getInterest()
     .then((res)=>{
-      console.log(res)  
       this.sports = res.data    
     }).catch((err)=>{
       console.log(err)
@@ -126,7 +123,12 @@ export default {
   methods:{
     imgError:function(e){
             e.target.src = img
-        }
+        },
+    clickDm:function(){
+      this.$store.commit('setChatOppenent', this.id)
+      this.$router.push('/chat')
+    }
+
   },
   computed:{
 

@@ -315,7 +315,8 @@ export default {
             .then((res)=>{
                 console.log(res)
                 Swal.fire('매칭이 등록되었습니다!')
-                this.$router.push('/matchingCategory')
+                this.$store.commit('setMatchingId',res.data.postId)
+                this.$router.push('/matchingDetail')
             }).catch((err)=>{
                 console.log(err)
             })
