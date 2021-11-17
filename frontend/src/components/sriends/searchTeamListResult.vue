@@ -290,26 +290,18 @@ export default {
             
         }
     },
-    // created(){
-    //     const city = store.state.selectCity
-    //     const sportCategory = store.state.selectSportCategory
-    //     getTeamList(city, sportCategory)
-    //     .then((res)=>{
-    //         console.log(res)
-    //         this.teams = res.data
-    //     }).catch((err)=>{
-    //         console.log(err)
-    //         this.state=false
-    //     })
-    // },
+    created(){
+
+
+    },
     
   methods:{
       infiniteHandler($state) {
-            if(this.form.city!=null){
+            if(this.form.city!=''){
                 this.selectCity=this.form.city
             }
             console.log(this.form.city)
-            if(this.form.sportCategory!=null){
+            if(this.form.sportCategory!=''){
                 this.selectSportCategory=this.form.sportCategory
             }
             const token = store.state.accessToken

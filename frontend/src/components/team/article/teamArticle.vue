@@ -10,6 +10,7 @@
                 </button>
                 </router-link>
             </div>
+            <div v-if="!state">등록된 공지사항이 없습니다</div>
             <articleItem v-for="item in post" :key="item.id"
                 :boardId="item.id"
                 :title="item.title"
@@ -42,7 +43,8 @@ export default {
     data() {
         return{
             post: [],
-            page:0
+            page:0,
+            state:false
 
         }
     },
@@ -68,6 +70,7 @@ export default {
                 }
             }).then(res => {
                 console.log(res.data)
+                this.state=true
                 setTimeout(() => {
                     if(res.data.content.length) {
                     this.post = this.post.concat(res.data.content)
@@ -84,6 +87,7 @@ export default {
                 }, 1000)
             }).catch(err => {
                 console.error(err);
+                this.state=false
             })
         },
   }

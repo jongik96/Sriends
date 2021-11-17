@@ -16,8 +16,8 @@
                 </h2>
 
 
-                <div v-if="authority">
-                    <router-link v-if="(authority=='대표') || (authority='매니저')" to="/teamModify" class="bg-yellow-500 px-2 py-1 
+                <div v-if="(authority=='대표') || (authority='매니저')">
+                    <router-link  to="/teamModify" class="bg-yellow-500 px-2 py-1 
                                     text-white font-semibold text-sm rounded block text-center lg:text-base ml-5 md:ml-0 mt-1 md:mt-0
                                     sm:inline-block"
                     >정보수정
@@ -28,25 +28,31 @@
             <!-- post, following, followers list for medium screens -->
             <ul class=" md:inline-block lg:text-xl">
                 <li class="">
-                    대표자
-                    <span class="font-semibold"><button @click="clickUser">{{this.leader.name}}</button></span>
-                    종목
-                    <span class="font-semibold">{{this.sportCategory}}</span>
+                    대표자 :
+                    <span class="font-medium"><button @click="clickUser"> {{this.leader.name}}</button></span>
+                    
                 </li>
                 <li>
-                    총 인원
-                    <span class="font-semibold">{{this.memberCount}}</span>
-                    회비
-                    <span class="font-semibold">{{this.membershipFee}}</span>
+                    종목 :
+                    <span class="font-medium"> {{this.sportCategory}}</span>
                 </li>
                 <li>
-                    지역
-                    <span class="font-semibold">{{this.city}}</span>
+                    총 인원 : 
+                    <span class="font-medium"> {{this.memberCount}}</span>
+                    
                 </li>
                 <li>
-                    모집여부
-                    <span v-if="recruitmentState" class="font-semibold">모집 중</span>
-                    <span v-if="!recruitmentState" class="font-semibold">모집 완료</span>
+                    회비 :
+                    <span class="font-medium"> {{this.membershipFee}}</span>
+                </li>
+                <li>
+                    지역 :
+                    <span class="font-medium"> {{this.city}}</span>
+                </li>
+                <li>
+                    모집여부 :
+                    <span v-if="recruitmentState" class="font-medium">모집 중</span>
+                    <span v-if="!recruitmentState" class="font-medium">모집 완료</span>
                 </li>
                 <li>
                     소개
@@ -67,7 +73,7 @@
         <!-- <div>
             <p class="ml-8 md:ml-20">{{this.description}}</p>
         </div> -->
-        <div v-if="this.authState" class="grid justify-end text-xl mr-3">회원님은 {{this.authority}}입니다!</div>
+        <div v-if="this.authState" class="grid justify-end text-xl mr-3">회원님은 {{authority1}}입니다!</div>
         <div v-if="!this.authState" class="grid justify-end text-xl mr-3">회원님은 손님입니다</div>
         <div v-if="this.authState" class="grid justify-end mr-3"><button @click="outofTeam">탈퇴하기</button></div>
         <div v-if="!this.authState" class="grid justify-center">
@@ -112,7 +118,7 @@ export default {
             membershipFee : '',
             city : '',
             sportCategory : '',
-            authority:'',
+            authority1:'',
             authState:'',
         }
     },
@@ -145,12 +151,13 @@ export default {
             getPermitState(teamId).
             then((res)=>{
                 console.log(res)
-                this.authority = res.data.authority
+                this.authority1 = res.data.authority
+                console.log(this.authority, res.data.authority)
                 this.$store.commit('setAuth',res.data.authority)
                 this.authState = true
             }).catch(()=>{
-                this.authority = false
-                this.$store.commit('setAuth',this.authority)
+                this.authState = false
+                this.$store.commit('setAuth',this.authority1)
             })
 
         }).catch((err)=>{
