@@ -6,6 +6,7 @@ import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRes;
 import com.project.autonomous.chat.entity.ChatMessage;
 import com.project.autonomous.chat.entity.ChatRoom;
 import com.project.autonomous.chat.entity.UserChatRoom;
+import com.project.autonomous.chat.entity.UserChatRoomId;
 import com.project.autonomous.chat.repository.ChatRepository;
 import com.project.autonomous.chat.repository.ChatRoomRepository;
 import com.project.autonomous.chat.repository.UserChatRoomRepository;
@@ -154,6 +155,12 @@ public class ChatServiceImpl implements ChatService {
     public ChatRoom createRoom(User user1, User user2){
         ChatRoom chatRoom = new ChatRoom(user1, user2, LocalDateTime.now());
         chatRoomRepository.save(chatRoom);
+
+        UserChatRoomId userChatRoomId_1 = new UserChatRoomId(user1,chatRoom);
+        UserChatRoomId userChatRoomId_2 = new UserChatRoomId(user2,chatRoom);
+
+        userChatRoomRepository.save(new UserChatRoom(userChatRoomId_1));
+        userChatRoomRepository.save(new UserChatRoom(userChatRoomId_2));
 
         return  chatRoom;
     }
