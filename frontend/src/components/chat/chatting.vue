@@ -164,21 +164,24 @@ export default {
         // App.vue가 생성되면 소켓 연결을 시도합니다.
         // this.findRoom();
         const token = store.state.accessToken
-        const partnerId = store.state.chatOppenent
-        this.connect()
-        axios({
-          method: 'get',
-          url: `${SERVER_URL}/chat/room/by-user/${partnerId}`,
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-        })
-        .then((res)=>{
-          console.log(res.data)
-          this.$store.commit('setRoomId',res.data.roomId)
-        }).catch((err)=>{
-          console.log(err)
-        })
+        // const partnerId = store.state.chatOppenent
+        // this.connect()
+        // axios({
+        //   method: 'get',
+        //   url: `${SERVER_URL}/chat/room/by-user/${partnerId}`,
+        //   headers: {
+        //       'Authorization': `Bearer ${token}`
+        //   }
+        // })
+        // .then((res)=>{
+        //   console.log(res.data)
+        //   this.$store.commit('setRoomId',res.data.roomId)
+        // }).catch((err)=>{
+        //   console.log(err)
+        // })
+        // 
+
+        // 리스트에서 불러올 때 
         const roomId = store.state.roomId
         axios({
           method: 'get',
@@ -208,7 +211,6 @@ export default {
           let today = new Date();
             const msg = { 
             // userName: this.userName,
-            type: 'TALK',
             roomId: store.state.roomId,
             message: this.message,
             sender: store.state.userName,

@@ -13,18 +13,14 @@
           <div class="flex flex-col space-y-1 mt-4  h-48 overflow-y-auto">
             
 
-            <div v-for="item in rooms" :key="item.id" class="border-2 border-yellow-500 rounded-xl mr-3">
-            <button
-              class="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
+            <chattingListItem v-for="item in rooms" :key="item.id"
+              :partnerName="item.partnerName"
+              :roomId="item.roomId"
+              :latestMessageDate="item.latestMessageDate"
+              :partnerPicture="item.partnerPicture"
             >
-              <div
-                class="flex items-center justify-center h-8 w-8 bg-yellow-200 rounded-full"
-              >
-                Image
-              </div>
-              <div class="ml-7 text-xl font-semibold">{{item.oppenentName}}</div>
-            </button>                       
-            </div>
+
+            </chattingListItem>
           </div>
           
         </div>
@@ -34,23 +30,18 @@
 </template>
 
 <script>
+import chattingListItem from '@/components/chat/chattingListItem.vue'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import axios from 'axios'
 import store from '@/store/index.js'
 export default {
+  components:{
+    chattingListItem
+  },
     data(){
         return{
             rooms:[
-                {
-                    roomId:1,
-                    oppenentId:3,
-                    oppenentName:'testA'
-                },
-                {
-                    roomId:1,
-                    oppenentId:3,
-                    oppenentName:'testB'
-                }
+
             ]
         }
     },
@@ -64,6 +55,7 @@ export default {
         }
       }).then((res)=>{
         console.log(res.data)
+        this.rooms = res.data
       }).catch((err)=>{
         console.log(err)
       })
