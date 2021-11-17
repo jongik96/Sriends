@@ -16,7 +16,6 @@ import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +64,7 @@ public class ChatServiceImpl implements ChatService {
                 partnerName = chatRoom.getPub().getName();
                 partnerEmail = chatRoom.getPub().getEmail();
                 partnerId = chatRoom.getPub().getId();
-                if(chatRoom.getPub().getPicture() == null) partnerPicture = chatRoom.getPub().getPicture().getImageUrl();
+                if(chatRoom.getPub().getPicture() != null) partnerPicture = chatRoom.getPub().getPicture().getImageUrl();
 
             }
             chatRoomListRes.setRoomId(chatRoom.getId());
