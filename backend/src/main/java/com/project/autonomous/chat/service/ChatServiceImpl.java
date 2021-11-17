@@ -50,21 +50,25 @@ public class ChatServiceImpl implements ChatService {
             String partnerName = "";
             String partnerEmail = "";
             String partnerPicture = "";
+            Long partnerId;
 
             if(chatRoom.getPub().getId().equals(user.getId())){
                 partnerName = chatRoom.getSub().getName();
                 partnerEmail = chatRoom.getSub().getEmail();
+                partnerId = chatRoom.getSub().getId();
                 if(chatRoom.getSub().getPicture() != null) partnerPicture = chatRoom.getSub().getPicture().getImageUrl();
 
             }else{
                 partnerName = chatRoom.getPub().getName();
                 partnerEmail = chatRoom.getPub().getEmail();
+                partnerId = chatRoom.getPub().getId();
                 if(chatRoom.getPub().getPicture() == null) partnerPicture = chatRoom.getPub().getPicture().getImageUrl();
 
             }
             chatRoomListRes.setRoomId(chatRoom.getId());
             chatRoomListRes.setPartnerName(partnerName);
             chatRoomListRes.setPartnerEmail(partnerEmail);
+            chatRoomListRes.setPartnerId(partnerId);
             chatRoomListRes.setPartnerPicture(partnerPicture);
 
             chatRoomListRes.setLatestMessageDate(chatRoom.getLatestMessageTime());

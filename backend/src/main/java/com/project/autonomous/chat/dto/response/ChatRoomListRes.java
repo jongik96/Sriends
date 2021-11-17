@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class ChatRoomListRes {
     Long roomId;
+    Long partnerId;
     String partnerName;
     String partnerEmail;
     String partnerPicture;
