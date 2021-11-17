@@ -3,6 +3,7 @@ package com.project.autonomous.chat.service;
 import com.project.autonomous.chat.dto.request.ChatMessageReq;
 import com.project.autonomous.chat.dto.response.ChatRoomListRes;
 import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRes;
+import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRoomIdRes;
 import com.project.autonomous.chat.entity.ChatMessage;
 import com.project.autonomous.chat.entity.ChatRoom;
 import com.project.autonomous.chat.entity.UserChatRoom;
@@ -15,6 +16,7 @@ import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
 import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,7 +85,7 @@ public class ChatServiceImpl implements ChatService {
     //채팅방 접속 - 채팅목록에서
     @Override
     @Transactional
-    public GetMSGByPartnerIdRes getMessageByPartnerId(Long partnerId) {
+    public GetMSGByPartnerIdRoomIdRes getMessageByPartnerId(Long partnerId) {
 
         //user체크
 
@@ -102,22 +104,23 @@ public class ChatServiceImpl implements ChatService {
         }
 
         //채팅 불러오기
-
-        List<ChatMessage> chatMessageList = chatRepository.findAllByChatRoom(chatRoom);
-        GetMSGByPartnerIdRes getMSGByPartnerIdRes = new GetMSGByPartnerIdRes();
-        getMSGByPartnerIdRes.setChatMessageList(chatMessageList);
-        getMSGByPartnerIdRes.setRoomId(chatRoom.getId());
-
-        return getMSGByPartnerIdRes;
+        return new GetMSGByPartnerIdRoomIdRes(chatRoom.getId(),
+            chatRepository.findAllByChatRoom(chatRoom)
+                .stream()
+                .map(GetMSGByPartnerIdRes::from)
+                .collect(Collectors.toList()));
     }
 
     //채팅방접속 - 유저상세보기에서
     @Override
-    public List<ChatMessage> getMessageByRoomId(Long roomId) {
+    public List<GetMSGByPartnerIdRes> getMessageByRoomId(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findChatRoomById(roomId)
                 .orElseThrow(()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
 
-        return chatRepository.findAllByChatRoom(chatRoom);
+        return chatRepository.findAllByChatRoom(chatRoom)
+            .stream()
+            .map(GetMSGByPartnerIdRes::from)
+            .collect(Collectors.toList());
     }
 
     //채팅 저장
