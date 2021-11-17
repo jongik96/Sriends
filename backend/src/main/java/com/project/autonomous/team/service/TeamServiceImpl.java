@@ -3,6 +3,10 @@ package com.project.autonomous.team.service;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
+import com.project.autonomous.notification.entity.NoticeType;
+import com.project.autonomous.notification.service.NotificationService;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.picture.service.DBFileStorageService;
@@ -65,6 +69,8 @@ public class TeamServiceImpl implements TeamService{
     TeamRepositorySupport teamRepositorySupport;
 
     private final DBFileStorageService dbFileStorageService;
+
+    private final NotificationService notificationService;
 
 
     @Override
@@ -288,11 +294,11 @@ public class TeamServiceImpl implements TeamService{
                 throw new CustomException(ErrorCode.APPLIY_FORM_NOT_FOUND);
             }
 
-            if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 신청했던 사람이 다시 신청할 경우
+            if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 탈퇴했던 사람이 다시 신청할 경우
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
 
                 requestJoinRepository.delete(requestJoin);
-                throw new CustomException(ErrorCode.ALREADY_JOIN);
+                throw new CustomException(ErrorCode.ALREADY_APPLY);
 
             }else{
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
@@ -303,9 +309,10 @@ public class TeamServiceImpl implements TeamService{
                 applyUser.setRegisterDate(LocalDateTime.now());
                 userTeamRepository.save(applyUser);
 
+                sendNotification(findMember(userId), team);
+
                 team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
                 teamRepository.save(team);
-
                 requestJoinRepository.delete(requestJoin);
             }
             return true;
@@ -313,6 +320,10 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
+    }
+
+    public void sendNotification(User applier, Team team) {
+        notificationService.createJoinNotification(applier, NoticeType.TEAMJOIN, team);
     }
 
     @Override
@@ -370,11 +381,9 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
 
         userTeamRepository.delete(userTeam);
-
         Team team = teamRepository.findById(teamId).get();
         team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
         teamRepository.save(team);
-
         return;
     }
 
@@ -389,7 +398,7 @@ public class TeamServiceImpl implements TeamService{
 
         if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
             UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
-            if(kickOutUser.getAuthority().equals("회원")){
+            if(kickOutUser.getAuthority().equals("회원")) {
                 userTeamRepository.delete(kickOutUser);
                 team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
                 teamRepository.save(team);
@@ -410,5 +419,9 @@ public class TeamServiceImpl implements TeamService{
 
     }
 
+    public User findMember(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 
 }
