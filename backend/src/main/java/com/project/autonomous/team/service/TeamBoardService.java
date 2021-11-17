@@ -3,6 +3,10 @@ package com.project.autonomous.team.service;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
+import com.project.autonomous.notification.entity.NoticeType;
+import com.project.autonomous.notification.service.NotificationService;
 import com.project.autonomous.team.dto.request.CommentModifyPutReq;
 import com.project.autonomous.team.dto.request.CommentPostReq;
 import com.project.autonomous.team.dto.request.PostingReq;
@@ -13,10 +17,15 @@ import com.project.autonomous.team.entity.TeamBoard;
 import com.project.autonomous.team.entity.TeamBoardComment;
 import com.project.autonomous.team.repository.TeamBoardCommentRepository;
 import com.project.autonomous.team.repository.TeamBoardRepository;
+import com.project.autonomous.team.repository.TeamBoardRepositorySupport;
 import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
+import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.repository.UserRepository;
 import com.project.autonomous.user.repository.UserTeamRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TeamBoardService {
 
     @Autowired
@@ -38,10 +48,15 @@ public class TeamBoardService {
     @Autowired
     TeamBoardCommentRepository teamBoardCommentRepository;
 
-    public boolean posting(PostingReq postingReq, long teamId) {
+    @Autowired
+    TeamBoardRepositorySupport teamBoardRepositorySupport;
+
+    private final NotificationService notificationService;
+
+    public PostViewRes posting(PostingReq postingReq, long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
         if(!userTeamRepository.findByUserIdAndTeamId(userId, teamId).isPresent()){//공지사항은 회원만 가능
-            return false;
+            throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
         TeamBoard teamBoard = new TeamBoard();
@@ -51,24 +66,24 @@ public class TeamBoardService {
         teamBoard.setCreateDate(LocalDateTime.now());
         teamBoard.setTeamId(teamId);
 
-        teamBoardRepository.save(teamBoard);
+        teamBoard = teamBoardRepository.save(teamBoard);
 
-        return true;
+        return PostViewRes.from(teamBoard, userRepository.findById(userId).get());
     }
 
-    public boolean postingModify(PostingReq postingReq, long teamId, long boardId) {
+    public PostViewRes postingModify(PostingReq postingReq, long teamId, long boardId) {
         long userId = SecurityUtil.getCurrentMemberId();
 
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
         if(teamBoard.getWriterId() != userId){//공지사항은 회원만 가능
-            return false;
+            throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
         teamBoard.setTitle(postingReq.getTitle());
         teamBoard.setContent(postingReq.getContent());
-        teamBoardRepository.save(teamBoard);
+        teamBoard = teamBoardRepository.save(teamBoard);
 
-        return true;
+        return PostViewRes.from(teamBoard, userRepository.findById(userId).get());
     }
 
     public boolean postingDelete(long teamId, long boardId) {
@@ -88,47 +103,34 @@ public class TeamBoardService {
 
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
 
-        PostViewRes postViewRes = new PostViewRes();
-        postViewRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
-//        postViewRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
-        postViewRes.setContent(teamBoard.getContent());
-        postViewRes.setTitle(teamBoard.getTitle());
-        postViewRes.setCreateDate(teamBoard.getCreateDate());
-
-        return postViewRes;
+        return PostViewRes.from(teamBoard, userRepository.findById(userId).get());
     }
 
-    public ArrayList<PostViewRes> postingViewList(long teamId) {
+    public Page<PostViewRes> postingViewList(long teamId, Pageable pageable) {
         long userId = SecurityUtil.getCurrentMemberId();
-        ArrayList<PostViewRes> ret = new ArrayList<>();
-        System.out.println("서비스");
 
+        Page<PostViewRes> ret = teamBoardRepositorySupport.getList(teamId, pageable);
 
-        for(TeamBoard teamBoard : teamBoardRepository.findAllByTeamId(teamId)){
-            System.out.println("조회중");
-            PostViewRes postViewListRes = new PostViewRes();
-            postViewListRes.setId(teamBoard.getId());
-            postViewListRes.setWriter(UserSimpleInfoRes.from(userRepository.findById(teamBoard.getWriterId()).get()));
-//            postViewListRes.setName(userRepository.findById(teamBoard.getWriterId()).get().getName());
-            postViewListRes.setContent(teamBoard.getContent());
-            postViewListRes.setTitle(teamBoard.getTitle());
-            postViewListRes.setCreateDate(teamBoard.getCreateDate());
+        if(ret.isEmpty())
+            throw new CustomException(ErrorCode.LIST_NOT_FOUND);
 
-            ret.add(postViewListRes);
-        }
-        System.out.println(ret.size());
         return ret;
     }
 
     public TeamBoardComment comment(CommentPostReq commentPostReq, long boardId) {
         long userId = SecurityUtil.getCurrentMemberId();
 
+        User writer = findMember(userId);
+        TeamBoard post = findTeamBoard(boardId);
+        TeamBoardComment parent = null;
 
         if (commentPostReq.getParentId() != 0) {
             TeamBoardComment teamBoardComment = new TeamBoardComment();
             TeamBoardComment parentComment = teamBoardCommentRepository.findById(commentPostReq.getParentId()).get();
             parentComment.setReplyCount(parentComment.getReplyCount()+1);
             teamBoardCommentRepository.save(parentComment);
+
+            parent = parentComment; // 부모 댓글
 
             teamBoardComment.setTeamBoardId(boardId);
             teamBoardComment.setWriterId(userId);
@@ -139,6 +141,8 @@ public class TeamBoardService {
             teamBoardComment.setModifyDate(LocalDateTime.now());
             teamBoardComment.setContent(commentPostReq.getContent());
             teamBoardComment.setReplyCount(0);
+
+            sendNotification(writer, post, parent);
 
             return teamBoardCommentRepository.save(teamBoardComment);
 
@@ -154,10 +158,32 @@ public class TeamBoardService {
             teamBoardComment.setContent(commentPostReq.getContent());
             teamBoardComment.setReplyCount(0);
 
+            sendNotification(writer, post, parent);
+
             return teamBoardCommentRepository.save(teamBoardComment);
 
         }
 
+    }
+
+    public void sendNotification(User writer, TeamBoard post, TeamBoardComment parentComment) {
+        User postWriter = findMember(post.getWriterId());
+        User parentCommentWriter = null;
+
+        if(!postWriter.equals(writer)) { // 본인 게시글에 본인이 댓글을 남긴다면 알림 X
+            if(parentComment != null) { // 대댓글이라면
+                parentCommentWriter = findMember(parentComment.getWriterId());
+                if(postWriter.equals(parentCommentWriter)) { // 게시글의 주인과 댓글의 주인이 같다면
+                    notificationService.createNotification(parentCommentWriter, NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
+                } else {
+                    notificationService.createNotification(postWriter, NoticeType.TEAMBOARD, post.getId()); // 게시글 주인에게 알림
+                    notificationService.createNotification(parentCommentWriter, NoticeType.COMMENT, post.getId()); // 댓글 부모에게 알림
+                }
+            } else {
+                notificationService.createNotification(postWriter, NoticeType.TEAMBOARD, post.getId()); // 게시글 주인에게 알림
+            }
+
+        }
     }
 
     public TeamBoardComment modifyComment(CommentModifyPutReq commentModifyPutReq, long commentId) {
@@ -238,5 +264,20 @@ public class TeamBoardService {
         commentListRes.setCommentsList(commentResArrayList);
 
         return commentListRes;
+    }
+
+    public User findMember(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public TeamBoard findTeamBoard(Long postId) {
+        return teamBoardRepository.findById(postId)
+            .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+    }
+
+    public TeamBoardComment findTeamBoardComment(Long commentId) {
+        return teamBoardCommentRepository.findById(commentId)
+            .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 }

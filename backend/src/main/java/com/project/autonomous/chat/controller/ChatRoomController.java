@@ -1,53 +1,50 @@
 package com.project.autonomous.chat.controller;
 
-import com.project.autonomous.chat.dto.ChatRoom;
-import com.project.autonomous.chat.repository.ChatRoomRepository;
+import com.project.autonomous.chat.dto.response.ChatRoomListRes;
+import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRes;
+import com.project.autonomous.chat.entity.ChatMessage;
+import com.project.autonomous.chat.service.ChatService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/chat")
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
+   private final ChatService chatRoomservice;
 
-    // 채팅 리스트 화면
-    @GetMapping("/room")
-    public String rooms(Model model) {
-        return "/chat/room";
+//    @Autowired
+//    ChatRoomService chatRoomservice;
+
+    //채팅방 전체 조회
+    @GetMapping("/list")
+    @Operation(summary = "본인 채팅 조회", description = "본인 채팅목록 조회")
+    public ResponseEntity<List<ChatRoomListRes>> getTeamList(){
+
+        List<ChatRoomListRes> list = chatRoomservice.getChatRoomList();
+        return ResponseEntity.ok(list);
     }
 
-    // 모든 채팅방 목록 반환
-    @GetMapping("/rooms")
-    @ResponseBody
-    public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
+    //채팅방 채팅내역 조회 by 유저상세정보에서
+    @GetMapping("/room/by-user/{partnerId}")
+    @Operation(summary = "채팅방 채팅내역 조회, 유저상세정보", description = "유저상세정보에서 채팅방의 채팅내역 조회시")
+    public ResponseEntity<GetMSGByPartnerIdRes> getMessageByUserInfo(@PathVariable Long partnerId){
+        return ResponseEntity.ok(chatRoomservice.getMessageByPartnerId(partnerId));
     }
 
-    // 채팅방 생성
-    @PostMapping("/room")
-    @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomRepository.createChatRoom(name);
-    }
-
-    // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId) {
-        model.addAttribute("roomId", roomId);
-        return "/chat/roomdetail";
-    }
-
-    // 특정 채팅방 조회
-    @GetMapping("/room/{roomId}")
-    @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+    //채팅방 채팅내역 조회 by 채팅리스트에서
+    @GetMapping("/room/by-list/{roomId}")
+    @Operation(summary = "채팅방 채팅내역 조회, 채팅리스트", description = "채팅리스트에서 채팅방의 채팅내역 조회시")
+    public ResponseEntity<List<ChatMessage>> getMessageByChatList(@PathVariable Long roomId){
+        return ResponseEntity.ok(chatRoomservice.getMessageByRoomId(roomId));
     }
 
 }

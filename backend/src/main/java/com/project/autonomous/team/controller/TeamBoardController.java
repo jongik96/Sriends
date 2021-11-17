@@ -13,6 +13,9 @@ import com.project.autonomous.team.service.TeamBoardService;
 import com.project.autonomous.team.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,14 +30,14 @@ public class TeamBoardController {
 
     @PostMapping("/{teamId}")
     @Operation(summary = "공지사항 등록", description = "팀 내 게시판 글 쓰기")
-    public ResponseEntity<Boolean> createPost(@PathVariable("teamId") long teamId, @RequestBody PostingReq postingReq){
+    public ResponseEntity<PostViewRes> createPost(@PathVariable("teamId") long teamId, @RequestBody PostingReq postingReq){
         return ResponseEntity.ok(teamBoardService.posting(postingReq, teamId));
 
     }
 
     @PutMapping("/{teamId}/{boardId}")
     @Operation(summary = "공지사항 수정", description = "팀 내 게시판 글 수정(본인만 가능)")
-    public ResponseEntity<Boolean> modifyPost(@PathVariable("teamId") long teamId, @PathVariable("boardId") long boardId, @RequestBody PostingReq postingReq){
+    public ResponseEntity<PostViewRes> modifyPost(@PathVariable("teamId") long teamId, @PathVariable("boardId") long boardId, @RequestBody PostingReq postingReq){
         return ResponseEntity.ok(teamBoardService.postingModify(postingReq, teamId, boardId));
 
     }
@@ -55,9 +58,8 @@ public class TeamBoardController {
 
     @GetMapping("/{teamId}")
     @Operation(summary = "공지사항 목록 조회", description = "팀 내 게시판 글 목록 조회(여러개)")
-    public ResponseEntity<ArrayList<PostViewRes>> getPostList(@PathVariable("teamId") long teamId){
-        return ResponseEntity.ok(teamBoardService.postingViewList(teamId));
-
+    public ResponseEntity<Page<PostViewRes>> getPostList(@PathVariable("teamId") long teamId, @PageableDefault(size = 10) Pageable pageable){
+        return ResponseEntity.ok(teamBoardService.postingViewList(teamId, pageable));
     }
 
     @PostMapping("/{boardId}/comments")
