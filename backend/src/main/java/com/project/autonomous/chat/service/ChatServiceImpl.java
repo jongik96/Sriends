@@ -54,10 +54,12 @@ public class ChatServiceImpl implements ChatService {
             if(chatRoom.getPub().equals(user)){
                 partnerName = chatRoom.getSub().getName();
                 partnerEmail = chatRoom.getSub().getEmail();
+                if(chatRoom.getSub().getPicture().getImageUrl() == null) continue;
                 partnerPicture = chatRoom.getSub().getPicture().getImageUrl();
             }else{
                 partnerName = chatRoom.getPub().getName();
                 partnerEmail = chatRoom.getPub().getEmail();
+                if(chatRoom.getPub().getPicture().getImageUrl() == null) continue;
                 partnerPicture = chatRoom.getPub().getPicture().getImageUrl();
             }
 
