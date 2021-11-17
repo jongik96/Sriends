@@ -1,22 +1,22 @@
 <template>
 <div>
-    <div v-if="!checked" class="grid grid-cols-6 bg-yellow-400 border-b-2 border-yellow-300 h-12 item-center">
-        <div @click="clickNotice" class="col-start-1 col-span-6">
+    <div v-if="!checked" class="grid grid-cols-6 bg-yellow-400 border-b-2 border-yellow-300 h-20  md:h-12 item-center">
+        <div @click="clickNotice" class="col-start-1 col-span-5 md:col-start-1 md:col-span-6">
             {{content}}
         </div>
-        <div class="col-start-1 col-span-3 cursor-default"></div>
-        <div class=" col-start-4 col-span-3 text-gray-600">
-            {{getTime}}<button class="ml-3" @click="readNotice"><font-awesome-icon icon="check-circle"/></button>
+        <div class="col-start-1 col-span-6 md:col-start-1 md:col-span-4 cursor-default"></div>
+        <div class="col-start-1 col-span-6 md:col-start-5 md:col-span-2 text-gray-600">
+            {{getTime}}
             <button class="ml-3" @click="clickDelete"><font-awesome-icon icon="trash-alt"/></button>
         </div>
     </div>
-    <div v-if="checked" class="grid grid-cols-6 bg-yellow-100 border-b-2 border-yellow-300 h-12 item-center">
-        <div @click="clickNotice" class="col-start-1 col-span-6">
+    <div v-if="checked" class="grid grid-cols-6 bg-yellow-100 border-b-2 border-yellow-300 h-20 md:h-12 item-center">
+        <div @click="clickNotice" class="col-start-1 col-span-5 md:col-start-1 md:col-span-6">
             {{content}}
         </div>
-        <div class="col-start-1 col-span-3 cursor-default"></div>
-        <div class=" col-start-4 col-span-3 text-gray-600">
-            {{getTime}}<button class="ml-3" @click="readNotice"><font-awesome-icon icon="check-circle"/></button>
+        <div class="col-start-1 col-span-6 md:col-start-1 md:col-span-4 cursor-default"></div>
+        <div class="col-start-1 col-span-6 md:col-start-5 md:col-span-2 text-gray-600">
+            {{getTime}}
             <button class="ml-3" @click="clickDelete"><font-awesome-icon icon="trash-alt"/></button>
         </div>
     </div>
@@ -51,12 +51,6 @@ export default {
     },
     methods:{
         clickNotice: function(){
-            this.$store.commit('setMatchingId', this.postId)
-            if(this.type=='MATCH'){
-                this.$router.push('/matchingDetail')
-            }
-        },
-        readNotice:function(){
             putNotice(this.notificationId)
             .then((res)=>{
                 console.log(res.data)
@@ -65,6 +59,22 @@ export default {
             }).catch((err)=>{
                 console.log(err)
             })
+            if(this.type=='MATCH'){
+                this.$store.commit('setMatchingId', this.postId)
+                this.$router.push('/matchingDetail')
+            }else if(this.type=='TEAMJOIN'){
+                this.$store.commit('setTeamId',this.postId)
+                this.$router.push('/team')
+            }else if(this.type=='TEAMBOARD'){
+                this.$store.commit('setBoardId',this.postId)
+                this.$router.push('/team/articleDetail')
+            }else if(this.type=='COMMENT'){
+                this.$store.commit('setBoardId',this.postId)
+                this.$router.push('/team/articleDetail')
+            }
+        },
+        readNotice:function(){
+
         },
         clickDelete:function(){
             deleteNotice(this.notificationId)

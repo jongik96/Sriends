@@ -18,6 +18,7 @@
               :roomId="item.roomId"
               :latestMessageDate="item.latestMessageDate"
               :partnerPicture="item.partnerPicture"
+              :partnerId="item.partnerId"
             >
 
             </chattingListItem>

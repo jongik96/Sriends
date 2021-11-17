@@ -7,6 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   plugins:[createPersistedState()],
   state: {
+    myPicture:'',
+    chatPath:'',
     accessToken: '',
     userId: '',
     userName:'',
@@ -26,8 +28,26 @@ export default new Vuex.Store({
     mySportCategory:'',
     chatOppenent:'',
     roomId:'',
+    partnerName:'',
+    partnerPicture:'',
+    partnerId:'',
   },
   mutations: {
+    setMyPicture(state,myPicture){
+      state.myPicture = myPicture
+    },
+    setChatPath(state,chatPath){
+      state.chatPath = chatPath
+    },
+    setPartnerId(state,partnerId){
+      state.partnerId = partnerId
+    },
+    setPartnerName(state,partnerName){
+      state.partnerName = partnerName
+    },
+    setPartnerPicture(state,partnerPicture){
+      state.partnerPicture = partnerPicture
+    },
     setRoomId(state,roomId){
       state.roomId = roomId
     },
