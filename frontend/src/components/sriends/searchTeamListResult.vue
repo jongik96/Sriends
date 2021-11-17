@@ -308,6 +308,7 @@ export default {
             if(this.form.city!=null){
                 this.selectCity=this.form.city
             }
+            console.log(this.form.city)
             if(this.form.sportCategory!=null){
                 this.selectSportCategory=this.form.sportCategory
             }
