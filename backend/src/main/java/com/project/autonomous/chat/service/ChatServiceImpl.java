@@ -3,6 +3,7 @@ package com.project.autonomous.chat.service;
 import com.project.autonomous.chat.dto.request.ChatMessageReq;
 import com.project.autonomous.chat.dto.response.ChatRoomListRes;
 import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRes;
+import com.project.autonomous.chat.dto.response.GetMSGByPartnerIdRoomIdRes;
 import com.project.autonomous.chat.entity.ChatMessage;
 import com.project.autonomous.chat.entity.ChatRoom;
 import com.project.autonomous.chat.entity.UserChatRoom;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,22 +52,25 @@ public class ChatServiceImpl implements ChatService {
             String partnerName = "";
             String partnerEmail = "";
             String partnerPicture = "";
+            Long partnerId;
 
-            if(chatRoom.getPub().equals(user)){
+            if(chatRoom.getPub().getId().equals(user.getId())){
                 partnerName = chatRoom.getSub().getName();
                 partnerEmail = chatRoom.getSub().getEmail();
-                if(chatRoom.getSub().getPicture() == null) continue;
-                partnerPicture = chatRoom.getSub().getPicture().getImageUrl();
+                partnerId = chatRoom.getSub().getId();
+                if(chatRoom.getSub().getPicture() != null) partnerPicture = chatRoom.getSub().getPicture().getImageUrl();
+
             }else{
                 partnerName = chatRoom.getPub().getName();
                 partnerEmail = chatRoom.getPub().getEmail();
-                if(chatRoom.getPub().getPicture() == null) continue;
-                partnerPicture = chatRoom.getPub().getPicture().getImageUrl();
-            }
+                partnerId = chatRoom.getPub().getId();
+                if(chatRoom.getPub().getPicture() != null) partnerPicture = chatRoom.getPub().getPicture().getImageUrl();
 
+            }
             chatRoomListRes.setRoomId(chatRoom.getId());
             chatRoomListRes.setPartnerName(partnerName);
             chatRoomListRes.setPartnerEmail(partnerEmail);
+            chatRoomListRes.setPartnerId(partnerId);
             chatRoomListRes.setPartnerPicture(partnerPicture);
 
             chatRoomListRes.setLatestMessageDate(chatRoom.getLatestMessageTime());
@@ -80,7 +85,7 @@ public class ChatServiceImpl implements ChatService {
     //채팅방 접속 - 채팅목록에서
     @Override
     @Transactional
-    public GetMSGByPartnerIdRes getMessageByPartnerId(Long partnerId) {
+    public GetMSGByPartnerIdRoomIdRes getMessageByPartnerId(Long partnerId) {
 
         //user체크
 
@@ -99,22 +104,23 @@ public class ChatServiceImpl implements ChatService {
         }
 
         //채팅 불러오기
-
-        List<ChatMessage> chatMessageList = chatRepository.findAllByChatRoom(chatRoom);
-        GetMSGByPartnerIdRes getMSGByPartnerIdRes = new GetMSGByPartnerIdRes();
-        getMSGByPartnerIdRes.setChatMessageList(chatMessageList);
-        getMSGByPartnerIdRes.setRoomId(chatRoom.getId());
-
-        return getMSGByPartnerIdRes;
+        return new GetMSGByPartnerIdRoomIdRes(chatRoom.getId(),
+            chatRepository.findAllByChatRoom(chatRoom)
+                .stream()
+                .map(GetMSGByPartnerIdRes::from)
+                .collect(Collectors.toList()));
     }
 
     //채팅방접속 - 유저상세보기에서
     @Override
-    public List<ChatMessage> getMessageByRoomId(Long roomId) {
+    public List<GetMSGByPartnerIdRes> getMessageByRoomId(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findChatRoomById(roomId)
                 .orElseThrow(()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
 
-        return chatRepository.findAllByChatRoom(chatRoom);
+        return chatRepository.findAllByChatRoom(chatRoom)
+            .stream()
+            .map(GetMSGByPartnerIdRes::from)
+            .collect(Collectors.toList());
     }
 
     //채팅 저장

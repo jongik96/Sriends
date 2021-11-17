@@ -84,7 +84,6 @@ public class TeamController {
         if(teamService.delete(teamId)){
             return ResponseEntity.ok(true);
         }
-
         return ResponseEntity.status(400).body(false);
 
     }
