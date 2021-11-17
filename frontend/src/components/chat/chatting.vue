@@ -205,17 +205,20 @@ export default {
         console.log("Send message:" + this.message);
         // ws = this.stompClient
         if (this.stompClient && this.stompClient.connected) {
+          let today = new Date();
             const msg = { 
             // userName: this.userName,
             type: 'TALK',
             roomId: store.state.roomId,
             message: this.message,
-            sender: store.state.userName
+            sender: store.state.userName,
+            time:today
             };
             this.stompClient.send(`/pub/chat/message`, JSON.stringify(msg), {});
         }else{
           console.log("not connect!")
         }
+        this.message=''
         },    
 
         connect() {
