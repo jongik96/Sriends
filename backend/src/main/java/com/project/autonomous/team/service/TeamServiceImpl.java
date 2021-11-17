@@ -210,6 +210,7 @@ public class TeamServiceImpl implements TeamService{
     public TeamInfoRes getTeamInfo(long teamId) {
 
         Team team = teamRepository.findById(teamId).get();
+        team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
         User leader = userRepository.findById(team.getLeaderId()).get();
         String sportCategory = sportCategoryRepository.getById(team.getSportCategoryId()).getName();
 
@@ -287,11 +288,11 @@ public class TeamServiceImpl implements TeamService{
                 throw new CustomException(ErrorCode.APPLIY_FORM_NOT_FOUND);
             }
 
-            if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 탈퇴했던 사람이 다시 신청할 경우
+            if(userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent()){//예전에 신청했던 사람이 다시 신청할 경우
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
 
                 requestJoinRepository.delete(requestJoin);
-                throw new CustomException(ErrorCode.ALREADY_APPLY);
+                throw new CustomException(ErrorCode.ALREADY_JOIN);
 
             }else{
                 RequestJoin requestJoin = requestJoinRepository.findByUserIdAndTeamId(userId,teamId).get();
@@ -301,6 +302,9 @@ public class TeamServiceImpl implements TeamService{
                 applyUser.setAuthority("회원");
                 applyUser.setRegisterDate(LocalDateTime.now());
                 userTeamRepository.save(applyUser);
+
+                team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+                teamRepository.save(team);
 
                 requestJoinRepository.delete(requestJoin);
             }
@@ -366,6 +370,11 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
 
         userTeamRepository.delete(userTeam);
+
+        Team team = teamRepository.findById(teamId).get();
+        team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+        teamRepository.save(team);
+
         return;
     }
 
@@ -380,8 +389,11 @@ public class TeamServiceImpl implements TeamService{
 
         if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
             UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
-            if(kickOutUser.getAuthority().equals("회원"))
+            if(kickOutUser.getAuthority().equals("회원")){
                 userTeamRepository.delete(kickOutUser);
+                team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+                teamRepository.save(team);
+            }
             else
                 throw new CustomException(ErrorCode.CANNOT_KICKOUT_MANAGER);
             return;
@@ -390,6 +402,8 @@ public class TeamServiceImpl implements TeamService{
             if(kickOutUser.getAuthority().equals("대표"))
                 throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
             userTeamRepository.delete(kickOutUser);
+            team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+            teamRepository.save(team);
             return;
         }
         throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
