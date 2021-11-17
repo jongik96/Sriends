@@ -57,7 +57,7 @@
               </div>
             </div>
             <div class="ml-4">
-              <button @click="sendMessage"
+              <button @keyup.enter="sendMessage" @click="sendMessage"
                 class="flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
               >
                 <span>Send</span>
@@ -125,6 +125,13 @@ export default {
             //     }
             // ]
         }
+    },
+    mounted(){
+      window.addEventListener('keyup', event => {
+      if (event.keyCode === 13) { 
+        this.sendMessage()
+      }
+    })
     },
     watch: {
         messages() {
