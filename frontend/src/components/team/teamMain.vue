@@ -16,7 +16,7 @@
                 </h2>
 
 
-                <div v-if="(authority=='대표') || (authority='매니저')">
+                <div v-if="(authority1=='대표') || (authority1=='매니저')">
                     <router-link  to="/teamModify" class="bg-yellow-500 px-2 py-1 
                                     text-white font-semibold text-sm rounded block text-center lg:text-base ml-5 md:ml-0 mt-1 md:mt-0
                                     sm:inline-block"
@@ -73,10 +73,10 @@
         <!-- <div>
             <p class="ml-8 md:ml-20">{{this.description}}</p>
         </div> -->
-        <div v-if="this.authState" class="grid justify-end text-xl mr-3">회원님은 {{authority1}}입니다!</div>
-        <div v-if="!this.authState" class="grid justify-end text-xl mr-3">회원님은 손님입니다</div>
+        <!-- <div v-if="this.authState" class="grid justify-end text-xl mr-3">회원님은 {{authority1}}입니다!</div>
+        <div v-if="!this.authState" class="grid justify-end text-xl mr-3">회원님은 손님입니다</div> -->
         <div v-if="this.authState" class="grid justify-end mr-3"><button @click="outofTeam">탈퇴하기</button></div>
-        <div v-if="!this.authState" class="grid justify-center">
+        <div v-if="!this.authState && recruitmentState" class="grid justify-center">
             <div class="mt-7">
                 <router-link to='/joinTeam'>
                     <button class="bg-yellow-500 px-2 py-1 
@@ -87,6 +87,15 @@
                 </router-link>
             </div>
         </div>
+        <div>
+            회원목록
+            <memberItem v-for="item in member" :key="item.id"
+                :id="item.user.id"
+                :authority="item.authority"
+            >
+    
+            </memberItem>
+        </div>
     </div>
   </div>
 </template>
@@ -95,15 +104,21 @@
 import img from '@/assets/sideImg.png'
 import { getPermitState } from '@/api/team.js'
 import { getTeamInfo } from '@/api/team.js'
+import { getTeamMemberList } from '@/api/team.js'
 import { outTeam } from '@/api/team.js'
+import memberItem from '@/components/team/member/memberPreview.vue'
 import store from '@/store/index.js'
 import Swal from 'sweetalert2'
 export default {
+    components:{
+        memberItem
+    },
     props:{
         teamId: [Number,String]
     },
     data(){
         return{
+            member:[],
             name : '',
             createDate : '',
             leader:{
@@ -163,6 +178,13 @@ export default {
         }).catch((err)=>{
             console.log(err)
             console.log(this.teamId)
+        }),
+        getTeamMemberList(teamId)
+        .then((res)=>{
+            console.log(res.data)
+            this.member = res.data
+        }).catch((err)=>{
+            console.log(err)
         })
     },
     methods:{

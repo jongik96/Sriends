@@ -14,11 +14,12 @@
 
                 <div  v-for="item in recvList" :key="item.id" class="col-start-1 col-end-12 p-3 rounded-lg">
                   <div v-if="item.sender==oppenentId" class="flex flex-row items-center">
+                    <div @click="clickUser" class="cursor-pointer">
                     <img @error="imgError"
                       :src="partnerPicture"
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-200 flex-shrink-0"
                     />
-                      
+                      </div>
                     
                     <div
                       class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
@@ -191,6 +192,10 @@ export default {
     },
 
     methods: {
+      clickUser:function(){
+        this.$store.commit('setTempUserId',this.oppenentId)
+        this.$router.push('/user')
+      },
       imgError:function(e){
             e.target.src = img
         },

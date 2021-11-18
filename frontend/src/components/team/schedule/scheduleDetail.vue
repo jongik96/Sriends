@@ -34,16 +34,16 @@
             <div v-if="modifyState" class="border-2 border-yellow-500 rounded-md">
                 <div class="ml-3 mt-3">
                     <p class="text-xl">제목</p>
-                    <input type="text" v-model="modifyName" class=" text-medium w-2/4 rounded-md border-2 border-yellow-400">
+                    <input type="text" v-model="name" class=" text-medium w-2/4 rounded-md border-2 border-yellow-400">
                 </div>
                 <div class="mt-5 ml-3">
                     <p class="text-xl">날짜</p>
-                    <input type="datetime-local" v-model="modifyDate" class=" text-medium w-2/4 rounded-md border-2 border-yellow-400">
+                    <input type="datetime-local" v-model="schedule" class=" text-medium w-2/4 rounded-md border-2 border-yellow-400">
                 </div>
                 <div class="mt-5 ml-3">
                     <p class="text-xl">내용</p>
-                    <textarea rows="5" type="text" v-model="modifyContent" class=" text-medium w-3/4 rounded-md border-2 border-yellow-400"></textarea>
-                    <p v-if="modifyContent.length>100" class="text-yellow-600">100자 이내로 입력해주세요</p>
+                    <textarea rows="5" type="text" v-model="content" class=" text-medium w-3/4 rounded-md border-2 border-yellow-400"></textarea>
+                    <p v-if="content.length>100" class="text-yellow-600">100자 이내로 입력해주세요</p>
                 </div>
                 <div class="mt-7 ml-3">
                     <button @click="modifyCalendar" :disabled="btnDisabled">수정하기</button>
@@ -63,7 +63,7 @@ import { getSchedule } from '@/api/schedule.js'
 import { putSchedule } from '@/api/schedule.js'
 // import axios from 'axios'
 // const baseURL = process.env.VUE_APP_SERVER_URL
-import {timestamp} from '@/utils/time.js'
+// import {timestamp} from '@/utils/time.js'
 import { deleteSchedule } from '@/api/schedule.js'
 import Swal from 'sweetalert2'
 export default {
@@ -93,7 +93,7 @@ export default {
             this.content = res.data.content
             this.id = res.data.id
             this.name = res.data.name
-            this.schedule = timestamp(res.data.schedule)
+            this.schedule = res.data.schedule
             this.writer.id = res.data.writer.id
             this.writer.name = res.data.writer.name
             if(res.data.writer.pictureUrl){
@@ -119,7 +119,7 @@ export default {
             //         name:this.name
             //     }
             // })
-            putSchedule(calendarId,teamId,this.writerId,this.modifyName,this.modifyContent,this.modifyDate)
+            putSchedule(calendarId,teamId,this.writer.id,this.name,this.content,this.schedule)
             .then((res)=>{
                 console.log(res.data)
                 Swal.fire('일정이 수정되었습니다.')

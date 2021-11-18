@@ -9,7 +9,7 @@
                     <div class="grid grid-cols-6">
                         <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-6 mb-3">
                             <p class="text-base sm:text-2xl">글 분류를 선택해주세요</p>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.category">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.category">
                                 <option disabled value="">분류</option>
                                 <option value="매칭">경기 매칭</option>
                                 <option value="용병">게스트 모집</option>
@@ -18,7 +18,7 @@
                         </div>
                         <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-3 sm:border-r border-yellow-300">
                             <p class="text-base sm:text-2xl">지역을 선택해주세요</p>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="selectDo">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="selectDo">
                             <option disabled value="">지역</option>
                             <option value="1">서울/인천/경기</option>
                             <option value="2">대전/충청</option>
@@ -28,7 +28,7 @@
                             <option value="6">제주</option>
                             <option value="7">광주/전라</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="서울특별시">서울특별시</option>
                                 <option value="인천광역시">인천광역시</option>
@@ -213,7 +213,7 @@
                         </div>
                         <div class="md:col-start-4 md:col-span-3 col-start-4 col-span-3  ml-0 md:ml-3">
                             <p class="text-base sm:text-2xl">종목을 선택해주세요</p>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
                             <option disabled value="">종목</option>
                             <option value="풋살">축구/풋살</option>
                             <option value="배구">배구</option>

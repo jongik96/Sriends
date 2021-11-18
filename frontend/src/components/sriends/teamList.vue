@@ -10,7 +10,7 @@
                     </button>
                 </router-link>
             </div>
-            <div class="text-base sm:text-xl">{{this.myCity}} 의 <span class="mr-3" v-for="item in mySportCategory" :key="item.id">{{item.interest}}에</span> 해당하는 스렌즈 리스트입니다~</div>
+            <div class="text-base sm:text-xl">{{this.myCity}} 의 <span class="mr-3" v-for="item in mySportCategory" :key="item.id">{{item.interest}} </span>에 해당하는 스렌즈 리스트입니다~</div>
             
             <!-- <div v-if="!state" class="text-xl sm:text-2xl mt-3 md:mt-10">해당 스렌즈가 없습니다.</div> -->
             <div v-if="teams.length==0">{{this.myCity}}의 <span v-for="item in mySportCategory" :key="item.id">{{item.interest}}</span>에 해당하는 팀이 없습니다.</div>

@@ -9,7 +9,7 @@
                 </ul>
             </p>
             <section class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
-                <article class="bg-white group relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
+                <article class="bg-white group  relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform duration-200">
                     <div class="relative w-full h-80 md:h-64 lg:h-44">
                         
                         <img src="@/assets/football.jpg"
@@ -128,7 +128,9 @@
                 </article>
             </section>
             <div class="float-right mt-5">   
+                <router-link to="main"><button class="border-2 rounded-xl border-yellow-500 text-xl mr-3 font-medium w-40 h-10 mt-3">건너뛰기</button> </router-link>
                 <button @click="selectCategory()" class="border-2 rounded-xl border-yellow-500 text-xl  font-medium w-40 h-10 mt-3">관심종목 등록</button>
+                
             </div>
         </article>
     </section>

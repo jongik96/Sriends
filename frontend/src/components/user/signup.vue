@@ -15,7 +15,7 @@
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-base font-bold">profileImg</p>
-                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-base w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="file" accept=".png, .jpg" v-on:change="fileSelect" id="image" ref="image" class=" text-base w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">E-mail *</p>
@@ -67,8 +67,8 @@
                         <label class="mr-3 font-semibold" for="man">남성</label>
                         <input type="radio" id="woman" value="여성" v-model="form.gender">
                         <label class="font-semibold" for="woman">여성</label>
-                        <br>
-                        <span>{{ this.form.gender }}</span>
+                        <!-- <br>
+                        <span>{{ this.form.gender }}</span> -->
                         <!-- <p>
                             <span v-if="!form.gender" class="text-yellow-600">성별을 선택해주세요.</span>
                         </p> -->
@@ -77,7 +77,9 @@
                           <p class="text-xl font-bold">연락처</p>
                           <input type="text" v-model="form.phone" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p>
-                            <span v-if="!isPhoneValid" class="text-yellow-600">올바른 전화번호를 입력해주세요.</span>
+                            <span v-if="!isPhoneValid" class="text-yellow-600">올바른 전화번호를 입력해주세요.
+                                <br> '-' 기호를 빼고 입력해주세요!
+                            </span>
                         </p>
                       </div>
                       <div class="md:pt-5 md:pl-20 pt-5 pl-5">
@@ -275,16 +277,16 @@
                             <option value="해남시">해남</option>
                             <option value="화순시">화순</option>
                         </select>
-                        <br/>
-                        <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
+                        <!-- <br/>
+                        <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p> -->
 
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit" :disabled="!btnDisabled"  class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
+                        <button type="submit"   class="border-solid border-2 font-semibold border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">가입하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/">
-                            <button  class="rounded-md hover:bg-gray-200"><p>이미 계정이 있습니다</p></button>
+                           <button class="border-2 border-yellow-400 px-1 rounded-md hover:bg-gray-200">이미 계정이 있습니다</button>
                         </router-link>
                     </div>          
                   </form>
@@ -363,6 +365,9 @@ export default {
         },
         //회원가입
         submitForm: function(){
+            if(!this.authState || !this.isDuplicated || !this.isEmailValid || !this.isPasswordValid || !this.isValidAny){
+                Swal.fire('프로필 이미지와 전화번호를 제외한 모든 정보를 입력해주세요')
+            }else{
             if(this.form.phone==''){
                 this.form.phone = null
             }
@@ -397,6 +402,7 @@ export default {
             }).catch((err)=>{
                 console.log(err)
             }) 
+            }
         },
         // 이메일 인증번호 전송
         clickEmailAuth: function(){

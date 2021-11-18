@@ -19,7 +19,7 @@
 
 <script>
 import { getSchedule } from '@/api/schedule.js'
-import {timestamp} from '@/utils/time.js'
+// import {timestamp} from '@/utils/time.js'
 export default {
     props:{
         calendarId: [String, Number],
@@ -45,7 +45,7 @@ export default {
             this.content = res.data.content
             this.id = res.data.id
             this.name = res.data.name
-            this.schedule = timestamp(res.data.schedule)
+            this.schedule = res.data.schedule
             this.writer.id = res.data.writer.id
             this.writer.name = res.data.writer.name
         }).catch((err)=>{
