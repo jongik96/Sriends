@@ -5,70 +5,41 @@
         <div
           class="flex flex-col flex-auto flex-shrink-0 rounded-2xl  bg-gray-100 h-full p-4"
         >
-          <div class="flex flex-col h-120 overflow-x-auto mb-4">
-            <div class="flex flex-col  h-full">
+            <div class="text-2xl">{{oppenentName}}님과의 대화</div>
+
+          <div id="chatdiv" class="flex flex-col h-120 overflow-x-auto mb-4">
+            <div id="chatdiv" class="flex flex-col h-screen max-h-96">
+              
               <div class="grid grid-cols-12 gap-y-2">
-                <!-- <div class="col-start-1 col-end-8 p-3 rounded-lg">
-                  <div class="flex flex-row items-center">
-                    <div
-                      class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-200 flex-shrink-0"
-                    >
-                      A
-                    </div>
-                    <div
-                      class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
-                    >
-                      <div>Hey How are you today?</div>
-                    </div>
-                  </div>
-                </div>
 
-                <div class="col-start-6 col-end-13 p-3 rounded-lg">
-                  <div class="flex items-center justify-start flex-row-reverse">
-                    <div
-                      class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-500 flex-shrink-0"
-                    >
-                      A
-                    </div>
-                    <div
-                      class="relative mr-3 text-sm bg-yellow-300 py-2 px-4 shadow rounded-xl"
-                    >
-                      <div>I'm ok what about you?</div>
-                    </div>
-                  </div>
-                </div> -->
-                <div v-for="item in recvList" :key="item.id" class="col-start-1 col-end-8 p-3 rounded-lg">
-                  <div v-if="item.sender==56" class="flex flex-row items-center">
-                    <div
+                <div  v-for="item in recvList" :key="item.id" class="col-start-1 col-end-12 p-3 rounded-lg">
+                  <div v-if="item.sender==oppenentId" class="flex flex-row items-center">
+                    <img @error="imgError"
+                      :src="partnerPicture"
                       class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-200 flex-shrink-0"
-                    >
-                      {{item.name}}
-                    </div>
+                    />
+                      
+                    
                     <div
                       class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
                     >
                       <div>{{item.message}}</div>
                     </div>
+                    <!-- <div>{{item.time}}</div> -->
                   </div>
-                </div>
-                <div v-for="item in recvList" :key="item.id" class="col-start-6 col-end-13 p-3 rounded-lg">
-                  <div v-if="item.sender==58" class="flex items-center justify-start flex-row-reverse">
-                    <div
-                      class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-500 flex-shrink-0"
-                    >
-                      {{item.name}}
-                    </div>
+                  <div v-if="item.sender==Myid" class="flex items-end justify-start flex-row-reverse">
+                    <img
+                      :src="myPicture" @error="imgError"
+                      class="flex items-center justify-center h-10 w-10 rounded-full bg-yellow-200 flex-shrink-0"
+                    />
                     <div
                       class="relative mr-3 text-sm bg-yellow-300 py-2 px-4 shadow rounded-xl"
                     >
                       <div>{{item.message}}</div>
+                      <!-- <div>{{item.time}}</div> -->
                     </div>
                   </div>
                 </div>
-
-
-
-
               </div>
             </div>
           </div>
@@ -86,7 +57,7 @@
               </div>
             </div>
             <div class="ml-4">
-              <button @click="sendMessage"
+              <button @keyup.enter="sendMessage" @click="sendMessage"
                 class="flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
               >
                 <span>Send</span>
@@ -116,22 +87,31 @@
 </template>
 
 <script>
+import $ from 'jquery'
+
+
+import img from '@/assets/profile.png'
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import store from '@/store/index.js'
-// import axios from 'axios'
+import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
+
 export default {
 
     data(){
         return{
             reconnect:0,
             message:'',
-            roomId:1,
-            opponentId:3,
-            userName:store.state.userId,
+            roomId:store.state.roomId,
+            oppenentId:store.state.partnerId,
+            oppenentName:store.state.partnerName,
+            userName:store.state.userName,
             recvList:[],
-            Myid:1,
+            partnerPicture:store.state.partnerPicture,
+            Myid:store.state.userId,
+            myPicture:store.state.myPicture,
             // items:[
             //     {
             //         name:'testA',
@@ -146,13 +126,74 @@ export default {
             // ]
         }
     },
+    mounted(){
+      window.addEventListener('keyup', event => {
+      if (event.keyCode === 13) { 
+        this.sendMessage()
+      }
+    })
+    },
+    watch: {
+        messages() {
+            // 화면에 추가된 후 동작하도록
+            this.$nextTick(() => {
+                let messages = this.$refs.messages;
 
+                messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
+            });
+        },
+    },
     created() {
+     $("#chatdiv").scrollTop($(document).height())
         // App.vue가 생성되면 소켓 연결을 시도합니다.
         // this.findRoom();
-        this.connect()
+        const token = store.state.accessToken
+        
+        // this.connect()
+        
+        this.connect();
+        const path = store.state.chatPath
+        if(path=='list'){
+        // 리스트에서 불러올 때 
+          const roomId = store.state.roomId
+          axios({
+            method: 'get',
+            url: `${SERVER_URL}/chat/room/by-list/${roomId}`,
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+          })
+          .then((res)=>{
+            this.recvList = res.data
+          }).catch((err)=>{
+            console.log(err)
+          })
+        }else{
+          const partnerId = store.state.chatOppenent
+          axios({
+            method: 'get',
+            url: `${SERVER_URL}/chat/room/by-user/${partnerId}`,
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+          })
+          .then((res)=>{
+            console.log(res.data)
+            this.recvList = res.data.list
+            this.roomId = res.data.roomId
+            this.$store.commit('setRoomId',res.data.roomId)
+          }).catch((err)=>{
+            console.log(err)
+          })
+        
+        }
+
     },
+
     methods: {
+      imgError:function(e){
+            e.target.src = img
+        },
         sendMessage () {
             this.send()
             //  위의 sendMessage는 유효성검사
@@ -163,21 +204,26 @@ export default {
         console.log("Send message:" + this.message);
         // ws = this.stompClient
         if (this.stompClient && this.stompClient.connected) {
+          let today = new Date();
             const msg = { 
             // userName: this.userName,
-            type: 'TALK',
-            roomId: '1',
+            roomId: this.roomId,
             message: this.message,
-            sender: this.userName
+            sender: store.state.userId,
+            time:today
             };
+            if(this.message!=''){
             this.stompClient.send(`/pub/chat/message`, JSON.stringify(msg), {});
+            }
         }else{
           console.log("not connect!")
         }
+        this.message=''
         },    
 
         connect() {
         let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
+        const roomId = this.roomId
         this.stompClient = Stomp.over(socket);
         console.log(`소켓 연결을 시도합니다. 서버 주소:'https://k5d106.p.ssafy.io:/api/ws-stomp'`)
         this.stompClient.connect(
@@ -188,13 +234,12 @@ export default {
             console.log('소켓 연결 성공', frame);
             // 서버의 메시지 전송 endpoint를 구독합니다.
             // 이런형태를 pub sub 구조라고 합니다.
-                this.stompClient.subscribe('/sub/chat/room/' + this.roomId, res => {
+            console.log(roomId)
+                this.stompClient.subscribe('/sub/chat/room/'+ roomId, res => {
                     console.log('res=>'+res)
                     console.log('subscribe 로 받은 메시지 입니다.', res.body);
-
                     // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
                     this.recvList.push(JSON.parse(res.body))
-                    console.log(this.recvList)
                 });
             },
             error => {
@@ -204,6 +249,8 @@ export default {
             }
         );        
         }
+    },
+    computed:{
     }
 
 
@@ -214,5 +261,4 @@ export default {
 </script>
 
 <style>
-
 </style>

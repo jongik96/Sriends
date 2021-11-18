@@ -20,7 +20,7 @@
                 <p>인원 : {{this.memberCount}} </p>
             </div>
             <div class="">
-                <p>현재 {{recruitmentState}} </p>
+                <p>현재  {{recruitmentState}} </p>
             </div>
             <div class="">
                 <p class="truncate w-96 invisible lg:visible">소개 : {{this.description}} </p>

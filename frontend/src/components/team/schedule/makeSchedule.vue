@@ -61,8 +61,9 @@ export default {
 
             .then((res)=>{
                 console.log(res)
+                this.$store.commit('setCalendarId', res.data.id)
                 Swal.fire('일정이 등록되었습니다.')
-                this.$router.push('/team/calendar')
+                this.$router.push('/team/calendar/detail')
             }).catch((err)=>{
                 console.log(err)
             })

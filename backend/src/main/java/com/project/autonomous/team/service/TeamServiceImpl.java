@@ -3,6 +3,10 @@ package com.project.autonomous.team.service;
 import com.project.autonomous.common.exception.CustomException;
 import com.project.autonomous.common.exception.ErrorCode;
 import com.project.autonomous.jwt.util.SecurityUtil;
+import com.project.autonomous.matchboard.comments.entity.MatchBoardComment;
+import com.project.autonomous.matchboard.posts.entity.MatchBoardPost;
+import com.project.autonomous.notification.entity.NoticeType;
+import com.project.autonomous.notification.service.NotificationService;
 import com.project.autonomous.picture.entity.Picture;
 import com.project.autonomous.picture.repository.PictureRepository;
 import com.project.autonomous.picture.service.DBFileStorageService;
@@ -16,7 +20,9 @@ import com.project.autonomous.team.entity.Team;
 import com.project.autonomous.team.repository.RequestJoinRepository;
 import com.project.autonomous.team.repository.SportCategoryRepository;
 import com.project.autonomous.team.repository.TeamRepository;
+import com.project.autonomous.team.repository.TeamRepositorySupport;
 import com.project.autonomous.user.dto.response.UserSimpleInfoRes;
+import com.project.autonomous.user.entity.User;
 import com.project.autonomous.user.entity.UserInterest;
 import com.project.autonomous.user.entity.UserTeam;
 import com.project.autonomous.user.repository.UserInterestRepository;
@@ -30,6 +36,8 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,15 +65,18 @@ public class TeamServiceImpl implements TeamService{
     @Autowired
     RequestJoinRepository requestJoinRepository;
 
+    @Autowired
+    TeamRepositorySupport teamRepositorySupport;
+
     private final DBFileStorageService dbFileStorageService;
+
+    private final NotificationService notificationService;
 
 
     @Override
     @Transactional
-    public Team create(TeamCreatePostReq teamInfo) throws IOException {
-
+    public TeamInfoRes create(TeamCreatePostReq teamInfo) throws IOException {
         long userId = SecurityUtil.getCurrentMemberId();
-
 
         Team team = new Team();
         team.setName(teamInfo.getName());
@@ -94,104 +105,53 @@ public class TeamServiceImpl implements TeamService{
         userTeam.setRegisterDate(LocalDateTime.now());
         userTeam.setAuthority("대표");
         userTeamRepository.save(userTeam);
-        return team;
+
+        return TeamInfoRes.from(team, userRepository.findById(userId).get(), teamInfo.getSportCategory());
     }
 
 
     @Override
-    public ArrayList<TeamListRes> getList() {
+    public Page<TeamListRes> getList(Pageable pageable) {
         long userId = SecurityUtil.getCurrentMemberId();
 
         ArrayList<UserInterest> interests = userInterestRepository.findAllByUserInterestIdUserId(userId).get();
         if(interests.isEmpty()){
             throw new CustomException(ErrorCode.NO_INTERESTING_ITEMS);
         }
-        String city = userRepository.findById(userId).get().getCity().value();
-        List<Team> teams = teamRepository.findAll();
-
-        ArrayList<TeamListRes> teamListRes = new ArrayList<>();
-
-        for(Team team : teams){
-            if(team.getCity().equals(city)){//위치 일치
-                //종목일치하는거 찾아야함
-                for(UserInterest interest : interests){
-                    if(interest.getUserInterestId().getSportCategory().getId() == team.getSportCategoryId()){
-                        TeamListRes teamListRes1 = new TeamListRes();
-                        teamListRes1.setId(team.getId());
-//                        teamListRes1.setLeaderId(team.getLeaderId());
-//                        teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
-                        teamListRes1.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
-                        teamListRes1.setDescription(team.getDescription());
-                        teamListRes1.setName(team.getName());
-                        teamListRes1.setMembershipFee(team.isMembershipFee());
-                        teamListRes1.setSportsCategory(sportCategoryRepository.findById(interest.getUserInterestId().getSportCategory().getId()).get().getName());
-                        teamListRes1.setCity(city.toString());
-                        teamListRes1.setMemberCount(team.getMemberCount());
-                        if(team.getPicture() == null)
-                            teamListRes1.setPictureDownloadUri(null);
-                        else
-                            teamListRes1.setPictureDownloadUri(team.getPicture().getImageUrl());
-
-                        teamListRes.add(teamListRes1);
-
-                    }
-                }
-
-            }
-
+        ArrayList<Long> sportsCategory = new ArrayList<>();
+        for(UserInterest userInterest : interests){
+            sportsCategory.add(userInterest.getUserInterestId().getSportCategory().getId());
         }
-        if(teamListRes.isEmpty()){
+
+        String city = userRepository.findById(userId).get().getCity().value();
+        Page<TeamListRes> teams = teamRepositorySupport.getList(sportsCategory,city,pageable);
+
+        if(teams.isEmpty()){
             throw new CustomException(ErrorCode.LIST_NOT_FOUND);
         }
 
-
-        return teamListRes;
+        return teams;
     }
 
     @Override
-    public ArrayList<TeamListRes> getChooseList(String cityName, String sportCategoryName) {
+    public Page<TeamListRes> getChooseList(String cityName, String sportCategoryName, Pageable pageable) {
 
         String city = cityName;
-        List<Team> teams = teamRepository.findAll();
-//        System.out.println(teams.size());
+        ArrayList<Long> sportsCategory = new ArrayList<>();
+        sportsCategory.add(sportCategoryRepository.findByName(sportCategoryName).get().getId());
 
-        ArrayList<TeamListRes> teamListRes = new ArrayList<>();
+        Page<TeamListRes> teams = teamRepositorySupport.getList(sportsCategory,city,pageable);
 
-        for(Team team : teams) {
-//            System.out.println(team.getCity());
-            if (team.getCity().equals(city)) {//위치 일치
-                if (sportCategoryRepository.findByName(sportCategoryName).get().getId() == team.getSportCategoryId()) {
-                    TeamListRes teamListRes1 = new TeamListRes();
-                    teamListRes1.setId(team.getId());
-                    teamListRes1.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
-//                    teamListRes1.setLeaderId(team.getLeaderId());
-//                    teamListRes1.setLeaderName(userRepository.findById(team.getLeaderId()).get().getName());
-                    teamListRes1.setDescription(team.getDescription());
-                    teamListRes1.setName(team.getName());
-                    teamListRes1.setMembershipFee(team.isMembershipFee());
-                    teamListRes1.setSportsCategory(sportCategoryName);
-                    teamListRes1.setMemberCount(team.getMemberCount());
-                    teamListRes1.setCity(cityName);
-                    if(team.getPicture() == null)
-                        teamListRes1.setPictureDownloadUri(null);
-                    else
-                        teamListRes1.setPictureDownloadUri(team.getPicture().getImageUrl());
-
-                    teamListRes.add(teamListRes1);
-                }
-
-            }
-        }
-        if(teamListRes.isEmpty()){
+        if(teams.isEmpty()){
             throw new CustomException(ErrorCode.LIST_NOT_FOUND);
         }
 
-        return teamListRes;
+        return teams;
     }
 
     @Override
     @Transactional
-    public boolean modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
+    public TeamInfoRes modify(TeamModifyPostReq teamInfo, long teamId) throws IOException {
 
         long userId = SecurityUtil.getCurrentMemberId();
 
@@ -220,12 +180,12 @@ public class TeamServiceImpl implements TeamService{
             team.setPicture(picture);
 
 
-            teamRepository.save(team);
+            team = teamRepository.save(team);
 
-            return true;
+            return TeamInfoRes.from(team, userRepository.findById(team.getLeaderId()).get(), teamInfo.getSportCategory());
         }
 
-        return false;
+        throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
     }
 
     @Override
@@ -256,26 +216,11 @@ public class TeamServiceImpl implements TeamService{
     public TeamInfoRes getTeamInfo(long teamId) {
 
         Team team = teamRepository.findById(teamId).get();
-        TeamInfoRes teamInfoRes = new TeamInfoRes();
+        team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+        User leader = userRepository.findById(team.getLeaderId()).get();
+        String sportCategory = sportCategoryRepository.getById(team.getSportCategoryId()).getName();
 
-        teamInfoRes.setCity(team.getCity());
-        teamInfoRes.setDescription(team.getDescription());
-        teamInfoRes.setCreateDate(team.getCreateDate());
-        teamInfoRes.setLeader(UserSimpleInfoRes.from(userRepository.findById(team.getLeaderId()).get()));
-        teamInfoRes.setMaxCount(team.getMaxCount());
-        teamInfoRes.setMemberCount(team.getMemberCount());
-        teamInfoRes.setName(team.getName());
-        teamInfoRes.setMembershipFee(team.isMembershipFee());
-        teamInfoRes.setRecruitmentState(team.isRecruitmentState());
-        teamInfoRes.setSportCategory(sportCategoryRepository.findById(team.getSportCategoryId()).get().getName());
-
-        if(team.getPicture() == null){
-            teamInfoRes.setPictureDownloadUrl(null);
-        }else{
-            teamInfoRes.setPictureDownloadUrl(team.getPicture().getImageUrl());
-        }
-
-        return teamInfoRes;
+        return TeamInfoRes.from(team, leader, sportCategory);
     }
 
     @Override
@@ -364,6 +309,10 @@ public class TeamServiceImpl implements TeamService{
                 applyUser.setRegisterDate(LocalDateTime.now());
                 userTeamRepository.save(applyUser);
 
+                sendNotification(findMember(userId), team);
+
+                team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+                teamRepository.save(team);
                 requestJoinRepository.delete(requestJoin);
             }
             return true;
@@ -371,6 +320,10 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
         }
 
+    }
+
+    public void sendNotification(User applier, Team team) {
+        notificationService.createJoinNotification(applier, NoticeType.TEAMJOIN, team);
     }
 
     @Override
@@ -428,6 +381,9 @@ public class TeamServiceImpl implements TeamService{
             throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
 
         userTeamRepository.delete(userTeam);
+        Team team = teamRepository.findById(teamId).get();
+        team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+        teamRepository.save(team);
         return;
     }
 
@@ -442,8 +398,11 @@ public class TeamServiceImpl implements TeamService{
 
         if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
             UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
-            if(kickOutUser.getAuthority().equals("회원"))
+            if(kickOutUser.getAuthority().equals("회원")) {
                 userTeamRepository.delete(kickOutUser);
+                team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+                teamRepository.save(team);
+            }
             else
                 throw new CustomException(ErrorCode.CANNOT_KICKOUT_MANAGER);
             return;
@@ -452,11 +411,17 @@ public class TeamServiceImpl implements TeamService{
             if(kickOutUser.getAuthority().equals("대표"))
                 throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
             userTeamRepository.delete(kickOutUser);
+            team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
+            teamRepository.save(team);
             return;
         }
         throw new CustomException(ErrorCode.AUTHORITY_NOT_FOUND);
 
     }
 
+    public User findMember(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 
 }

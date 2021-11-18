@@ -376,6 +376,7 @@ export default {
       this.$store.commit("setUserId", res.data.id)
       this.$store.commit("setUserName", res.data.name)
       this.$store.commit("setMyCity",res.data.city)
+      this.$store.commit("setMyPicture",res.data.pictureUrl)
     }).catch((err)=>{
       console.log(err)
     }),

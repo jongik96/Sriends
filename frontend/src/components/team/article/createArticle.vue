@@ -59,8 +59,10 @@ export default {
             createArticleInfo(teamId,this.form)
             .then((res)=>{
                 console.log(res)
+                this.$store.commit('setBoardId',res.data.id)
                 Swal.fire('작성 완료!')
-                this.$router.push('/team/articleList')
+                this.$router.push('/team/articleDetail')
+                // this.$router.push('/team/articleDetail')
             }).catch((err)=>{
                 console.log(err)
             })

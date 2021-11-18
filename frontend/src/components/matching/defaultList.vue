@@ -1,6 +1,6 @@
 <template>
   <div class="">
-        <div class=" border-b px-4 py-2 bg-white mt-10">
+        <div class=" border-b px-4 py-2 bg-white mt-3 sm:mt-10">
             <div class="flex justify-end">
                 <router-link to="/createMatching">
                 <button class="bg-yellow-500 px-2 py-1 
@@ -19,7 +19,7 @@
                 </div>
             </div> -->
             <div class="grid grid-cols-6 mt-10 border-b border-yellow-500 text-center">
-                <div class="grid col-start-1 col-span-1 text-center">
+                <div class="grid col-start-1 col-span-1 text-center text-gray-600">
                     글 분류
                 </div>
                 <div class="grid col-start-2 col-span-1 text-center">

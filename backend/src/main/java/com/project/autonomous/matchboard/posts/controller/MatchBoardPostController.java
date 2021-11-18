@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -61,7 +62,7 @@ public class MatchBoardPostController {
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public ResponseEntity<MatchBoardPostInfoRes> createPost(
-        @RequestBody MatchBoardCreateReq matchBoardCreateReq) {
+        @Valid @RequestBody MatchBoardCreateReq matchBoardCreateReq) {
         return ResponseEntity.ok(matchBoardPostService.createPost(matchBoardCreateReq));
     }
 
@@ -73,7 +74,7 @@ public class MatchBoardPostController {
         @ApiResponse(responseCode = "404", description = "BOARD_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MatchBoardPostInfoRes> getPostInfo(@PathVariable("postId") long postId) {
+    public ResponseEntity<MatchBoardPostInfoRes> getPostInfo(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(matchBoardPostService.getPostInfo(postId));
     }
 
@@ -86,8 +87,8 @@ public class MatchBoardPostController {
             + "SPORT_CATEGORY_NOT_FOUND\n\nBOARD_NOT_FOUND\n\nBOARD_CATEGORY_NOT_FOUND",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<MatchBoardPostInfoRes> updatePost(@PathVariable("postId") long postId,
-        @RequestBody MatchBoardUpdateReq matchBoardUpdateReq) {
+    public ResponseEntity<MatchBoardPostInfoRes> updatePost(@PathVariable("postId") Long postId,
+        @Valid @RequestBody MatchBoardUpdateReq matchBoardUpdateReq) {
         return ResponseEntity.ok(matchBoardPostService.updatePost(postId, matchBoardUpdateReq));
     }
 
@@ -96,7 +97,7 @@ public class MatchBoardPostController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "삭제되었습니다.", content = @Content),
     })
-    public ResponseEntity<String> deletePost(@PathVariable("postId") long postId) {
+    public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId) {
         matchBoardPostService.deletePost(postId);
         return ResponseEntity.ok("삭제되었습니다.");
     }

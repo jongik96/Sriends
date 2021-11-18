@@ -1,0 +1,17 @@
+package com.project.autonomous.chat.dto.response;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+public class ChatRoomListRes {
+    Long roomId;
+    Long partnerId;
+    String partnerName;
+    String partnerEmail;
+    String partnerPicture;
+    LocalDateTime latestMessageDate;
+}

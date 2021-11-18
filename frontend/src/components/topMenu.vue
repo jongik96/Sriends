@@ -6,38 +6,43 @@
         <a href="/main"><button class="font-semibold text-3xl">S-riends</button></a>
       </div>
        
-      <div class=" sm:hidden">
-        <a @mouseover="notifiList = true" @click="clickInfo" @mouseleave="notifiList = false" class="flex items-center cursor-pointer  border rounded text-teal-200 border-teal-400 ">
-          <font-awesome-icon icon="bell" class=""/>
-       
-          <transition name="fade">
-              
-            <ul v-if="notifiList" @click="notifiList = false" class="fixed border-2 mr-10 mt-96 w-60 h-96  bg-white">
-              <li>
-                a
-              </li>
-              <li>
-               b
-              </li>
-              <li>
-                c
-              </li>
-              <li>
-               d
-              </li>
-
-            </ul>
+      <div class="ml-36 sm:hidden">
+        <span class="">
+            <a @mouseover="smallList = true" @click="clickInfo" @mouseleave="smallList = false" class="cursor-pointer ml-3 border rounded text-teal-200 border-teal-400 ">
+              <font-awesome-icon size="lg" :style="{ color: 'orange' }" icon="bell" class=""/><span class="text-yellow-600"
+               v-if="countNotice>0">{{countNotice}}</span>
           
-          </transition>
-        </a>
+              <transition name="fade">
+                  
+                <ul v-if="smallList" class="z-10 fixed border-2 mr-48 ml-0 md:ml-80 min-w-60 w-36 md:w-72 min-h-96 h-96 bg-white">
+                  <div class="mb-2">
+                    <span class="cursor-default">전체확인</span> <button @click="readAllNotice"><font-awesome-icon icon="check-circle"/></button>
+                    <button class="ml-3" @click="clickDeleteAll"><font-awesome-icon icon="trash-alt"/></button>
+                    
+                  </div>
+                  <noticeItem v-for="item in recvlist" :key="item.id"
+                    :content="item.content"
+                    :type="item.type"
+                    :postId="item.postId"
+                    :createAt="item.createAt"
+                    :checked="item.checked"
+                    :notificationId="item.notificationId"
+                  >
+                  </noticeItem>
+                  
+                </ul>
+              
+              </transition>
+            </a>
+          </span>
       </div>
       <div class=" sm:hidden">
-        <a @mouseover="smallList = true" @click="clickInfo" @mouseleave="smallList = false" class="flex items-center  border rounded text-teal-200 border-teal-400 ">
+        <a @mouseover="listOne = true" @click="clickInfo" @mouseleave="listOne = false" class="flex items-center  border rounded text-teal-200 border-teal-400 ">
           <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
        
           <transition name="fade">
               
-            <ul v-if="smallList" @click="smallList = false" class="fixed border-2 mr-10 mt-32 w-60 bg-white">
+            <ul v-if="listOne" @click="listOne = false" class="fixed border-2 mr-10 mt-32 w-60 bg-white">
               <li>
                 <router-link to="/teamList"><p class="hover:bg-yellow-500">스렌즈 찾기</p></router-link>
               </li>
@@ -80,28 +85,31 @@
             </p>
           </router-link>
           <router-link to="/chatList">
-            <font-awesome-icon icon="comments"/>
+            <font-awesome-icon size="lg" :style="{ color: 'orange' }" icon="comments"/>
           </router-link>
           <span class="">
             <a @mouseover="smallList = true" @click="clickInfo" @mouseleave="smallList = false" class="cursor-pointer ml-3 border rounded text-teal-200 border-teal-400 ">
-              <font-awesome-icon icon="bell" class=""/>
+              <font-awesome-icon size="lg" :style="{ color: 'orange' }" icon="bell" class=""/><span class="text-yellow-600"
+               v-if="countNotice>0">{{countNotice}}</span>
           
               <transition name="fade">
                   
-                <ul v-if="smallList" @click="smallList = false" class="fixed border-2 ml-80 w-72 min-h-96 h-96 bg-white">
-                  <li>
-                    a
-                  </li>
-                  <li>
-                  b
-                  </li>
-                  <li>
-                    c
-                  </li>
-                  <li>
-                  d
-                  </li>
-
+                <ul v-if="smallList" class="z-10 fixed border-2 ml-80 w-72 min-h-96 h-96 bg-white">
+                  <div class="mb-2">
+                    <span class="cursor-default">전체확인</span> <button @click="readAllNotice"><font-awesome-icon icon="check-circle"/></button>
+                    <button class="ml-3" @click="clickDeleteAll"><font-awesome-icon icon="trash-alt"/></button>
+                    
+                  </div>
+                  <noticeItem v-for="item in recvlist" :key="item.id"
+                    :content="item.content"
+                    :type="item.type"
+                    :postId="item.postId"
+                    :createAt="item.createAt"
+                    :checked="item.checked"
+                    :notificationId="item.notificationId"
+                  >
+                  </noticeItem>
+                  
                 </ul>
               
               </transition>
@@ -133,23 +141,77 @@
 </template>
 
 <script>
+import noticeItem from '@/components/notice/noticeItem.vue'
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
+
+// 알림관련
+import { putAllNotice } from '@/api/auth.js'
+// import { putNotice } from '@/api/auth.js'
+import { deleteAllNotice } from '@/api/auth.js'
+// import { deleteNotice } from '@/api/auth.js'
+
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 import store from '@/store/index.js'
+import { getNotice } from '@/api/auth.js'
 export default {
+  components:{
+    noticeItem
+  },
   data(){
     return{
       notifiList:false,
       listOne: false,
       smallList: false,
       recvlist:[],
+      status:'',
+      connected:'',
+      noticeCount:'',
     }
   },
   created(){
     this.connect();
+    getNotice()
+    .then((res)=>{
+      console.log(res)
+      this.recvlist = res.data
+      this.noticeCount = res.data.length
+    }).catch((err)=>{
+      console.log(err)
+    })
+  },
+  computed:{
+    countNotice(){
+      let unRead = 0
+      for(let i=0; i<this.noticeCount;i++){
+        if(this.recvlist[i].checked == false){
+          unRead++
+        }
+      }
+      return unRead
+    }
   },
   methods:{
+    clickDeleteAll:function(){
+      deleteAllNotice()
+      .then((res)=>{
+        console.log(res.data)
+        this.recvlist = res.data
+        this.$router.go();
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },
+    readAllNotice:function(){
+      putAllNotice()
+      .then((res)=>{
+        console.log(res.data)
+        this.recvlist = res.data
+        // this.$router.go();
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },
     clickInfo: function(){
       if(this.listOne == false){
         this.listOne == true;
@@ -166,7 +228,9 @@ export default {
     // },
     logout: function(){
       localStorage.removeItem('vuex')
+      this.disconnect()
       this.$router.push('/')
+      
     },
     connect() {
           const userId = store.state.userId
@@ -182,12 +246,19 @@ export default {
               // 서버의 메시지 전송 endpoint를 구독합니다.
               // 이런형태를 pub sub 구조라고 합니다.
                   this.stompClient.subscribe(`/topic/${userId}`, res => {
-                      console.log('res=>'+res)
+                    console.log(res)
                       console.log('subscribe 로 받은 메시지 입니다.', res.body);
 
                       // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-                      this.recvlist.push(JSON.parse(res.body))
-                      console.log(this.recvList)
+                      // this.recvlist.push(JSON.parse(res.body))
+                      // console.log(this.recvList)
+                      getNotice()
+                      .then((res)=>{
+                        console.log(res)
+                        this.recvlist = res.data
+                      }).catch((err)=>{
+                        console.log(err)
+                      })
                   });
               },
               error => {
@@ -196,7 +267,14 @@ export default {
               this.connected = false;
               }
           );        
-        }
+        },
+    disconnect(){
+      let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
+      socket.close();
+      this.connected=false;
+      this.recvlist=[];
+      console.log('소켓연결해제')
+    }
   }
 
 }
