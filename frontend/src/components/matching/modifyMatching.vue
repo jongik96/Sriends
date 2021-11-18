@@ -21,6 +21,7 @@
                         <div class="md:pt-3 md:pl-10  pt-3 pl-2">
                             <p class="text-xl font-bold">장소 *</p>
                             <input v-model="form.place" id="joinIntro" type="text" class="text-xl w-3/4 rounded-md border-2 border-yellow-400 mt-2"/>
+                            <p v-if="form.place.length>20" class="text-yellow-600">20자 이내로 입력해주세요</p>
                         </div>
                         <div class="md:pt-3 md:pl-10  pt-3 pl-2">
                             <p class="text-xl font-bold">모집인원 *</p>
@@ -54,7 +55,7 @@
                         <p class="text-2xl">종목 *</p>
                         <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
                             <option disabled value="">종목</option>
-                            <option value="축구/풋살">축구/풋살</option>
+                            <option value="풋살">축구/풋살</option>
                             <option value="배구">배구</option>
                             <option value="농구">농구</option>
                             <option value="배드민턴">배드민턴</option>
@@ -267,6 +268,7 @@
                     <div class="md:pt-3 md:pl-10  pt-3 pl-2">
                             <p class="text-xl font-bold">내용을 입력해주세요. *</p>
                             <textarea v-model="form.content" id="joinIntro" rows=5 type="text" class="text-xl w-4/5 rounded-md border-2 border-yellow-400 mt-2"/>
+                            <p v-if="form.content.length>200" class="text-yellow-600">200자 이내로 입력해주세요</p>
                     </div>
                 </div>
                 <div class="col-start-1 col-span-6 mt-10 flex justify-center">
@@ -289,6 +291,7 @@
 <script>
 import { getMyTeam } from '@/api/matching.js'
 import { putMatching } from '@/api/matching.js'
+import { getMatchDetail } from '@/api/matching.js'
 import store from '@/store/index.js'
 import Swal from 'sweetalert2'
 export default {
@@ -311,6 +314,26 @@ export default {
     },
 
     created(){
+        const postId = store.state.postId
+        getMatchDetail(postId)
+        .then((res)=>{
+            console.log(res)
+            this.form.city = res.data.city
+            this.form.content = res.data.content
+            this.form.matchBoardCategory = res.data.matchBoardCategory
+            this.form.place = res.data.place
+            this.form.playingTime = res.data.playingTime
+            if(res.data.recruited == false){
+                this.form.recruited = '대기 중'
+            }else{
+                this.form.recruited = '매칭 완료'
+            }
+            this.form.recruitmentCount = res.data.recruitmentCount
+            this.form.sportCategory = res.data.sportCategory
+
+        }).catch((err)=>{
+            console.log(err)
+        })
         getMyTeam().then((res)=>{
             console.log(res)
             this.myTeam = res.data
@@ -333,10 +356,11 @@ export default {
     },
     computed:{
         btnDisabled(){
-            if(!this.form.city || !this.form.place || !this.form.teamId
+            if(!this.form.city || this.form.place.length>20 || !this.form.teamId
                 || !this.form.sportCategory || !this.form.matchBoardCategory
                 || !this.form.playingTime || !this.form.recruitmentCount
-                ||  !this.form.content || !this.form.recruited
+                ||  !this.form.content || !this.form.recruited 
+                 || this.form.content.length>200
             ){
                 return true
             }

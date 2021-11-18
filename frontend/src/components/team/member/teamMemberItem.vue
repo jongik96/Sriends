@@ -122,6 +122,10 @@ export default {
   methods:{
     clickDm:function(){
       this.$store.commit('setChatOppenent', this.tempId)
+      this.$store.commit('setPartnerId', this.tempId)
+      this.$store.commit('setChatPath','profile')
+      this.$store.commit('setPartnerName',this.name)
+      this.$store.commit('setPartnerPicture',this.pictureUrl)
       this.$router.push('/chat')
     },
     imgError:function(e){

@@ -20,7 +20,7 @@
             </router-link>
             <router-link to="/team/memberList">
                 <button class="inline-block bg-yellow-400 px-2 py-1 text-black font-semibold text-md rounded">
-                    <p>회원 목록</p>
+                    <p>회원관리</p>
                 </button>
             </router-link>
         </div>

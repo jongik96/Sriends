@@ -1,7 +1,7 @@
 <template>
 <div>
     <div v-if="!checked" class="grid grid-cols-6 bg-yellow-400 border-b-2 border-yellow-300 h-20  md:h-12 item-center">
-        <div @click="clickNotice" class="col-start-1 col-span-5 md:col-start-1 md:col-span-6">
+        <div @click="clickNotice" class="truncate col-start-1 col-span-5 md:col-start-1 md:col-span-6">
             {{content}}
         </div>
         <div class="col-start-1 col-span-6 md:col-start-1 md:col-span-4 cursor-default"></div>
@@ -11,7 +11,7 @@
         </div>
     </div>
     <div v-if="checked" class="grid grid-cols-6 bg-yellow-100 border-b-2 border-yellow-300 h-20 md:h-12 item-center">
-        <div @click="clickNotice" class="col-start-1 col-span-5 md:col-start-1 md:col-span-6">
+        <div @click="clickNotice" class="truncate col-start-1 col-span-5 md:col-start-1 md:col-span-6">
             {{content}}
         </div>
         <div class="col-start-1 col-span-6 md:col-start-1 md:col-span-4 cursor-default"></div>

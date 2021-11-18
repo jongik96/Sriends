@@ -388,6 +388,7 @@ export default {
             }
         },
         clickDelete:function(){
+            const teamId = store.state.teamId
             Swal.fire({
             title: '팀을 삭제하시겠습니까?',
             text: "다시 복구할 수 없습니다.",
@@ -400,10 +401,11 @@ export default {
           })
           .then((result) => {
             if(result.isConfirmed){    
-                deleteTeam()
+                deleteTeam(teamId)
                 .then((res)=>{
                     console.log(res)
                     Swal.fire('팀이 삭제되었습니다')
+                    this.$router.push('/main')
                 }).catch((err)=>{
                     console.log(err)
                 })

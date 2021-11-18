@@ -76,7 +76,11 @@ export default {
             this.id = res.data.postId
             this.content = res.data.content
             this.createAt = getDate(res.data.createAt)
+            if(res.data.matchBoardCategory=='용병'){
+                this.matchBoardCategory = '게스트'    
+            }else{
             this.matchBoardCategory = res.data.matchBoardCategory
+            }
             this.place = res.data.place
             this.playingTime = res.data.playingTime
             if(res.data.recruited == false){
@@ -91,7 +95,7 @@ export default {
             this.team.pictureUrl = res.data.team.pictureUrl
             this.writer.id = res.data.writer.id
             this.writer.name = res.data.writer.name
-            if(res.dadta.writer.pictureUrl!=null){
+            if(res.data.writer.pictureUrl!=null){
             this.writer.pictureUrl = res.data.writer.pictureUrl
             }
         }).catch((err)=>{

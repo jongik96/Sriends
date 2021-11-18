@@ -323,7 +323,7 @@ import img from '@/assets/profile.png'
 import { validatePhone } from '@/utils/phoneNumberValidation.js';
 import {getProfileInfo} from '@/api/auth.js'
 import { getInterest } from '@/api/auth.js'
-import { modifyNumber } from '@/utils/phoneNumber.js'
+// import { modifyNumber } from '@/utils/phoneNumber.js'
 import store from '@/store/index.js'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -360,7 +360,7 @@ export default {
       console.log(res.data)
       this.id = res.data.id
       this.name = res.data.name
-      this.phone = modifyNumber(res.data.phone)
+      this.phone = res.data.phone
       this.gender = res.data.gender
       if(res.data.pictureUrl!=null){
       this.pictureUrl = res.data.pictureUrl
@@ -404,7 +404,9 @@ export default {
       }
     },
     clickCancel(){
+      this.$router.go()
       this.modifyState=false
+      
     },
     clickDelete: function(){
         this.$router.push('/confirmPassword')
@@ -413,6 +415,7 @@ export default {
             if(this.form.phone==''){
                 this.form.phone = null
             }
+            if(this.isPhoneValid == true){
             console.log('수정클릭')
             const token = store.state.accessToken
             const formData = new FormData();
@@ -444,6 +447,9 @@ export default {
                 console.log(formData)
                 console.log(err)
             })
+            }else{
+              Swal.fire('입력값이 잘못 되었습니다.')
+            }
     } 
   },
   computed:{

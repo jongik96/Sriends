@@ -8,7 +8,7 @@
        
       <div class="ml-36 sm:hidden">
         <span class="">
-            <a @mouseover="smallList = true" @click="clickInfo" @mouseleave="smallList = false" class="cursor-pointer ml-3 border rounded text-teal-200 border-teal-400 ">
+            <a @mouseover="smallList = true" @click="clickInfo" @mouseleave="smallList = false" class="cursor-pointer ml-3  rounded text-teal-200 border-teal-400 ">
               <font-awesome-icon size="lg" :style="{ color: 'orange' }" icon="bell" class=""/><span class="text-yellow-600"
                v-if="countNotice>0">{{countNotice}}</span>
           
@@ -16,8 +16,8 @@
                   
                 <ul v-if="smallList" class="z-10 fixed border-2 mr-48 ml-0 md:ml-80 min-w-60 w-36 md:w-72 min-h-96 h-96 bg-white">
                   <div class="mb-2">
-                    <span class="cursor-default">전체확인</span> <button @click="readAllNotice"><font-awesome-icon icon="check-circle"/></button>
-                    <button class="ml-3" @click="clickDeleteAll"><font-awesome-icon icon="trash-alt"/></button>
+                    <span class="cursor-default text-xs">전체확인</span> <button @click="readAllNotice"><font-awesome-icon icon="check-circle"/></button>
+                    <span class="cursor-default text-xs">전체삭제</span> <button class="ml-3" @click="clickDeleteAll"><font-awesome-icon icon="trash-alt"/></button>
                     
                   </div>
                   <noticeItem v-for="item in recvlist" :key="item.id"
@@ -37,7 +37,7 @@
           </span>
       </div>
       <div class=" sm:hidden">
-        <a @mouseover="listOne = true" @click="clickInfo" @mouseleave="listOne = false" class="flex items-center  border rounded text-teal-200 border-teal-400 ">
+        <a @mouseover="listOne = true" @click="clickInfo" @mouseleave="listOne = false" class="flex items-center   rounded text-teal-200 border-teal-400 ">
           <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
        
           <transition name="fade">
@@ -97,7 +97,7 @@
                 <ul v-if="smallList" class="z-10 fixed border-2 ml-80 w-72 min-h-96 h-96 bg-white">
                   <div class="mb-2">
                     <span class="cursor-default">전체확인</span> <button @click="readAllNotice"><font-awesome-icon icon="check-circle"/></button>
-                    <button class="ml-3" @click="clickDeleteAll"><font-awesome-icon icon="trash-alt"/></button>
+                    <span class="cursor-default">전체삭제</span> <button class="ml-3" @click="clickDeleteAll"><font-awesome-icon icon="trash-alt"/></button>
                     
                   </div>
                   <noticeItem v-for="item in recvlist" :key="item.id"

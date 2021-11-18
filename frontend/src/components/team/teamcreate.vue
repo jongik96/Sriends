@@ -4,7 +4,6 @@
       <div class="col-start-2 col-span-4 ">
           <div class="grid grid-cols-6  mt-10">
               <div class="md:col-start-2 md:col-span-4 col-start-1 col-span-6 shadow-md border-solid border-2 border-yellow-500 rounded-md ml-2">
-                  <form @submit.prevent="submitForm">
                       <div class="pt-10">
                           <p class="text-3xl font-bold flex justify-center">S-riends 생성</p>
                       </div>
@@ -249,25 +248,25 @@
                             <option value="해남시">해남</option>
                             <option value="화순시">화순</option>
                         </select>
-                        <br/>
-                        <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p>
+                        <!-- <br/>
+                        <p v-if="this.form.city" class="mt-2 font-medium">선택지역 : {{ this.form.city }} </p> -->
                         </div>
                         <div class="md:pt-5 md:pl-20 pt-5 pl-5">
                           <p class="text-xl font-bold">특이사항</p>
-                          <input type="text" v-model="form.description" class=" text-xl w-3/4 h-20 rounded-md border-2 border-yellow-400">
+                            <textarea v-model="form.description" class=" text-xl w-3/4 h-20 rounded-md border-2 border-yellow-400"/>
+                          <p v-if="form.description.length>200" class="text-yellow-600">200자 이내로 입력해주세요</p>
                           <p>
                             <span class="text-yellow-600">S-riends 소개</span>
                         </p>
                       </div>
                       <div class="flex justify-center p-2 mt-10">
-                        <button type="submit"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">생성하기</button>
+                        <button @click="submitForm"  class="border-solid border-2 border-yellow-500 rounded-md hover:bg-yellow-400 w-20 h-10">생성하기</button>
                     </div>
                     <div class="flex justify-center p-2 ">
                         <router-link to="/main">
                             <button class="rounded-md hover:bg-gray-200"><p>취소</p></button>
                         </router-link>
                     </div>          
-                  </form>
                   
               </div>
           </div>

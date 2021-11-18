@@ -34,6 +34,7 @@
 import { modifyArticleInfo } from '@/api/article.js'
 import Swal from 'sweetalert2'
 import store from '@/store/index.js'
+import { getArticleInfo } from '@/api/article.js'
 export default {
     props:{
         boardId: [String, Number]
@@ -46,6 +47,21 @@ export default {
             }
             
         }
+    },
+    created(){
+        console.log(this.userId)
+        const teamId = store.state.teamId
+        // this.$store.commit("setBoardId",this.boardId)
+        const boardId = store.state.boardId
+        getArticleInfo(teamId,boardId).
+        then((res)=>{
+            console.log(res)
+            this.form.title = res.data.title
+            this.form.content = res.data.content
+            // this.$store.commit("setBoardId",this.boardId)
+        }).catch((err)=>{
+            console.log(err)
+        })
     },
     computed: {
         btnDisabled(){
