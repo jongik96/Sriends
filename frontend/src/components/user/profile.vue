@@ -8,7 +8,7 @@
                      border-2 border-yellow-500 p-1" :src=pictureUrl @error="imgError">
         <div v-if="this.modifyState">
           <p class="text-xl font-bold">profileImg</p>
-          <input type="file" @change="fileSelect" id="image" ref="image" class=" text-sm w-full md:w-3/4 rounded-md border-2 border-yellow-400">
+          <input type="file"  accept=".png, .jpg" @change="fileSelect" id="image" ref="image" class=" text-sm w-full md:w-3/4 rounded-md border-2 border-yellow-400">
           <div id="preview" class="grid grid-cols-2 profile-image" >
             <div>
               <p>현재 프로필</p>

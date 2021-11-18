@@ -9,7 +9,8 @@
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">TeamImg</p>
-                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="file" accept=".png, .jpg" v-on:change="fileSelect" id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
+                          <p>가로형 이미지를 권장합니다.</p>
                           <div id="preview" class="grid grid-cols-2 profile-image" >
                             <div>
                             <p>현재 프로필</p>

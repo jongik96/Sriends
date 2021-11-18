@@ -15,7 +15,7 @@
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-base font-bold">profileImg</p>
-                          <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-base w-3/4 rounded-md border-2 border-yellow-400">
+                          <input type="file" accept=".png, .jpg" v-on:change="fileSelect" id="image" ref="image" class=" text-base w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
                           <p class="text-xl font-bold">E-mail *</p>
