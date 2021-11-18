@@ -10,8 +10,6 @@
                       </div>
                       <!-- name -->
                       <div class="md:pt-10 md:pl-20 pl-5 pt-5">
-                          <p class="text-xl font-bold">S-riends 명</p>
-                          <input type="text"  class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                           <p class="text-xl font-bold">TeamImg</p>
                           <input type="file" v-on:change="fileSelect" id="image" ref="image" class=" text-xl w-3/4 rounded-md border-2 border-yellow-400">
                       </div>
