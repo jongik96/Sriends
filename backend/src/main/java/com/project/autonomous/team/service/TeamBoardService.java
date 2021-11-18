@@ -103,7 +103,7 @@ public class TeamBoardService {
 
         TeamBoard teamBoard = teamBoardRepository.findById(boardId).get();
 
-        return PostViewRes.from(teamBoard, userRepository.findById(userId).get());
+        return PostViewRes.from(teamBoard, userRepository.findById(teamBoard.getWriterId()).get());
     }
 
     public Page<PostViewRes> postingViewList(long teamId, Pageable pageable) {
