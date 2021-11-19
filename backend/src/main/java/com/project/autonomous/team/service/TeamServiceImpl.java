@@ -400,7 +400,7 @@ public class TeamServiceImpl implements TeamService{
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(leaderId,teamId).get();
 
         if(userTeam.getAuthority().equals("매니저")){//조회하는 사람이 관리자 이상이면 가능
-            UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
+            UserTeam kickOutUser = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
             if(kickOutUser.getAuthority().equals("회원")) {
                 userTeamRepository.delete(kickOutUser);
                 team.setMemberCount(userTeamRepository.findAllByTeamId(teamId).size());
@@ -410,7 +410,7 @@ public class TeamServiceImpl implements TeamService{
                 throw new CustomException(ErrorCode.CANNOT_KICKOUT_MANAGER);
             return;
         }else if(userTeam.getAuthority().equals("대표")){
-            UserTeam kickOutUser = userTeamRepository.findByUserId(userId).get();
+            UserTeam kickOutUser = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
             if(kickOutUser.getAuthority().equals("대표"))
                 throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
             userTeamRepository.delete(kickOutUser);
