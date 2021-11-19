@@ -26,14 +26,14 @@
 ---------------------------------------------------------------------------------------------------
 
 # 기술 스택
-|**과목명**|**질문보기**|기간|모의면접|
 
-|**Java**|Java11|-|
-|**Spring boot**|2.5.5|-|
-|**Vue.js**|2|-|
-|**MySQL**|8.0.23|-|
-|**Distributed Computing**|Hadoop|-|
-|**DevOps**|Docker Compose(Docker|-|
+    Java                    11
+    Spring boot             2.5.5
+    Vue.js                  2
+    MySQL                   8.0.23
+    Distributed Computing   Hadoop
+    DevOps                  Docker Compose(Docker)
+
 ---------------------------------------------------------------------------------------------------
 # DB
 
