@@ -23,7 +23,7 @@
         <div>
         {{gender}}
         </div>
-        <div>
+        <div class="">
         <button class="border-2 cursor-default border-yellow-600 rounded-md w-12 sm:w-20">{{authority}}</button>
         </div>
       </div>

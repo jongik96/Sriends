@@ -4,11 +4,11 @@
             <p class="col-start-1 col-span-5 break-words text-justify leading-tight text-gray-800">{{ this.content }}</p>
             <div class="col-start-6 col-span-1 ml-3 lg:ml-10 xl:ml-20">
                 <p class=" text-yellow-600">
-                    <button @click="clickUser">{{ this.writerName }}</button>
+                    <button class="sm:text-base text-xs" @click="clickUser">{{ this.writerName }}</button>
                     <img v-if="this.writerImg!=null" :src="writerImg" @error="imgError" class="h-10 w-10 rounded-xl" alt="">
                     <img v-if="this.writerImg==null" src="@/assets/profile.png" class="h-10 w-10 rounded-xl">
                 </p>
-                <p class="text-xs">{{getTime}}</p>
+                <p class="text-xs w-12">{{getTime}}</p>
             </div>
         </div>
         <div v-if="modifyState">

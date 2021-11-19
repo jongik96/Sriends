@@ -1,7 +1,7 @@
 <template>
-<div class="flex antialiased text-gray-800 border-b-4 border-l-4 border-r-4 border-yellow-200 rounded-lg">
+<div class="flex antialiased text-gray-800 border-b-4 border-l-4 h-full border-r-4 border-yellow-200 rounded-lg">
     <div class="flex flex-row h-full w-full overflow-x-hidden">
-      <div class="flex flex-col py-8 pl-6 pr-2 w-full  flex-shrink-0">
+      <div class="flex flex-col py-8 pl-6 pr-2 w-full h-96 min-h-96 flex-shrink-0">
         <div class="flex flex-row items-center justify-center h-12 w-full">
 
           <div class=" font-bold text-2xl">채팅목록</div>

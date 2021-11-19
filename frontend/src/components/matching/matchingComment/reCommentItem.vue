@@ -5,10 +5,10 @@
             <p class="col-start-1 break-words col-span-5 text-justify leading-tight text-gray-800">{{ this.content }}</p>
             <div class="col-start-6 col-span-1 lg:ml-10 xl:ml-20">
                 <p class=" text-yellow-600 ">
-                    <button @click="clickUser">{{this.writerName}}</button></p>
+                    <button class="sm:text-base text-xs" @click="clickUser">{{this.writerName}}</button></p>
                     <img v-if="this.writerImg!=null" :src="this.writerImg" class="h-6 w-6 rounded-xl" alt="">
                     <img v-if="this.writerImg==null" src="@/assets/profile.png" class="h-6 w-6 rounded-xl">
-                <p class="text-xs">{{getTime}}</p>
+                <p class="text-xs w-12">{{getTime}}</p>
             </div>
         </div>
         <div v-if="modifyState">

@@ -10,7 +10,7 @@
                         <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-6 mb-3">
                             <p class="text-base sm:text-2xl">글 분류를 선택해주세요</p>
                             <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.category">
-                                <option disabled value="">분류</option>
+                                <option disabled>전체</option>
                                 <option value="매칭">경기 매칭</option>
                                 <option value="용병">게스트 모집</option>
                             </select>
@@ -18,7 +18,7 @@
                         </div>
                         <div class="md:col-start-1 md:col-span-3 col-start-1 col-span-3 sm:border-r border-yellow-300">
                             <p class="text-base sm:text-2xl">지역을 선택해주세요</p>
-                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="selectDo">
+                            <select class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="selectDo">
                             <option disabled value="">지역</option>
                             <option value="1">서울/인천/경기</option>
                             <option value="2">대전/충청</option>
@@ -28,7 +28,7 @@
                             <option value="6">제주</option>
                             <option value="7">광주/전라</option>
                             </select>
-                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='1'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-0 sm:ml-3" v-if="this.selectDo=='1'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="서울특별시">서울특별시</option>
                                 <option value="인천광역시">인천광역시</option>
@@ -64,7 +64,7 @@
                                 <option value="양평군">양평군</option>
                                 <option value="연천군">연천군</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='2'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-0 sm:ml-3" v-if="this.selectDo=='2'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="대전광역시">대전광역시</option>
                                 <option value="세종특별자치시">세종특별자치시</option>
@@ -95,7 +95,7 @@
                                 <option value="증평군">증평군</option>
                                 <option value="진천군">진천군</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='3'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-0 sm:ml-3" v-if="this.selectDo=='3'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="대구광역시">대구광역시</option>
                                 <option value="경산시">경산시</option>
@@ -122,7 +122,7 @@
                                 <option value="청송군">청송군</option>
                                 <option value="칠곡군">칠곡군</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='4'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-0 sm:ml-3" v-if="this.selectDo=='4'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="강릉시">강릉시</option>
                                 <option value="동해시">동해시</option>
@@ -140,7 +140,7 @@
                                 <option value="철원군">철원군</option>
                                 <option value="평창군">평창군</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='5'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-0 sm:ml-3" v-if="this.selectDo=='5'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="부산광역시">부산광역시</option>
                                 <option value="울산광역시">울산광역시</option>
@@ -163,12 +163,12 @@
                                 <option value="함양군">함양군</option>
                                 <option value="합천군">합천군</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='6'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md  ml-0 sm:ml-3" v-if="this.selectDo=='6'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="제주시">제주시</option>
                                 <option value="서귀포시">서귀포시</option>
                             </select>
-                            <select class="border-2 border-solid border-yellow-500 rounded-md ml-3" v-if="this.selectDo=='7'" v-model="form.city">
+                            <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md ml-0 sm:ml-3" v-if="this.selectDo=='7'" v-model="form.city">
                                 <option disabled value="">시/군</option>
                                 <option value="광주광역시">광주</option>
                                 <option value="광양시">전주</option>
@@ -214,7 +214,7 @@
                         <div class="md:col-start-4 md:col-span-3 col-start-4 col-span-3  ml-0 md:ml-3">
                             <p class="text-base sm:text-2xl">종목을 선택해주세요</p>
                             <select multiple="multiple" class="border-2 border-solid border-yellow-500 rounded-md mt-3" v-model="form.sportCategory">
-                            <option disabled value="">종목</option>
+                            <option disabled>전체</option>
                             <option value="풋살">축구/풋살</option>
                             <option value="배구">배구</option>
                             <option value="농구">농구</option>
