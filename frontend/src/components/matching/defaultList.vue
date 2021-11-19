@@ -35,6 +35,7 @@
                     작성일시
                 </div>
             </div>
+            <div v-if="teams.length==0">현재 자신의 지역에 매칭글이 없습니다.</div>
             <matchingListItem v-for="item,index in teams" :key="index"
                 :postId=item.postId
             >

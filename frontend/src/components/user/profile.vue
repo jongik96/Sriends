@@ -12,12 +12,12 @@
           <div id="preview" class="grid grid-cols-2 profile-image" >
             <div>
               <p>현재 프로필</p>
-              <img class="profileImg" :src=pictureUrl />
+              <img class="profileImg object-contain rounded-xl border-2 border-yellow-500" :src=pictureUrl />
             </div>
             <div>
               <p>변경할 프로필</p>
-              <img class="profileImg" :src=modifyPicture />
-            </div>
+              <img v-if="modifyPicture" class="profileImg object-contain rounded-xl border-2 border-yellow-500" :src=modifyPicture />
+            </div> 
           </div>
         </div>
       </div>

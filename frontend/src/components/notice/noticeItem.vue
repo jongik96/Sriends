@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div v-if="!checked" class="grid grid-cols-6 bg-yellow-400 border-b-2 border-yellow-300 h-20  md:h-12 item-center">
+    <div v-if="!checked" class="grid grid-cols-6 bg-yellow-400 border-b-2 border-yellow-300 h-12  md:h-12 item-center">
         <div @click="clickNotice" class="truncate col-start-1 col-span-5 md:col-start-1 md:col-span-6">
             {{content}}
         </div>
@@ -10,7 +10,7 @@
             <button class="ml-3" @click="clickDelete"><font-awesome-icon icon="trash-alt"/></button>
         </div>
     </div>
-    <div v-if="checked" class="grid grid-cols-6 bg-yellow-100 border-b-2 border-yellow-300 h-20 md:h-12 item-center">
+    <div v-if="checked" class="grid grid-cols-6 bg-yellow-100 border-b-2 border-yellow-300 h-12 md:h-12 item-center">
         <div @click="clickNotice" class="truncate col-start-1 col-span-5 md:col-start-1 md:col-span-6">
             {{content}}
         </div>

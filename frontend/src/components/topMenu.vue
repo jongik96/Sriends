@@ -37,17 +37,17 @@
           </span>
       </div>
       <div class=" sm:hidden">
-        <a @mouseover="listOne = true" @click="clickInfo" @mouseleave="listOne = false" class="flex items-center   rounded text-teal-200 border-teal-400 ">
+        <a @mouseover="listOne = true" @click="clickInfo" @mouseleave="listOne = false" class="flex items-center mr-10  rounded text-teal-200 border-teal-400 ">
           <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
        
           <transition name="fade">
               
-            <ul v-if="listOne" @click="listOne = false" class="fixed border-2 mr-10 mt-32 w-60 bg-white">
+            <ul v-if="listOne" @click="listOne = false" class="fixed border-2 mr-24 mt-32 w-60 bg-white">
               <li>
                 <router-link to="/teamList"><p class="hover:bg-yellow-500">스렌즈 찾기</p></router-link>
               </li>
               <li>
-                <router-link to="/matchingCategory"><p class="hover:bg-yellow-500">경기/스렌드 찾기</p></router-link>
+                <router-link to="/matchingCategory"><p class="hover:bg-yellow-500">경기/게스트 찾기</p></router-link>
               </li>
               <li>
                 <router-link to="/main"><p class="hover:bg-yellow-500">My S-riends</p></router-link>
@@ -76,7 +76,7 @@
           </router-link>
           <router-link to="/matchingCategory">
             <p class="text-center block mt-4 sm:inline-block hover:bg-yellow-400 rounded-md lg:mt-0 text-teal-200  w-32 mr-4">
-              경기/스렌드 찾기
+              경기/게스트 찾기
             </p>
           </router-link>
           <router-link to="/main">

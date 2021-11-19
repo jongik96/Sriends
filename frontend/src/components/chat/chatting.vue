@@ -209,7 +209,15 @@ export default {
         console.log("Send message:" + this.message);
         // ws = this.stompClient
         if (this.stompClient && this.stompClient.connected) {
-          let today = new Date();
+          let now = new Date();
+          const utc = 
+            now.getTime() + 
+            (now.getTimezoneOffset() * 60 * 1000);
+
+          const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+          const today = 
+                new Date(utc + (KR_TIME_DIFF));
+
             const msg = { 
             // userName: this.userName,
             roomId: this.roomId,

@@ -16,7 +16,7 @@
                             <p>{{writer.name}}</p>
                         </div>
                     </div>
-                    <div class="float-right">
+                    <div v-if="userId == writer.id" class="float-right">
                        
                         <button @click="modifyState=true">수정하기</button>
 

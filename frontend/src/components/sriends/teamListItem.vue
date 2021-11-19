@@ -19,8 +19,8 @@
             <div class="">
                 <p>현재 {{this.recruitmentState}}</p>
             </div>
-            <div class="">
-                <p class="truncate w-96  lg:visible">소개 : {{this.description}} </p>
+            <div class="invisible md:visible">
+                <p class="truncate  lg:visible">소개 : {{this.description}} </p>
             </div>
         </div>
     </div>
