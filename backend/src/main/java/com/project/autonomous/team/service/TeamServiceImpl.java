@@ -189,6 +189,7 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    @Transactional
     public boolean delete(long teamId) {
 
         long userId = SecurityUtil.getCurrentMemberId();
@@ -371,12 +372,13 @@ public class TeamServiceImpl implements TeamService{
 
 
     @Override
+    @Transactional
     public void quit(long teamId) {
         long userId = SecurityUtil.getCurrentMemberId();
         if(!userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent())
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
-        UserTeam userTeam = userTeamRepository.findByUserId(userId).get();
+        UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(userId,teamId).get();
         if(userTeam.getAuthority().equals("대표"))
             throw new CustomException(ErrorCode.CANNOT_LEAVE_LEADER);
 
@@ -388,6 +390,7 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    @Transactional
     public void kickout(long teamId, long userId) {
         long leaderId = SecurityUtil.getCurrentMemberId();
         if(!userTeamRepository.findByUserIdAndTeamId(userId,teamId).isPresent())
