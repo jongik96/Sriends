@@ -26,13 +26,12 @@
 ---------------------------------------------------------------------------------------------------
 
 # 기술 스택
-
-|Java|Java11|
-|Spring boot|2.5.5|
-|Vue.js|2|
-|MySQL|8.0.23|
-|Distributed Computing|Hadoop|
-|DevOps|Docker Compose(Docker|
+|**Java**|Java11|-|
+|**Spring boot**|2.5.5|-|
+|**Vue.js**|2|-|
+|**MySQL**|8.0.23|-|
+|**Distributed Computing**|Hadoop|-|
+|**DevOps**|Docker Compose(Docker|-|
 ---------------------------------------------------------------------------------------------------
 # DB
 
