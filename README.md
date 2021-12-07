@@ -1,3 +1,8 @@
+# 나의 역할
+ - Front-End 전체 UI 및 기능 구현 담당
+ - TailwindCSS 사용
+ - Vue2 사용
+
 # 로컬 실행 방법
 
 포팅메뉴얼 front 정보
